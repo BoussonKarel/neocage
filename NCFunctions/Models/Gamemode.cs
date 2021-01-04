@@ -9,10 +9,12 @@ namespace NCFunctions.Models
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("duration")]
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
         [JsonProperty("released")]
         public bool Released { get; set; }
     }

@@ -11,8 +11,32 @@ namespace NCFunctions.Repositories
 {
     public static class GamemodeRepository
     {
-        public static async Task<List<Gamemode>> GetGamemodesAsync() {
+        public static async Task<List<Gamemode>> GetGamemodesAsync(bool released) {
+            // Create list to store the result
             List<Gamemode> gamemodes = new List<Gamemode>();
+
+            // Get the gamemodes table
+            CloudTable gamemodeTable = await StorageHelper.GetCloudTable("gamemodes");
+
+            // Query to get ALL
+            TableQuery<GamemodeEntity> query = new TableQuery<GamemodeEntity>();
+
+            if (released)
+                query.Where(TableQuery.GenerateFilterCondition("released", QueryComparisons.Equal, true.ToString()));
+
+            var queryResult = gamemodeTable.ExecuteQuerySegmentedAsync<GamemodeEntity>(query, null);
+
+            foreach (GamemodeEntity gme in queryResult.Result)
+            {
+                gamemodes.Add(new Gamemode()
+                {
+                    Id = gme.Id,
+                    Name = gme.Name,
+                    Description = gme.Description,
+                    Duration = gme.Duration,
+                    Released = gme.Released
+                });
+            }
 
             return gamemodes;
         }
@@ -22,7 +46,7 @@ namespace NCFunctions.Repositories
             try
             {
                 // Make Entity of it
-                GamemodeEntity gamemodeEntity = new GamemodeEntity(gm.Id, gm.Description, gm.Duration, gm.Released);
+                GamemodeEntity gamemodeEntity = new GamemodeEntity(gm.Id, gm.Name, gm.Description, gm.Duration, gm.Released);
 
                 CloudTable gamemodeTable = await StorageHelper.GetCloudTable("gamemodes");
 
@@ -34,6 +58,7 @@ namespace NCFunctions.Repositories
                 Gamemode resultGamemode = new Gamemode()
                 {
                     Id = resultEntity.Id,
+                    Name = resultEntity.Name,
                     Description = resultEntity.Description,
                     Duration = resultEntity.Duration,
                     Released = resultEntity.Released

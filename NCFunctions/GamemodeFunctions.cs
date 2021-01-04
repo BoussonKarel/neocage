@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NCFunctions.Models;
 using NCFunctions.Repositories;
+using System.Collections.Generic;
 
 namespace NCFunctions
 {
@@ -25,6 +26,26 @@ namespace NCFunctions
             Gamemode added = await GamemodeRepository.AddGamemodeAsync(gamemode);
 
             return new OkObjectResult(added);
+        }
+
+        [FunctionName("GetReleasedGamemodes")]
+        public static async Task<IActionResult> GetReleasedGamemodes(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gamemodes")] HttpRequest req,
+            ILogger log)
+        {
+            List<Gamemode> gamemodes = await GamemodeRepository.GetGamemodesAsync(true);
+
+            return new OkObjectResult(gamemodes);
+        }
+
+        [FunctionName("GetAllGamemodes")]
+        public static async Task<IActionResult> GetAllGamemodes(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gamemodes/all")] HttpRequest req,
+            ILogger log)
+        {
+            List<Gamemode> gamemodes = await GamemodeRepository.GetGamemodesAsync(false);
+
+            return new OkObjectResult(gamemodes);
         }
     }
 }
