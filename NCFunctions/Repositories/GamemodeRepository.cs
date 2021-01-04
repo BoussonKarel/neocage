@@ -28,9 +28,18 @@ namespace NCFunctions.Repositories
 
                 TableOperation insertOperation = TableOperation.Insert(gamemodeEntity);
 
-                await gamemodeTable.ExecuteAsync(insertOperation);
+                TableResult result = await gamemodeTable.ExecuteAsync(insertOperation);
 
-                return gm;
+                GamemodeEntity resultEntity = result.Result as GamemodeEntity;
+                Gamemode resultGamemode = new Gamemode()
+                {
+                    Id = resultEntity.Id,
+                    Description = resultEntity.Description,
+                    Duration = resultEntity.Duration,
+                    Released = resultEntity.Released
+                };
+
+                return resultGamemode;
             }
             catch (Exception ex)
             {
