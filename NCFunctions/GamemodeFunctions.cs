@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace NCFunctions
 {
-    public static class Function1
+    public static class GamemodeFunctions
     {
         [FunctionName("Function1")]
         public static async Task<IActionResult> Run(
