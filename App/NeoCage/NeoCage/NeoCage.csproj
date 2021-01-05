@@ -19,4 +19,13 @@
     <Folder Include="Helpers\" />
     <Folder Include="Models\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\GameInfo.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Homescreen.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

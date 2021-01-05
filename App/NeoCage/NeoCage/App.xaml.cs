@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoCage.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,7 @@ namespace NeoCage
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new GameInfo());
         }
 
         protected override void OnStart()
