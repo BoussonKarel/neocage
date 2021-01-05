@@ -1,11 +1,14 @@
 /*
-  1. Devicetwin ophalen & leds status aanpassen indien nodig
-  2. De reported aanpassen en doorsturen.
-  3. Wachten totdat twin device gechanged wordt
-  4. Indien led aanstaat checken dat de TOF geen bal detecteerd
-  5. Wordt de bal gedetecteerd dan doorsturen naar iothub via message
+  1. Connectie maken met wifi visuele feedback dmv led lichtjes
+  2. Ledjes in wachtstatus
+  3. Wachten op C2D message 
+      -> message komt binnen:
+         -> Juiste spel wordt gestart 
+            -> Indien er een gebeurtenis is (= bal onder sensor)
+               -> Doorsturen naar server, licht aanpassen
+         -> Indien spel voorbij: data doorsturen naar via message D2C
+    Indien method ontvangen, game vroegtijdig stoppen.
 */
-
 /*
  Libraries
 */
