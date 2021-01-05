@@ -22,7 +22,7 @@ namespace NCFunctions.Repositories
             TableQuery<GamemodeEntity> query = new TableQuery<GamemodeEntity>();
 
             if (released)
-                query.Where(TableQuery.GenerateFilterCondition("released", QueryComparisons.Equal, true.ToString()));
+                query = query.Where(TableQuery.GenerateFilterConditionForBool("Released", QueryComparisons.Equal, true));
 
             var queryResult = gamemodeTable.ExecuteQuerySegmentedAsync<GamemodeEntity>(query, null);
 
