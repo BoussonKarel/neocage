@@ -34,9 +34,9 @@ namespace NCFunctions
                         payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
                         await GameHelper.GameUpdated(payloadGame);
                         break;
-                    case "game_stop":
+                    case "game_end":
                         payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
-                        await GameHelper.GameStopped(payloadGame);
+                        await GameHelper.GameEnded(payloadGame);
                         break;
                     default:
                         break;
