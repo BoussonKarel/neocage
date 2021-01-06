@@ -54,5 +54,29 @@ namespace NCFunctions.Helpers
                 throw ex;
             }
         }
+
+        public static async Task<Game> CurrentGameMethod()
+        {
+            try
+            {
+                ServiceClient client = GetServiceClient();
+
+                // Send method 'stopgame'
+                CloudToDeviceMethod method = new CloudToDeviceMethod("currentgame");
+
+                CloudToDeviceMethodResult result = await client.InvokeDeviceMethodAsync(_DEVICEID, method);
+
+                if (result.Status == 404)
+                    return null; // No game
+                
+                Game currentGame = JsonConvert.DeserializeObject<Game>(result.GetPayloadAsJson());
+
+                return currentGame;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

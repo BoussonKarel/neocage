@@ -8,11 +8,12 @@ namespace NCFunctions.Helpers
 {
     public static class GameHelper
     {
-        public static Game CurrentGame { get; set; } = null;
         public static async Task StartGame(Gamemode gamemode)
         {
             try
             {
+                Game CurrentGame = await IoTHubHelper.CurrentGameMethod();
+
                 if (CurrentGame == null)
                 {
                     // Er is nog geen game bezig, game aanmaken
@@ -35,10 +36,6 @@ namespace NCFunctions.Helpers
             }
             catch (Exception ex)
             {
-                if (!ex.Message.Equals("GAME_BUSY"))
-                {
-                    CurrentGame = null;
-                }
                 throw ex;
             }
         }
@@ -47,6 +44,8 @@ namespace NCFunctions.Helpers
         {
             try
             {
+                Game CurrentGame = await IoTHubHelper.CurrentGameMethod();
+
                 if (CurrentGame == null)
                 {
                     // Er is geen game bezig

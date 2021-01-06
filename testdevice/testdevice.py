@@ -4,7 +4,7 @@ import time
 import random
 from azure.iot.device import IoTHubDeviceClient, MethodResponse
 
-current_game = None
+current_game = dict()
 
 conn_str = "HostName=IoTNeoCage.azure-devices.net;DeviceId=testdevice;SharedAccessKey=xmO8wWsMDV0YU3To/n4C+Eua+eSyJjHwvcC19aNOpsQ="
 # Create instance of the device client using the authentication provider
@@ -14,11 +14,26 @@ def method_request_handler(method_request):
     global current_game
     
     # Determine how to respond to the method request based on the method name
-    if method_request.name == "startgame":
+    if method_request.name == "currentgame":
+        print("Backend asks for current game:")
+
+        if (current_game):
+            print("-- There is a game: ", str(current_game))
+            # Game bezig
+            payload = current_game # Set response payload
+            status = 200 # return status code
+        else:
+            print("-- There is no game: ", str(current_game))
+            # Geen game bezig
+            payload = {"id": None} # Set response payload
+            status = 404 # return status code
+
+    elif method_request.name == "startgame":
         print("Received start game event:")
         print(method_request.payload)
 
         current_game = method_request.payload
+        print("New game: ", current_game["gamemode"])
 
         payload = {"started": True} # Set response payload
         status = 200 # return status code
@@ -52,8 +67,8 @@ def testmenu():
     if (keuze == 1):
         if (current_game):
             # Score += 1
-            current_game.score += 1
-            print("Score +1, nu is de score " + current_game.score)
+            current_game["score"] += 1
+            print("Score +1, nu is de score " + str(current_game["score"]))
             print("Dit verzenden naar Cloud / Backend...")
             # Send game update
             send_data(current_game)
@@ -73,8 +88,7 @@ def main():
 
     while True:
         # iets sturen?
-        
-        time.sleep(3) #even wachten
+        testmenu()
         
     # finally, disconnect
     device_client.disconnect()
