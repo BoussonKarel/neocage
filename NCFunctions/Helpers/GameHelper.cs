@@ -1,4 +1,5 @@
 ﻿using NCFunctions.Models;
+using NCFunctions.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,10 @@ namespace NCFunctions.Helpers
         {
             try
             {
-                Game CurrentGame = await IoTHubHelper.CurrentGameMethod();
+                // Haal de huidige game op
+                Game CurrentGame = await GameRepository.GetCurrentGameAsync();
 
+                // Is er al een game?
                 if (CurrentGame == null)
                 {
                     // Er is nog geen game bezig, game aanmaken
@@ -25,7 +28,7 @@ namespace NCFunctions.Helpers
                         Score = 0
                     };
 
-                    // Send these game details to the ESP32
+                    // Game details naar device sturen in start methode
                     await IoTHubHelper.StartGameMethod(CurrentGame);
                 }
                 else
@@ -39,12 +42,11 @@ namespace NCFunctions.Helpers
                 throw ex;
             }
         }
-
         public static async Task StopGame()
         {
             try
             {
-                Game CurrentGame = await IoTHubHelper.CurrentGameMethod();
+                Game CurrentGame = await GameRepository.GetCurrentGameAsync();
 
                 if (CurrentGame == null)
                 {
@@ -53,15 +55,20 @@ namespace NCFunctions.Helpers
                 }
                 else
                 {
-                    // Er is geen game bezig
+                    // Er is al een game bezig, stuur stop methode
                     await IoTHubHelper.StopGameMethod();
-                    CurrentGame = null;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        public static async Task GameUpdate(Game game)
+        {
+            // Received a game update, send it to the end user
+            Console.WriteLine(game);
+            // -- send game details over MQTT
         }
     }
 }
