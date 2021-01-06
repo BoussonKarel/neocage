@@ -1,5 +1,6 @@
-using NCFunctions.Models;
+﻿using NCFunctions.Models;
 using NCFunctions.Repositories;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace NCFunctions.Helpers
 {
     public static class GameHelper
     {
-        public static async Task StartGame(Gamemode gamemode)
+        public static async Task<Game> StartGame(Gamemode gamemode)
         {
             try
             {
@@ -30,6 +31,8 @@ namespace NCFunctions.Helpers
 
                     // Game details naar device sturen in start methode
                     await IoTHubHelper.StartGameMethod(CurrentGame);
+
+                    return CurrentGame;
                 }
                 else
                 {
@@ -64,21 +67,50 @@ namespace NCFunctions.Helpers
                 throw ex;
             }
         }
-        public static async Task GameUpdated(Game game)
+        public static void GameUpdated(Game game)
         {
-            // Received a game update, send it to the end user
-            Console.WriteLine(game);
-            MqttHelper.SendMessage("/neocage", "Game update");
-            // -- send game details over MQTT
+            try
+            {
+                // Received a game update, send it to the end user
+
+                // type "game_update", payload is the game info
+                string gamePayload = JsonConvert.SerializeObject(game);
+                MqttMessage message = new MqttMessage("game_update", gamePayload);
+
+                // Serialize
+                string mqttBody = JsonConvert.SerializeObject(message);
+
+                // Send to topic /neocage
+                MqttHelper.SendMessage("/neocage", mqttBody);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static async Task GameEnded(Game game)
         {
-            // The game has stopped, send final details to the end user
-            // Save the game in table storage
-            Console.WriteLine(game);
-            MqttHelper.SendMessage("/neocage", "Game ended");
-            // -- send game details over MQTT
+            try
+            {
+                // Received a game update, the game has ended, send it to the end user
+
+                // type "game_end", payload is the game info
+                string gamePayload = JsonConvert.SerializeObject(game);
+                MqttMessage message = new MqttMessage("game_end", gamePayload);
+
+                // Serialize
+                string mqttBody = JsonConvert.SerializeObject(message);
+
+                // Send to topic /neocage
+                MqttHelper.SendMessage("/neocage", mqttBody);
+
+                // Save game to table storage
+                await GameRepository.SaveGameAsync(game);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }
         }
     }
 }

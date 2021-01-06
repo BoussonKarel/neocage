@@ -85,9 +85,7 @@ def testmenu():
     if (keuze == 2):
         # END GAME
         if (current_game):
-            current_game = None
-
-            print("Game is gestopt")
+            print("Game stoppen...")
             print("Dit verzenden naar Cloud / Backend...")
 
             # Save in IoTMessage format
@@ -97,6 +95,9 @@ def testmenu():
             
             # Send game update
             send_data(data)
+
+            
+            current_game = None
         else:
             print("GEEN GAME BEZIG")
 

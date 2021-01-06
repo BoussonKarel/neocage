@@ -32,7 +32,7 @@ namespace NCFunctions
                 {
                     case "game_update":
                         payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
-                        await GameHelper.GameUpdated(payloadGame);
+                        GameHelper.GameUpdated(payloadGame);
                         break;
                     case "game_end":
                         payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
@@ -41,8 +41,6 @@ namespace NCFunctions
                     default:
                         break;
                 }
-                
-
             }
             catch (Exception ex)
             {
