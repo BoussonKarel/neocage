@@ -61,6 +61,7 @@ def twin_patch_handler(patch):
     # print(f"Threshold update: {threshold}")
 
 def testmenu():
+    global current_game
     print("Maak een keuze: ")
     print("1) Stuur score update")
     print("2) Stop game")
@@ -84,9 +85,14 @@ def testmenu():
     if (keuze == 2):
         # END GAME
         if (current_game):
+            current_game = None
+
+            print("Game is gestopt")
+            print("Dit verzenden naar Cloud / Backend...")
+
             # Save in IoTMessage format
             data = dict()
-            data["type"] = "game_stop"
+            data["type"] = "game_end"
             data["payload"] = json.dumps(current_game)
             
             # Send game update
