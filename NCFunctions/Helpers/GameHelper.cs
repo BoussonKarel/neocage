@@ -64,9 +64,17 @@ namespace NCFunctions.Helpers
                 throw ex;
             }
         }
-        public static async Task GameUpdate(Game game)
+        public static async Task GameUpdated(Game game)
         {
             // Received a game update, send it to the end user
+            Console.WriteLine(game);
+            // -- send game details over MQTT
+        }
+
+        public static async Task GameStopped(Game game)
+        {
+            // The game has stopped, send final details to the end user
+            // Save the game in table storage
             Console.WriteLine(game);
             // -- send game details over MQTT
         }

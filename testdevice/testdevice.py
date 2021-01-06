@@ -63,6 +63,7 @@ def twin_patch_handler(patch):
 def testmenu():
     print("Maak een keuze: ")
     print("1) Stuur score update")
+    print("2) Stop game")
     keuze = int(input("> "))
     if (keuze == 1):
         if (current_game):
@@ -70,8 +71,26 @@ def testmenu():
             current_game["score"] += 1
             print("Score +1, nu is de score " + str(current_game["score"]))
             print("Dit verzenden naar Cloud / Backend...")
+
+            # Save in IoTMessage format
+            data = dict()
+            data["type"] = "game_update"
+            data["payload"] = json.dumps(current_game)
+
             # Send game update
-            send_data(current_game)
+            send_data(data)
+        else:
+            print("GEEN GAME BEZIG")
+    if (keuze == 2):
+        # END GAME
+        if (current_game):
+            # Save in IoTMessage format
+            data = dict()
+            data["type"] = "game_stop"
+            data["payload"] = json.dumps(current_game)
+            
+            # Send game update
+            send_data(data)
         else:
             print("GEEN GAME BEZIG")
 

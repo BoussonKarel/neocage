@@ -25,9 +25,24 @@ namespace NCFunctions
             {
                 // Device sends a message
                 string messageBody = Encoding.UTF8.GetString(message.Body.Array);
-                Game messageGame = JsonConvert.DeserializeObject<Game>(messageBody);
+                IoTMessage iotMessage = JsonConvert.DeserializeObject<IoTMessage>(messageBody);
 
-                await GameHelper.GameUpdate(messageGame);
+                Game payloadGame;
+                switch (iotMessage.Type)
+                {
+                    case "game_update":
+                        payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
+                        await GameHelper.GameUpdated(payloadGame);
+                        break;
+                    case "game_stop":
+                        payloadGame = JsonConvert.DeserializeObject<Game>(iotMessage.Payload);
+                        await GameHelper.GameStopped(payloadGame);
+                        break;
+                    default:
+                        break;
+                }
+                
+
             }
             catch (Exception ex)
             {
