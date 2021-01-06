@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NCFunctions.Helpers;
 using NCFunctions.Models;
+using NCFunctions.Repositories;
 
 namespace NCFunctions
 {
@@ -27,9 +28,9 @@ namespace NCFunctions
                 Gamemode selectedGamemode = JsonConvert.DeserializeObject<Gamemode>(requestBody);
 
                 // Start this gamemode
-                await GameHelper.StartGame(selectedGamemode);
+                Game startedGame = await GameHelper.StartGame(selectedGamemode);
 
-                return new OkObjectResult("");
+                return new OkObjectResult(startedGame);
             }
             catch (Exception ex)
             {
@@ -59,6 +60,24 @@ namespace NCFunctions
                 {
                     return new BadRequestObjectResult("There is no game to stop.");
                 }
+                throw ex;
+            }
+        }
+
+        [FunctionName("GetCurrentGame")]
+        public static async Task<IActionResult> GetCurrentGame(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "game")] HttpRequest req,
+            ILogger log)
+        {
+            try
+            {
+                // User wants to get details about the current game
+                Game CurrentGame = await GameRepository.GetCurrentGameAsync();
+
+                return new OkObjectResult(CurrentGame);
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }
