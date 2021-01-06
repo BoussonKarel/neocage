@@ -4,20 +4,28 @@ import time
 import random
 from azure.iot.device import IoTHubDeviceClient, MethodResponse
 
+current_game = None
+
 conn_str = "HostName=IoTNeoCage.azure-devices.net;DeviceId=testdevice;SharedAccessKey=xmO8wWsMDV0YU3To/n4C+Eua+eSyJjHwvcC19aNOpsQ="
 # Create instance of the device client using the authentication provider
 device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
 
 def method_request_handler(method_request):
+    global current_game
+    
     # Determine how to respond to the method request based on the method name
     if method_request.name == "startgame":
         print("Received start game event:")
         print(method_request.payload)
 
+        current_game = method_request.payload
+
         payload = {"started": True} # Set response payload
         status = 200 # return status code
     elif method_request.name == "stopgame":
         print("Received stop game event")
+
+        current_game = None
 
         payload = {"stopped": True} # Set response payload
         status = 200 # return status code
@@ -37,6 +45,28 @@ def twin_patch_handler(patch):
     # threshold = patch["threshold"]
     # print(f"Threshold update: {threshold}")
 
+def testmenu():
+    print("Maak een keuze: ")
+    print("1) Stuur score update")
+    keuze = int(input("> "))
+    if (keuze == 1):
+        if (current_game):
+            # Score += 1
+            current_game.score += 1
+            print("Score +1, nu is de score " + current_game.score)
+            print("Dit verzenden naar Cloud / Backend...")
+            # Send game update
+            send_data(current_game)
+        else:
+            print("GEEN GAME BEZIG")
+
+def send_data(data):
+    # data = {"device": "pckarel", "temperature": temperatuur} # python dict
+    body = json.dumps(data) # json string
+
+    #versturen
+    device_client.send_message(body)
+
 def main():
     global device_client
     # global threshold
@@ -51,6 +81,7 @@ def main():
 
 
 if __name__ == "__main__":
+    current_game = None
     device_client.connect()
 
     twin = device_client.get_twin()
