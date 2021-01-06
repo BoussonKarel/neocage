@@ -14,6 +14,8 @@ namespace NCFunctions.Models
         [JsonProperty("duration")]
         public int? Duration { get; set; }
         [JsonProperty("score")]
-        public int Score { get; set; }
+        public int Score { get; set; } = 0;
+        [JsonProperty("username")]
+        public string Username { get; set; } = null;
     }
 }
