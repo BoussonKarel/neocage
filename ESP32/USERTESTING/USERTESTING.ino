@@ -15,20 +15,26 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 void setup() {
   Serial.begin(115200);
 
-//Led aanzetten
-  strip.begin();
-  strip.show();
-
   // wait until serial port opens for native USB devices
   while (! Serial) {
     delay(1);
   }
+
+
+//Led aanzetten
+  strip.begin();
+  strip.setBrightness(100);
+  strip.fill(strip.Color(255,0,0), 0, 7);
+  strip.show();
   
   Serial.println("Adafruit VL53L0X test");
   if (!lox.begin()) {
     Serial.println(F("Failed to boot VL53L0X"));
     while(1);
   }
+
+  lox.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
+
   // power 
   Serial.println(F("VL53L0X API Simple Ranging example\n\n")); 
 
@@ -49,9 +55,11 @@ void loop() {
     
       if (measure.RangeStatus != 4 && measure.RangeMilliMeter < 8000 ) {  // phase failures have incorrect data
         Serial.print("Distance (mm): "); Serial.println(measure.RangeMilliMeter);
-        if(measure.RangeMilliMeter + 100 < laatste) {
+        if(measure.RangeMilliMeter + 50 < laatste) {
           Serial.println("GOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL");
           speel = 0;
+            strip.fill(strip.Color(0,255,0), 0, 7);
+            strip.show();
         }
         laatste = measure.RangeMilliMeter;
       } else {
@@ -61,6 +69,8 @@ void loop() {
   else {
     delay(3000);
     speel = 1;
+    strip.fill(strip.Color(255,0,0), 0, 7);
+    strip.show();
   }
     
 }
