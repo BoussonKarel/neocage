@@ -16,6 +16,11 @@ def method_request_handler(method_request):
 
         payload = {"started": True} # Set response payload
         status = 200 # return status code
+    elif method_request.name == "stopgame":
+        print("Received stop game event")
+
+        payload = {"stopped": True} # Set response payload
+        status = 200 # return status code
     else:
         payload = {"error": "unknown method"} # Set response payload
         status = 400 # return status code

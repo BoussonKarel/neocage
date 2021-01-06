@@ -37,5 +37,22 @@ namespace NCFunctions.Helpers
                 throw ex;
             }
         }
+
+        public static async Task StopGameMethod()
+        {
+            try
+            {
+                ServiceClient client = GetServiceClient();
+
+                // Send method 'stopgame'
+                CloudToDeviceMethod method = new CloudToDeviceMethod("stopgame");
+
+                await client.InvokeDeviceMethodAsync(_DEVICEID, method);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
