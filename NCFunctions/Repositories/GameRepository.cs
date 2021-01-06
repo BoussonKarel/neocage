@@ -51,10 +51,5 @@ namespace NCFunctions.Repositories
                 throw ex;
             }
         }
-
-        //public static async Task<Game> UpdateUsernameAsync()
-        //{
-        //    // Update username async
-        //}
     }
 }
