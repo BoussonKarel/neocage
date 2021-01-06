@@ -1,4 +1,4 @@
-﻿using NCFunctions.Models;
+using NCFunctions.Models;
 using NCFunctions.Repositories;
 using System;
 using System.Collections.Generic;
@@ -68,14 +68,16 @@ namespace NCFunctions.Helpers
         {
             // Received a game update, send it to the end user
             Console.WriteLine(game);
+            MqttHelper.SendMessage("/neocage", "Game update");
             // -- send game details over MQTT
         }
 
-        public static async Task GameStopped(Game game)
+        public static async Task GameEnded(Game game)
         {
             // The game has stopped, send final details to the end user
             // Save the game in table storage
             Console.WriteLine(game);
+            MqttHelper.SendMessage("/neocage", "Game ended");
             // -- send game details over MQTT
         }
     }
