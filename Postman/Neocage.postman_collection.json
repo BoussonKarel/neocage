@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "0054a0c2-9780-400b-984c-8e2e4bc79faf",
+		"name": "Neocage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Gamemode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"doubletrouble\",\r\n    \"name\": \"Double Trouble\",\r\n    \"description\": \"De bedoeling van dit spel is bla bla bla en nog een heleboel andere uitleg over hoe het werkt heb geen zin om  te copy aopsten\",\r\n    \"duration\": 60,\r\n    \"released\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/gamemodes",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"gamemodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Released gamemodes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/gamemodes",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"gamemodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Gamemodes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/gamemodes/all",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"gamemodes",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"doubletrouble\",\r\n    \"name\": \"Double Trouble\",\r\n    \"description\": \"De bedoeling van dit spel is bla bla bla en nog een heleboel andere uitleg over hoe het werkt heb geen zin om  te copy aopsten\",\r\n    \"duration\": 60,\r\n    \"released\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/game/start",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"game",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/game/stop",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"game",
+						"stop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Played Games (with saved score)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/games",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Played Games",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/games/all",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"games",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current Game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/games/current",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"games",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save username to game (for score)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"aba50348-e1a8-4761-a7ba-8bfe89b40b34\",\r\n    \"gamemode\": \"doubletrouble\",\r\n    \"duration\": 60,\r\n    \"score\": 3,\r\n    \"username\": \"Karel\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://neocage.azurewebsites.net/api/games",
+					"protocol": "https",
+					"host": [
+						"neocage",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"games"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
