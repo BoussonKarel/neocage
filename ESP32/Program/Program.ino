@@ -196,6 +196,8 @@ void quickyTricky(int duration) {
   int currentLed = 1;
   int previousLed = 1;
 
+  int currentScore = 0;
+
   int value = readSensor(currentLed);
   int laatste = readSensor(currentLed);
   while (currentMillis - previousMillis <= duration) {
@@ -222,6 +224,7 @@ void quickyTricky(int duration) {
       delay(10);
       setJewel(currentLed,255,0,0);
       //TODO: Score bijhouden
+      currentScore++;
       //Doorsturen IOTHUB
     }
     laatste = readSensor(currentLed);   
@@ -229,6 +232,7 @@ void quickyTricky(int duration) {
    
 
   }
+  Serial.println("Game score " + currentScore); 
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
   delay(2500);
