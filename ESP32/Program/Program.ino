@@ -23,7 +23,19 @@ Adafruit_VL53L0X lox3 = Adafruit_VL53L0X();
 //Adafruit_VL53L0X lox4 = Adafruit_VL53L0X();
 
 Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3};
+<<<<<<< develop
 //Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3, lox4};
+=======
+
+// this holds the measurement
+VL53L0X_RangingMeasurementData_t measure1;
+VL53L0X_RangingMeasurementData_t measure2;
+VL53L0X_RangingMeasurementData_t measure3;
+
+VL53L0X_RangingMeasurementData_t measurement;
+
+//VL53L0X_RangingMeasurementData_t measures[] = {measure1,measure2,measure3};
+>>>>>>> Added The Rondo functionality
 
 #define LED_PIN 5
 #define JEWEL_COUNT 3
@@ -252,7 +264,10 @@ void setID() {
   sensors[0] = lox1;
   sensors[1] = lox2;
   sensors[2] = lox3;
+<<<<<<< develop
   //sensors[3] = lox4;
+=======
+>>>>>>> Added The Rondo functionality
   
   //Led aanzetten
   leds.begin();
@@ -332,6 +347,7 @@ void theRondo() {
    
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
+<<<<<<< develop
   delay(1000);
   leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
   leds.show();
@@ -339,6 +355,21 @@ void theRondo() {
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
   delay(1000);  
+=======
+}
+
+int readSensor(int sensorId) {
+  sensorId = sensorId - 1;
+
+  sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+
+  while(measurement.RangeStatus == 4 || measurement.RangeMilliMeter > 8190) {
+    sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+  } 
+  Serial.println(String(sensorId) + ": " + measurement.RangeMilliMeter);
+  delay(1);
+  return measurement.RangeMilliMeter;
+>>>>>>> Added The Rondo functionality
 }
 
 void quickyTricky(int duration) {
@@ -392,6 +423,57 @@ void gameOff() {
   leds.show();
 }
 
+void theRondo() {
+  //Alle lichten op rood
+  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
+  leds.show();
+  //Timer starten
+  int startMillis = millis();
+
+  int done[3] = {0,0,0};
+
+  int lastValue[3] = {0,0,0};
+  int currentValue[3] = {0,0,0};
+
+  int finished[3] = {1,1,1};
+  int value = 0;
+  int teller2 = 0;
+  while(done[0] != 1 || done[1] != 1 ||done[2] != 1 ) {
+    for (int teller = 0; teller < 3; teller++) {
+      teller2 = teller + 1;
+      value = readSensor(teller2);
+      Serial.println("Vergelijking VALUE " + String(value)+ " " + String(lastValue[teller]));
+      if(value + 50 < lastValue[teller]) {
+        //Er is gescoord
+        //Licht groen + done aanpassen
+        done[teller] = 1;
+        setJewel(teller2,0,255,0);
+        Serial.println(String(teller) + " GOAAAAAAAAAAAAAAAAAAAL");
+      }
+      lastValue[teller]= value;
+      Serial.println(String(lastValue[0]) + " " + String(lastValue[1]) + " " + String(lastValue[2]) + " " );
+    }
+    teller2 = 0;
+  }
+  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+  leds.show();
+  delay(2500);
+  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
+  leds.show();
+  delay(2500);
+  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+  leds.show();
+
+}
+
 void loop() {
+<<<<<<< develop
   Esp32MQTTClient_Check();
+=======
+  theRondo();
+  leds.fill(leds.Color(255, 0, 255), 0, LED_COUNT);
+  leds.show();
+  delay(1000000); 
+
+>>>>>>> Added The Rondo functionality
 }
