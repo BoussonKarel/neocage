@@ -427,28 +427,20 @@ a:focus {
 \*------------------------------------*/
 
 /*
-    Component: Logo
+    Component: App
     ---
-    Website main logo
+    Main app wrapper
 */
 
-/*
-    Component: Card
-    ---
-    Card with box shadow
-*/
+.c-app {
+    max-width: 29em; /* 400 / 16px = 25em + 4em padding */
+    padding: 2em; /* 32 / 16px = 2em */
+    margin: 0 auto;
+    
+}
 
-/*
-    Component: Forms
-    ---
-    Everything form related here
-*/
 
-/*
-    Component: Input
-    ---
-    Class to put on all input="text" like form inputs
-*/
+
 
 .c-input {
 
