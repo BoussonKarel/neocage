@@ -51,5 +51,38 @@ namespace NCFunctions.Repositories
                 throw ex;
             }
         }
+
+        public static async Task<List<Game>> GetGamesAsync(bool withUsername)
+        {
+            // Create list to store the result
+            List<Game> games = new List<Game>();
+
+            // Get the games table
+            CloudTable gameTable = await StorageHelper.GetCloudTable("games");
+
+            // Query to get ALL
+            TableQuery<GameEntity> query = new TableQuery<GameEntity>();
+
+            // Query to get ALL with a username filled in (not null)
+            if (withUsername)
+                query = query.Where(TableQuery.GenerateFilterCondition("Username", QueryComparisons.NotEqual, null));
+
+            var queryResult = gameTable.ExecuteQuerySegmentedAsync<GameEntity>(query, null);
+
+            foreach (GameEntity ge in queryResult.Result)
+            {
+                games.Add(new Game()
+                {
+                    Id = ge.Id,
+                    GamemodeId = ge.GamemodeId,
+                    Duration = ge.Duration,
+                    Score = ge.Score,
+                    Username = ge.Username
+                });
+            }
+
+            return games;
+        }
+
     }
 }
