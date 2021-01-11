@@ -83,14 +83,15 @@ namespace NCFunctions
             }
         }
 
-        [FunctionName("GetGamesWithScore")]
-        public static async Task<IActionResult> GetGamesWithScore(
+        [FunctionName("GetGames")]
+        public static async Task<IActionResult> GetGames(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "games")] HttpRequest req,
             ILogger log)
         {
             try
             {
-                // User wants to get all games with a username / score
+                // User wants to get the played games with a username filled in (score saved)
+                // No matter what gamemode
                 List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true);
 
                 return new OkObjectResult(gamesWithScore);
@@ -108,10 +109,51 @@ namespace NCFunctions
         {
             try
             {
-                // User wants to get all the games
+                // User wants to get ALL the played games
+                // No matter what gamemode
                 List<Game> games = await GameRepository.GetGamesAsync(false);
 
                 return new OkObjectResult(games);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FunctionName("GetGamesByGamemode")]
+        public static async Task<IActionResult> GetGamesByGamemode(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "games/{gamemodeid}")] HttpRequest req,
+            string gamemodeid,
+            ILogger log)
+        {
+            try
+            {
+                // User wants to get the played games with a username filled in (score saved)
+                // Only the ones of gamemode id
+                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true, gamemodeid);
+
+                return new OkObjectResult(gamesWithScore);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FunctionName("GetAllGamesByGamemode")]
+        public static async Task<IActionResult> GetAllGamesByGamemode(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "games/{gamemodeid}/all")] HttpRequest req,
+            string gamemodeid,
+            ILogger log)
+        {
+            try
+            {
+                // User wants to get ALL the played games
+                // Only the ones of gamemode id
+                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(false, gamemodeid);
+
+                return new OkObjectResult(gamesWithScore);
             }
             catch (Exception ex)
             {
