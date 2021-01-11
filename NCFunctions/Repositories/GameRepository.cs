@@ -60,7 +60,7 @@ namespace NCFunctions.Repositories
             }
         }
 
-        public static async Task<List<Game>> GetGamesAsync(bool withUsername)
+        public static async Task<List<Game>> GetGamesAsync(bool withUsername, string gamemodeid = null)
         {
             try
             {
@@ -73,10 +73,29 @@ namespace NCFunctions.Repositories
                 // Query to get ALL
                 TableQuery<GameEntity> query = new TableQuery<GameEntity>();
 
+                // Filters opslaan
+                string usernameFilter = null;
+                string gamemodeFilter = null;
+
                 // Query to get ALL with a username filled in (not null)
                 if (withUsername)
-                    query = query.Where(TableQuery.GenerateFilterCondition("Username", QueryComparisons.NotEqual, null));
+                    usernameFilter = TableQuery.GenerateFilterCondition("Username", QueryComparisons.NotEqual, null);
 
+                // Query to filter on gamemode id
+                if (!string.IsNullOrWhiteSpace(gamemodeid))
+                    gamemodeFilter = TableQuery.GenerateFilterCondition("GamemodeId", QueryComparisons.Equal, gamemodeid);
+
+                // Beide filters zijn ingesteld
+                if (usernameFilter != null && gamemodeFilter != null)
+                    query = query.Where(TableQuery.CombineFilters(usernameFilter, TableOperators.And, gamemodeFilter));
+                // Enkel de username (score) filter is ingesteld
+                else if (usernameFilter != null && gamemodeFilter == null)
+                    query = query.Where(usernameFilter);
+                // Enkel de gamemode filter is ingesteld
+                else if (gamemodeFilter != null && usernameFilter == null)
+                    query = query.Where(gamemodeFilter);
+
+                // Execute the query
                 var queryResult = gameTable.ExecuteQuerySegmentedAsync<GameEntity>(query, null);
 
                 foreach (GameEntity ge in queryResult.Result)
