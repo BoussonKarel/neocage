@@ -5,29 +5,36 @@
 #define LOX1_ADDRESS 0x30
 #define LOX2_ADDRESS 0x31
 #define LOX3_ADDRESS 0x32
+//#define LOX4_ADDRESS 0x32
 
 // set the pins to shutdown
-#define SHT_LOX1 15
-#define SHT_LOX2 14
-#define SHT_LOX3 16
+#define SHT_LOX1 4
+#define SHT_LOX2 16
+#define SHT_LOX3 17
+//#define SHT_LOX4 0
 
 // objects for the vl53l0x
 Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
 Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
 Adafruit_VL53L0X lox3 = Adafruit_VL53L0X();
+//Adafruit_VL53L0X lox4 = Adafruit_VL53L0X();
 
 Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3};
+//Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3, lox4};
 
 // this holds the measurement
 VL53L0X_RangingMeasurementData_t measure1;
 VL53L0X_RangingMeasurementData_t measure2;
 VL53L0X_RangingMeasurementData_t measure3;
+//VL53L0X_RangingMeasurementData_t measure4;
 
 //VL53L0X_RangingMeasurementData_t measures[] = {measure1,measure2,measure3};
 
 #define LED_PIN 5
 #define JEWEL_COUNT 3
 int LED_COUNT = JEWEL_COUNT * 7;
+
+int sensitivity = 50;
 
 Adafruit_NeoPixel leds(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -44,17 +51,20 @@ void setID() {
   digitalWrite(SHT_LOX1, LOW);
   digitalWrite(SHT_LOX2, LOW);
   digitalWrite(SHT_LOX3, LOW);
+  //digitalWrite(SHT_LOX4, LOW);
   delay(100);
   // all unreset
   digitalWrite(SHT_LOX1, HIGH);
   digitalWrite(SHT_LOX2, HIGH);
   digitalWrite(SHT_LOX3, HIGH);
+  //digitalWrite(SHT_LOX4, HIGH);
   delay(100);
 
   // activating LOX1 and reseting LOX2
   digitalWrite(SHT_LOX1, HIGH);
   digitalWrite(SHT_LOX2, LOW);
   digitalWrite(SHT_LOX3, LOW);
+  //digitalWrite(SHT_LOX4, LOW);
 
   // initing LOX1
   if (!lox1.begin(LOX1_ADDRESS)) {
@@ -82,15 +92,26 @@ void setID() {
     Serial.println(F("Failed to boot 3 VL53L0X"));
     while (1);
   }
+  
+  /* activating LOX3
+  digitalWrite(SHT_LOX4, HIGH);
+  delay(100);
+
+  //initing LOX3
+  if (!lox4.begin(LOX4_ADDRESS)) {
+    Serial.println(F("Failed to boot 4 VL53L0X"));
+    while (1);
+  }*/
 
   lox1.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
   lox2.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
   lox3.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
+  //lox4.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
 
 
   //Led aanzetten
   leds.begin();
-  leds.setBrightness(25);
+  leds.setBrightness(5);
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
 }
@@ -100,6 +121,7 @@ void read_dual_sensors() {
   lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
   lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
   lox3.rangingTest(&measure3, false); // pass in 'true' to get debug data printout!
+  //lox4.rangingTest(&measure4, false); // pass in 'true' to get debug data printout!
 
   // print sensor one reading
   Serial.print(F("1: "));
@@ -129,16 +151,25 @@ void read_dual_sensors() {
     Serial.print(F("Out of range"));
   }
 
-
   Serial.print(F(" "));
 
+  /* print sensor two reading
+  Serial.print(F("4: "));
+  if (measure4.RangeStatus != 4) {
+    Serial.print(measure4.RangeMilliMeter);
+  } else {
+    Serial.print(F("Out of range"));
+  }*/
+
+  Serial.print(F(" "));
+  
   Serial.println();
 }
 
 void setup() {
   Serial.begin(115200);
 
-  randomSeed(123456);
+  randomSeed(millis());
   // wait until serial port opens for native USB devices
   while (! Serial) {
     delay(1);
@@ -149,12 +180,14 @@ void setup() {
   pinMode(SHT_LOX1, OUTPUT);
   pinMode(SHT_LOX2, OUTPUT);
   pinMode(SHT_LOX3, OUTPUT);
+  //pinMode(SHT_LOX4, OUTPUT);
 
   Serial.println(F("Shutdown pins inited..."));
 
   digitalWrite(SHT_LOX1, LOW);
   digitalWrite(SHT_LOX2, LOW);
   digitalWrite(SHT_LOX3, LOW);
+  //digitalWrite(SHT_LOX4, LOW);
 
   Serial.println(F("Both in reset mode...(pins are low)"));
 
@@ -165,15 +198,31 @@ void setup() {
 
 void setJewel(int jewel, int red, int green, int blue) {
   jewel = jewel - 1;
-  if(jewel != 0) {
-    jewel = jewel * 7;
-  }
+  jewel = jewel * 7;
+  //Todo Als de jewel groter is dan aantal dan neits aan ofz
   leds.fill(leds.Color(red, green, blue), jewel, 7);
   leds.show();
 }
 
-int readSensor(int sensorId) {
-  sensorId = sensorId - 1;
+int readSensor(int sensorId, bool IndexOrNot) {
+  if(IndexOrNot) {
+      sensorId = sensorId - 1;
+      
+      sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+      while(measurement.RangeStatus == 4 || measurement.RangeMilliMeter > 8190) {
+        sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+      } 
+      Serial.println(String(sensorId) + ": " + measurement.RangeMilliMeter);
+      return measurement.RangeMilliMeter;
+  }
+  else {
+      sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+      while(measurement.RangeStatus == 4 || measurement.RangeMilliMeter > 8190) {
+        sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+      } 
+      Serial.println(String(sensorId) + ": " + measurement.RangeMilliMeter);
+      return measurement.RangeMilliMeter;
+  }
 
   VL53L0X_RangingMeasurementData_t measurement;
   sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
@@ -186,6 +235,7 @@ int readSensor(int sensorId) {
 }
 
 void quickyTricky(int duration) {
+  //duration * 1000 want komt als secondenbinnen
   //leds resetten
   leds.fill(leds.Color(0, 0, 255), 0, LED_COUNT);
   leds.show();
@@ -203,7 +253,10 @@ void quickyTricky(int duration) {
     //Licht 1 op rood en wachten op een goal
     setJewel(currentLed, 255, 0, 0);
     //Wachten op goal van sensor 1
-    value = readSensor(currentLed) + 30;
+    //Serial.println("Value: " + String(readSensor(currentLed)));
+    value = readSensor(currentLed,1) + sensitivity;
+    //Serial.println("Value + 30: " + String(value));
+    //Serial.println("Laatste: " +  String(laatste));
     if(value < laatste ) {
       //Er is gescoord
       //huidige led op groen, volgende willekeurige led op rood
@@ -224,20 +277,17 @@ void quickyTricky(int duration) {
       //TODO: Score bijhouden
       //Doorsturen IOTHUB
     }
-    laatste = readSensor(currentLed);   
+    laatste = value - sensitivity;   
     currentMillis = millis();
-   
-
   }
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
-  delay(2500);
+  delay(1000);
   leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
   leds.show();
-  delay(2500);
+  delay(1000);
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
-  delay(duration);
 }
 
 void loop() {
