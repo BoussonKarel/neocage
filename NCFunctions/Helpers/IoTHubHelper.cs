@@ -10,7 +10,7 @@ namespace NCFunctions.Helpers
 {
     public class IoTHubHelper
     {
-        private const string _DEVICEID = "testdevice";
+        private const string _DEVICEID = "ESPBRUGGE01";
         public static ServiceClient GetServiceClient()
         {
             return ServiceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("IoTHubAdmin"));
