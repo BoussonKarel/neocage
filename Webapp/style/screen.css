@@ -7,20 +7,7 @@
 \*------------------------------------*/
 
 :root {
-    /* colors */
-    --color-alpha-light: MEDIUMSLATEBLUE;
-    --color-alpha: SLATEBLUE;
-
-    --color-neutral-light: LIGHTSLATEGRAY;
-    --color-neutral: SLATEGRAY;
-    --color-neutral-dark: DARKSLATEGRAY;
-
-    /* Shadows */
-
-    /* border radius */
-
-    /* transitions */
-    --transition-alpha: .1s;
+    
 }
 
 /*------------------------------------*\
