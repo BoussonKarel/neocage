@@ -1,5 +1,8 @@
 #include "Adafruit_VL53L0X.h"
 #include <Adafruit_NeoPixel.h>
+#include <ArduinoJson.h>
+#include <WiFi.h>
+#include "Esp32MQTTClient.h"
 
 // address we will assign if dual sensor is present
 #define LOX1_ADDRESS 0x30
@@ -20,21 +23,176 @@ Adafruit_VL53L0X lox3 = Adafruit_VL53L0X();
 //Adafruit_VL53L0X lox4 = Adafruit_VL53L0X();
 
 Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3};
+<<<<<<< develop
 //Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3, lox4};
+=======
+
+// this holds the measurement
+VL53L0X_RangingMeasurementData_t measure1;
+VL53L0X_RangingMeasurementData_t measure2;
+VL53L0X_RangingMeasurementData_t measure3;
+
+VL53L0X_RangingMeasurementData_t measurement;
+
+//VL53L0X_RangingMeasurementData_t measures[] = {measure1,measure2,measure3};
+>>>>>>> Added The Rondo functionality
 
 #define LED_PIN 5
 #define JEWEL_COUNT 3
 int LED_COUNT = JEWEL_COUNT * 7;
 
-int sensitivity = 75;
-int lastGoal;
-
 Adafruit_NeoPixel leds(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
+//Game variables
+int sensitivity = 75;
+int lastGoal;
 bool activeSensors[3] = { false, false, false };
 int lastValue[3] = {0,0,0};
 int doneRondo[3] = {false,false,false};
+String currentGame;
+int currentDuration;
 
+//IoTHub
+const char* ssid = "KAMER5";
+const char* password = "AABBCCDDAA";
+static const char* connectionString = "HostName=IoTNeoCage.azure-devices.net;DeviceId=ESPBRUGGE01;SharedAccessKey=psK7dYZpKtJ6wrvWccz79NqtIlzZfvNvpNWcmioLxWI=";
+static bool hasIoTHub = false;
+static bool hasWifi = false;
+static bool messageSending = true;
+
+//MultiThreading
+TaskHandle_t Task0;
+
+void setup() {
+  Serial.begin(115200);
+
+  randomSeed(millis());
+  // wait until serial port opens for native USB devices
+  while (! Serial) {
+    delay(1);
+  }
+
+  WiFi.mode(WIFI_AP);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    hasWifi = false;
+  }
+  hasWifi = true;
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.println(" > IoT Hub");
+  if (!Esp32MQTTClient_Init((const uint8_t*)connectionString, true))
+  {
+    hasIoTHub = false;
+    Serial.println("Initializing IoT hub failed.");
+    return;
+  }
+  Esp32MQTTClient_SetSendConfirmationCallback(SendConfirmationCallback);
+  Esp32MQTTClient_SetMessageCallback(MessageCallback);
+  //Esp32MQTTClient_SetDeviceTwinCallback(DeviceTwinCallback);
+  Esp32MQTTClient_SetDeviceMethodCallback(DeviceMethodCallback);
+
+  Serial.println(F("dqsdqsdqsd pins inited..."));
+  delay(100);
+  pinMode(SHT_LOX1, OUTPUT);
+  pinMode(SHT_LOX2, OUTPUT);
+  pinMode(SHT_LOX3, OUTPUT);
+  //pinMode(SHT_LOX4, OUTPUT);
+
+  Serial.println(F("Shutdown pins inited..."));
+
+  digitalWrite(SHT_LOX1, LOW);
+  digitalWrite(SHT_LOX2, LOW);
+  digitalWrite(SHT_LOX3, LOW);
+  //digitalWrite(SHT_LOX4, LOW);
+
+  setID();
+
+  //MultiThreading
+  xTaskCreatePinnedToCore(Task0Code,"Task0",10000,NULL,0,&Task0,0);
+}
+
+void Task0Code(void * parameter) {
+  for(;;) {
+    if(currentGame=="quickytricky") {
+      quickyTricky(currentDuration);
+    }
+    else if(currentGame=="therondo") {
+      theRondo();
+    }
+  }
+}
+
+static int  DeviceMethodCallback(const char *methodName, const unsigned char *payload, int size, unsigned char **response, int *response_size)
+{
+  LogInfo("Try to invoke method %s", methodName);
+  const char *responseMessage = "\"Successfully invoke device method\"";
+  int result = 200;
+
+  if (strcmp(methodName, "startgame") == 0)
+  {
+    //Eerst currentgame method -> 404 returnen 
+     //Startgame -> payload ophalen welke game en welke duration
+     StaticJsonDocument<800> doc;
+     
+    // Deserialize the JSON document
+    DeserializationError error = deserializeJson(doc, payload);
+    // Test if parsing succeeds.
+    if (error) {
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.println(error.f_str());
+    }
+    
+    String gamemode = doc["gamemode"];
+    currentDuration = doc["duration"];  
+    // Print values.
+    Serial.println(gamemode);
+    Serial.println(currentDuration);
+    //voor game starten -> succes code sturen naar backend
+    if(gamemode ==  "therondo") {
+      currentGame = "therondo";
+    }
+    else if(gamemode=="quickytricky") {
+      currentGame = "quickytricky";
+    }
+    else {
+      Serial.println("game unknown");    
+    }
+    
+  }
+  else if (strcmp(methodName, "stop") == 0)
+  {
+    LogInfo("Stop spel");
+  }
+  else
+  {
+    LogInfo("No method %s found", methodName);
+    responseMessage = "\"No method found\"";
+    result = 404;
+  }
+
+  *response_size = strlen(responseMessage) + 1;
+  *response = (unsigned char *)strdup(responseMessage);
+
+  return result;
+}
+
+static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result)
+{
+  if (result == IOTHUB_CLIENT_CONFIRMATION_OK)
+  {
+    Serial.println("Send Confirmation Callback finished.");
+  }
+}
+
+static void MessageCallback(const char* payLoad, int size)
+{
+  Serial.println("Message callback:");
+  Serial.println(payLoad);
+}
 
 void toggleSensor(int index) {
   bool waarde = activeSensors[index];
@@ -106,39 +264,16 @@ void setID() {
   sensors[0] = lox1;
   sensors[1] = lox2;
   sensors[2] = lox3;
+<<<<<<< develop
   //sensors[3] = lox4;
+=======
+>>>>>>> Added The Rondo functionality
   
   //Led aanzetten
   leds.begin();
   leds.setBrightness(5);
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
-}
-
-void setup() {
-  Serial.begin(115200);
-
-  randomSeed(millis());
-  // wait until serial port opens for native USB devices
-  while (! Serial) {
-    delay(1);
-  }
-
-  Serial.println(F("dqsdqsdqsd pins inited..."));
-  delay(100);
-  pinMode(SHT_LOX1, OUTPUT);
-  pinMode(SHT_LOX2, OUTPUT);
-  pinMode(SHT_LOX3, OUTPUT);
-  //pinMode(SHT_LOX4, OUTPUT);
-
-  Serial.println(F("Shutdown pins inited..."));
-
-  digitalWrite(SHT_LOX1, LOW);
-  digitalWrite(SHT_LOX2, LOW);
-  digitalWrite(SHT_LOX3, LOW);
-  //digitalWrite(SHT_LOX4, LOW);
-
-  setID();
 }
 
 void setJewel(int jewel, int red, int green, int blue) {
@@ -212,6 +347,7 @@ void theRondo() {
    
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
+<<<<<<< develop
   delay(1000);
   leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
   leds.show();
@@ -219,6 +355,21 @@ void theRondo() {
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
   delay(1000);  
+=======
+}
+
+int readSensor(int sensorId) {
+  sensorId = sensorId - 1;
+
+  sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+
+  while(measurement.RangeStatus == 4 || measurement.RangeMilliMeter > 8190) {
+    sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
+  } 
+  Serial.println(String(sensorId) + ": " + measurement.RangeMilliMeter);
+  delay(1);
+  return measurement.RangeMilliMeter;
+>>>>>>> Added The Rondo functionality
 }
 
 void quickyTricky(int duration) {
@@ -250,7 +401,12 @@ void quickyTricky(int duration) {
     currentMillis = millis();
   }
   //alles uit
+  gameOff();
 
+}
+
+void gameOff() {
+  //Alles resetten
   for(int i = 0; i < JEWEL_COUNT; i++) {
     activeSensors[i] = false;
     lastValue[i] = 0;
@@ -267,10 +423,57 @@ void quickyTricky(int duration) {
   leds.show();
 }
 
-void loop() {
-  //quickyTricky(30);
-  theRondo();
-  //read_dual_sensors();
-  //delay(2000);
+void theRondo() {
+  //Alle lichten op rood
+  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
+  leds.show();
+  //Timer starten
+  int startMillis = millis();
 
+  int done[3] = {0,0,0};
+
+  int lastValue[3] = {0,0,0};
+  int currentValue[3] = {0,0,0};
+
+  int finished[3] = {1,1,1};
+  int value = 0;
+  int teller2 = 0;
+  while(done[0] != 1 || done[1] != 1 ||done[2] != 1 ) {
+    for (int teller = 0; teller < 3; teller++) {
+      teller2 = teller + 1;
+      value = readSensor(teller2);
+      Serial.println("Vergelijking VALUE " + String(value)+ " " + String(lastValue[teller]));
+      if(value + 50 < lastValue[teller]) {
+        //Er is gescoord
+        //Licht groen + done aanpassen
+        done[teller] = 1;
+        setJewel(teller2,0,255,0);
+        Serial.println(String(teller) + " GOAAAAAAAAAAAAAAAAAAAL");
+      }
+      lastValue[teller]= value;
+      Serial.println(String(lastValue[0]) + " " + String(lastValue[1]) + " " + String(lastValue[2]) + " " );
+    }
+    teller2 = 0;
+  }
+  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+  leds.show();
+  delay(2500);
+  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
+  leds.show();
+  delay(2500);
+  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+  leds.show();
+
+}
+
+void loop() {
+<<<<<<< develop
+  Esp32MQTTClient_Check();
+=======
+  theRondo();
+  leds.fill(leds.Color(255, 0, 255), 0, LED_COUNT);
+  leds.show();
+  delay(1000000); 
+
+>>>>>>> Added The Rondo functionality
 }
