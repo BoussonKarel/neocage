@@ -23,19 +23,7 @@ Adafruit_VL53L0X lox3 = Adafruit_VL53L0X();
 //Adafruit_VL53L0X lox4 = Adafruit_VL53L0X();
 
 Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3};
-<<<<<<< develop
 //Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3, lox4};
-=======
-
-// this holds the measurement
-VL53L0X_RangingMeasurementData_t measure1;
-VL53L0X_RangingMeasurementData_t measure2;
-VL53L0X_RangingMeasurementData_t measure3;
-
-VL53L0X_RangingMeasurementData_t measurement;
-
-//VL53L0X_RangingMeasurementData_t measures[] = {measure1,measure2,measure3};
->>>>>>> Added The Rondo functionality
 
 #define LED_PIN 5
 #define JEWEL_COUNT 3
@@ -49,8 +37,10 @@ int lastGoal;
 bool activeSensors[3] = { false, false, false };
 int lastValue[3] = {0,0,0};
 int doneRondo[3] = {false,false,false};
-String currentGame;
+String currentGame = "";
+String gameID = "";
 int currentDuration;
+int gameScore = 0;
 
 //IoTHub
 const char* ssid = "KAMER5";
@@ -58,7 +48,7 @@ const char* password = "AABBCCDDAA";
 static const char* connectionString = "HostName=IoTNeoCage.azure-devices.net;DeviceId=ESPBRUGGE01;SharedAccessKey=psK7dYZpKtJ6wrvWccz79NqtIlzZfvNvpNWcmioLxWI=";
 static bool hasIoTHub = false;
 static bool hasWifi = false;
-static bool messageSending = true;
+#define MESSAGE_MAX_LEN 256
 
 //MultiThreading
 TaskHandle_t Task0;
@@ -148,6 +138,8 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
     
     String gamemode = doc["gamemode"];
     currentDuration = doc["duration"];  
+    String id = doc["id"];
+    gameID = id;
     // Print values.
     Serial.println(gamemode);
     Serial.println(currentDuration);
@@ -264,10 +256,7 @@ void setID() {
   sensors[0] = lox1;
   sensors[1] = lox2;
   sensors[2] = lox3;
-<<<<<<< develop
   //sensors[3] = lox4;
-=======
->>>>>>> Added The Rondo functionality
   
   //Led aanzetten
   leds.begin();
@@ -340,36 +329,9 @@ void theRondo() {
       }
     }
   }
-  Serial.println("The rondo done");
-  for(int i = 0; i < JEWEL_COUNT; i++) {
-    lastValue[i] = 0;
-  }
-   
-  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
-  leds.show();
-<<<<<<< develop
-  delay(1000);
-  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
-  leds.show();
-  delay(1000);
-  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
-  leds.show();
-  delay(1000);  
-=======
-}
+  
+  gameOff();
 
-int readSensor(int sensorId) {
-  sensorId = sensorId - 1;
-
-  sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
-
-  while(measurement.RangeStatus == 4 || measurement.RangeMilliMeter > 8190) {
-    sensors[sensorId].rangingTest(&measurement, false); // pass in 'true'
-  } 
-  Serial.println(String(sensorId) + ": " + measurement.RangeMilliMeter);
-  delay(1);
-  return measurement.RangeMilliMeter;
->>>>>>> Added The Rondo functionality
 }
 
 void quickyTricky(int duration) {
@@ -394,6 +356,7 @@ void quickyTricky(int duration) {
       }while(randNumber == lastGoal);
       activeSensors[randNumber] = true;
       Serial.println("Random number " + String(randNumber));
+      gameScore++;
       //Led aanzetten
       setJewel(lastGoal,0,0,255);      
       setJewel(randNumber,255,0,0);
@@ -406,12 +369,27 @@ void quickyTricky(int duration) {
 }
 
 void gameOff() {
+  char charGameID[128], charCurrentGame[32];
+  gameID.toCharArray(charGameID,128);
+  currentGame.toCharArray(charCurrentGame,32);
+  //Scores doorsturen
+  char messagePayload[MESSAGE_MAX_LEN];
+  char *messageData = "{\"type\":\"game_end\",\"payload\":{\"id\":\"%s\",\"gamemode\":\"%s\",\"duration\":%i,\"score\":%i}}";
+  snprintf(messagePayload, MESSAGE_MAX_LEN, messageData, charGameID, charCurrentGame,currentDuration,gameScore);
+  Serial.println(String(messagePayload));
+  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(messagePayload, MESSAGE);
+  Esp32MQTTClient_SendEventInstance(message);
+  
   //Alles resetten
   for(int i = 0; i < JEWEL_COUNT; i++) {
     activeSensors[i] = false;
     lastValue[i] = 0;
   }
-  
+  currentGame = "";
+  gameID = "";
+  currentDuration = 0;
+  gameScore = 0;
+
   //Serial.println("Game score " + String(currentScore)); 
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
@@ -423,57 +401,6 @@ void gameOff() {
   leds.show();
 }
 
-void theRondo() {
-  //Alle lichten op rood
-  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
-  leds.show();
-  //Timer starten
-  int startMillis = millis();
-
-  int done[3] = {0,0,0};
-
-  int lastValue[3] = {0,0,0};
-  int currentValue[3] = {0,0,0};
-
-  int finished[3] = {1,1,1};
-  int value = 0;
-  int teller2 = 0;
-  while(done[0] != 1 || done[1] != 1 ||done[2] != 1 ) {
-    for (int teller = 0; teller < 3; teller++) {
-      teller2 = teller + 1;
-      value = readSensor(teller2);
-      Serial.println("Vergelijking VALUE " + String(value)+ " " + String(lastValue[teller]));
-      if(value + 50 < lastValue[teller]) {
-        //Er is gescoord
-        //Licht groen + done aanpassen
-        done[teller] = 1;
-        setJewel(teller2,0,255,0);
-        Serial.println(String(teller) + " GOAAAAAAAAAAAAAAAAAAAL");
-      }
-      lastValue[teller]= value;
-      Serial.println(String(lastValue[0]) + " " + String(lastValue[1]) + " " + String(lastValue[2]) + " " );
-    }
-    teller2 = 0;
-  }
-  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
-  leds.show();
-  delay(2500);
-  leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
-  leds.show();
-  delay(2500);
-  leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
-  leds.show();
-
-}
-
 void loop() {
-<<<<<<< develop
   Esp32MQTTClient_Check();
-=======
-  theRondo();
-  leds.fill(leds.Color(255, 0, 255), 0, LED_COUNT);
-  leds.show();
-  delay(1000000); 
-
->>>>>>> Added The Rondo functionality
 }
