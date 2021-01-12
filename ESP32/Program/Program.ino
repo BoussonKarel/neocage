@@ -370,7 +370,12 @@ void quickyTricky(int duration) {
     currentMillis = millis();
   }
   //alles uit
+  gameOff();
 
+}
+
+void gameOff() {
+  //Alles resetten
   for(int i = 0; i < JEWEL_COUNT; i++) {
     activeSensors[i] = false;
     lastValue[i] = 0;
