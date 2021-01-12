@@ -25,12 +25,16 @@
     --global-color-alpha-xxx-dark: #00394D;
     --global-color-alpha-xxxx-dark: #00131A;
 
+    --global-color-alpha-transparent: #44C9F632;
+
     --global-color-beta-xx-light: #ECBDD9;
     --global-color-beta-x-light: #EC8EC6;
     --global-color-beta-light: #EC5EB2;
     --global-color-beta: #EC008C;
     --global-color-beta-dark: #B3006A;
     --global-color-beta-x-dark: #80004C;
+
+    --global-color-beta-transparent: #EC008C32;
 
     --global-color-gamma-xx-light: #FFFBCC;
     --global-color-gamma-x-light: #FFF899;
@@ -70,6 +74,10 @@ html {
     background-color: white;
 }
 
+body {
+    min-height: 100vh;
+}
+
 *,
 *:before,
 *:after {
@@ -84,13 +92,13 @@ html {
 */
 
 ::-moz-selection {
-    background: var(--color-alpha);
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
 }
 
 ::selection {
-    background: var(--color-alpha);
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
 }
@@ -315,11 +323,99 @@ input::placeholder {
 #COMPONENTS
 \*------------------------------------*/
 
+.blue {
+    background: var(--global-color-alpha);
+}
+
 /*
-    Component: Name
+    Component: App
     ---
-    Description
+    Main app container
 */
+
+.c-app {
+    max-width: calc(41 * var(--global-baseline));
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+    Component: Popup
+    ---
+    Popup to show above everything
+*/
+
+.c-popup {
+    background-color: #FFFFFF;
+    border-radius: var(--global-baseline);
+    padding: var(--global-whitespace-xxs);
+    width: 100%;
+    max-width: calc(41 * var(--global-baseline));
+
+    position: fixed;
+    top: var(--global-whitespace-xxs);
+    bottom: var(--global-whitespace-xxs);
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: none;
+}
+
+.c-popup--shown {
+    display: block;
+}
+
+.c-popup__close {
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: var(--global-whitespace-xxs);
+    right: var(--global-whitespace-xxs);
+    fill: var(--global-color-neutral-dark);
+}
+
+.c-popup__close:hover,
+.c-popup__close:focus,
+.c-popup__close:active {
+    fill: var(--global-color-neutral-x-dark);  
+}
+
+/*
+    Component: Button
+    ---
+    Button for play, stop, save...
+*/
+
+.c-button {
+    cursor: pointer;
+    width: 100%;
+    background: var(--button-backgroundColor, var(--global-color-alpha));
+    border-radius: calc(var(--global-baseline) / 2);
+}
+
+.c-button__svg {
+    fill: white;
+    height: 48px;
+    width: 48px;
+}
+
+.c-button:hover,
+.c-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--button-shadowcolor, var(--global-color-alpha-transparent));
+}
+
+.c-button:active {
+    background: var(--button-activeBackground, var(--global-color-alpha-light));
+}
+
+.c-button--stop {
+    --button-backgroundColor: var(--global-color-beta);
+    --button-shadowcolor: var(--global-color-beta-transparent);
+    --button-activeBackground: var(--global-color-beta-light);
+}
+
 
 /*------------------------------------*\
 #UTILITIES
