@@ -38,6 +38,15 @@
     --global-color-gamma: #FFED00;
     --global-color-gamma-dark: #E6D500;
     --global-color-gamma-x-dark: #CCBE00;
+
+    --global-font-size: 16;
+
+    --global-baseline: calc(1rem / 2);
+    --global-whitespace-xxs: var(--global-baseline); /* 8 */
+    --global-whitespace-xs: calc(var(--global-baseline) * 2); /* 16 */
+    --global-whitespace-sm: calc(var(--global-baseline) * 3); /* 24 */
+    --global-whitespace-md: calc(var(--global-baseline) * 4); /* 32 */
+    --global-whitespace-lg: calc(var(--global-baseline) * 5); /* 40 */
 }
 
 /*------------------------------------*\
@@ -51,7 +60,7 @@
 */
 
 html {
-    font-size: 16px;
+    font-size: calc(var(--global-font-size) / 16 * 100%);
     line-height: 1.5;
     font-family: Helvetica, arial, sans-serif;
     color: var(--color-neutral-dark);
@@ -114,29 +123,29 @@ h3 {
 }
 
 h1 {
-    font-size: 36px;
-    line-height: 48px;
+    font-size: calc(36rem / var(--global-font-size));
+    line-height: calc(48rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h2 {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: calc(32rem / var(--global-font-size));
+    line-height: calc(40rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h3 {
-    font-size: 26px;
-    line-height: 32px;
+    font-size: calc(26rem / var(--global-font-size));
+    line-height: calc(32rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h4,
 h5,
 h6 {
-    font-size: 16px;
+    font-size: calc(16rem / var(--global-font-size));
     font-weight: 600;
-    line-height: 24px;
+    line-height: calc(24rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
@@ -162,8 +171,8 @@ li ol {
 
 blockquote {
     font-style: normal;
-    font-size: 23px;
-    line-height: 32px;
+    font-size: calc(23rem / var(--global-font-size));
+    line-height: calc(32rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
@@ -174,8 +183,8 @@ blockquote * {
 
 figcaption {
     font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: calc(12rem / var(--global-font-size));
+    line-height: calc(16rem / var(--global-font-size));
     margin-top: 8px;
 }
 
@@ -411,7 +420,7 @@ input::placeholder {
 */
 
 .u-text-sm {
-    font-size: 14px;
+    font-size: calc(14rem / var(--global-font-size));
 }
 
 /*------------------------------------*\
