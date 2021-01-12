@@ -66,7 +66,7 @@
 html {
     font-size: calc(var(--global-font-size) / 16 * 100%);
     line-height: 1.5;
-    font-family: Helvetica, arial, sans-serif;
+    font-family: 'Open Sans', Helvetica, arial, sans-serif;
     color: var(--color-neutral-dark);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
@@ -416,10 +416,112 @@ input::placeholder {
     --button-activeBackground: var(--global-color-beta-light);
 }
 
+/*
+    Component: title
+    ---
+    Titles on pages
+*/
+
+.c-title{
+    font-size: calc(32rem / var(--global-font-size));
+    text-align: center;
+    margin: var(--global-whitespace-xs) 0 var(--global-whitespace-xs) 0;
+}
+
+/*
+    Component: card
+    ---
+    Grey cards with information in them
+*/
+
+.c-status{
+}
+
+
+.c-card{
+    background-color: var(--global-color-neutral-xx-light);
+    padding: var(--global-whitespace-sm);
+    border-radius: var(--global-baseline);
+    text-align: center;
+    margin-bottom: var(--global-whitespace-sm);
+}
+
+.c-card__title{
+    font-size: calc(29rem / var(--global-font-size));
+}
+
+.c-card__value{
+    font-size: calc(56rem / var(--global-font-size));
+}
+
+.c-minicards{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+/* .c-minicards > :first-child{
+    margin: 0 var(--global-whitespace-sm) 0 0;
+} */
+
+.c-minicard{
+    flex-basis: calc(50% - 12px);
+    background-color: var(--global-color-neutral-xx-light);
+    border-radius: var(--global-baseline);
+    padding: var(--global-whitespace-sm) var(--global-whitespace-xs) var(--global-whitespace-sm) var(--global-whitespace-xs);
+
+}
+
+@media (max-width: 315px) {
+    .c-minicards{
+        display: inline;
+        text-align: center;
+    }
+    
+    /* .c-minicards > :first-child{
+        margin: 0 var(--global-whitespace-sm) 0 0;
+    } */
+    
+    .c-minicard{
+        width:100%;
+        margin-top: var(--global-whitespace-sm);
+    
+    }
+}
+
 
 /*------------------------------------*\
 #UTILITIES
 \*------------------------------------*/
+
+/*
+    Utilities: textcolor
+    ---
+    Utility classes to put specific colors onto text
+*/
+
+.u-alpha-textcolor{
+    color: var(--global-color-alpha);
+}
+
+.u-beta-textcolor{
+    color: var(--global-color-beta)
+}
+
+/*
+    Utilities: bottompage
+    ---
+    Utility classes to an element on the bottom of teh page
+*/
+
+.u-bottompage{
+    position: fixed;
+    bottom: var(--global-whitespace-xs);
+    width: 100vw;
+    max-width: calc(41 * var(--global-baseline));
+    width: 100%;
+}
+
 
 /*
     Utilities: color

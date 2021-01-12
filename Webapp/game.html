@@ -9,6 +9,9 @@
         <link rel="stylesheet" href="./style/normalize.css">
         <link rel="stylesheet" href="./style/screen.css">
 
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
         <script src="./script/app.js"></script>
     </head>
     <body>
@@ -16,36 +19,36 @@
 
             <!-- div Gamestatus pagina -->
             <div class="c-status">
-                <h1 class ="c-title">Double trouble (!)</h1>   
+                <h1 class ="c-title">Double trouble</h1>   
             
                 <!-- Timer -->
                 <div class="c-card">
                     <h2 class="c-card__title">Verstreken tijd</h2>
-                    <h5 class="c-card__value">00:06 (!)</h5>
+                    <h5 class="c-card__value">00:23</h5>
                 </div>
 
                 <!-- score -->
                 <div class="c-card">
-                    <h2 class="c-card__title">Verstreken tijd</h2>
-                    <h5 class="c-card__value">00:06 (!)</h5>
+                    <h2 class="c-card__title">Huidige score</h2>
+                    <h5 class="c-card__value">11</h5>
                 </div>
     
                 <!-- Score -->
                 <div class="c-minicards">
-                    <h2 class="c-minicards__title">Resterende targets</h2>
                     <div class="c-minicard">
-                        <h2 class="c-minicard__title">Team 1</h2>
-                        <h5 class="c-minicard__value">2 (!)</h5>
+                        <h2 class="c-card__title u-alpha-textcolor">Team 1</h2>
+                        <h5 class="c-card__value u-alpha-textcolor">2</h5>
                     </div>
                     <div class="c-minicard">
-                        <h2 class="c-minicard__title">Team 2</h2>
-                        <h5 class="c-minicard__value">1 (!)</h5>
+                        <h2 class="c-card__title u-beta-textcolor">Team 2</h2>
+                        <h5 class="c-card__value u-beta-textcolor">1</h5>
                     </div>
                 </div>
-    
-                <button class="c-button c-button--stop">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 6h12v12H6z"/></svg>
-                </button>
+                <div class="u-bottompage">
+                    <button class="o-button-reset c-button c-button--stop">
+                        <svg class="c-button__svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 6h12v12H6z"/></svg>
+                    </button>
+                </div>
             </div>
            
       
