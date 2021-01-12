@@ -1,5 +1,8 @@
 #include "Adafruit_VL53L0X.h"
 #include <Adafruit_NeoPixel.h>
+#include <ArduinoJson.h>
+#include <WiFi.h>
+#include "Esp32MQTTClient.h"
 
 // address we will assign if dual sensor is present
 #define LOX1_ADDRESS 0x30
@@ -26,15 +29,158 @@ Adafruit_VL53L0X sensors[] = {lox1, lox2, lox3};
 #define JEWEL_COUNT 3
 int LED_COUNT = JEWEL_COUNT * 7;
 
-int sensitivity = 75;
-int lastGoal;
-
 Adafruit_NeoPixel leds(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
+//Game variables
+int sensitivity = 75;
+int lastGoal;
 bool activeSensors[3] = { false, false, false };
 int lastValue[3] = {0,0,0};
 int doneRondo[3] = {false,false,false};
+String currentGame;
+int currentDuration;
 
+//IoTHub
+const char* ssid = "KAMER5";
+const char* password = "AABBCCDDAA";
+static const char* connectionString = "HostName=IoTNeoCage.azure-devices.net;DeviceId=ESPBRUGGE01;SharedAccessKey=psK7dYZpKtJ6wrvWccz79NqtIlzZfvNvpNWcmioLxWI=";
+static bool hasIoTHub = false;
+static bool hasWifi = false;
+static bool messageSending = true;
+
+//MultiThreading
+TaskHandle_t Task0;
+
+void setup() {
+  Serial.begin(115200);
+
+  randomSeed(millis());
+  // wait until serial port opens for native USB devices
+  while (! Serial) {
+    delay(1);
+  }
+
+  WiFi.mode(WIFI_AP);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    hasWifi = false;
+  }
+  hasWifi = true;
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.println(" > IoT Hub");
+  if (!Esp32MQTTClient_Init((const uint8_t*)connectionString, true))
+  {
+    hasIoTHub = false;
+    Serial.println("Initializing IoT hub failed.");
+    return;
+  }
+  Esp32MQTTClient_SetSendConfirmationCallback(SendConfirmationCallback);
+  Esp32MQTTClient_SetMessageCallback(MessageCallback);
+  //Esp32MQTTClient_SetDeviceTwinCallback(DeviceTwinCallback);
+  Esp32MQTTClient_SetDeviceMethodCallback(DeviceMethodCallback);
+
+  Serial.println(F("dqsdqsdqsd pins inited..."));
+  delay(100);
+  pinMode(SHT_LOX1, OUTPUT);
+  pinMode(SHT_LOX2, OUTPUT);
+  pinMode(SHT_LOX3, OUTPUT);
+  //pinMode(SHT_LOX4, OUTPUT);
+
+  Serial.println(F("Shutdown pins inited..."));
+
+  digitalWrite(SHT_LOX1, LOW);
+  digitalWrite(SHT_LOX2, LOW);
+  digitalWrite(SHT_LOX3, LOW);
+  //digitalWrite(SHT_LOX4, LOW);
+
+  setID();
+
+  //MultiThreading
+  xTaskCreatePinnedToCore(Task0Code,"Task0",10000,NULL,0,&Task0,0);
+}
+
+void Task0Code(void * parameter) {
+  for(;;) {
+    if(currentGame=="quickytricky") {
+      quickyTricky(currentDuration);
+    }
+    else if(currentGame=="therondo") {
+      theRondo();
+    }
+  }
+}
+
+static int  DeviceMethodCallback(const char *methodName, const unsigned char *payload, int size, unsigned char **response, int *response_size)
+{
+  LogInfo("Try to invoke method %s", methodName);
+  const char *responseMessage = "\"Successfully invoke device method\"";
+  int result = 200;
+
+  if (strcmp(methodName, "startgame") == 0)
+  {
+    //Eerst currentgame method -> 404 returnen 
+     //Startgame -> payload ophalen welke game en welke duration
+     StaticJsonDocument<800> doc;
+     
+    // Deserialize the JSON document
+    DeserializationError error = deserializeJson(doc, payload);
+    // Test if parsing succeeds.
+    if (error) {
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.println(error.f_str());
+    }
+    
+    String gamemode = doc["gamemode"];
+    currentDuration = doc["duration"];  
+    // Print values.
+    Serial.println(gamemode);
+    Serial.println(currentDuration);
+    //voor game starten -> succes code sturen naar backend
+    if(gamemode ==  "therondo") {
+      currentGame = "therondo";
+    }
+    else if(gamemode=="quickytricky") {
+      currentGame = "quickytricky";
+    }
+    else {
+      Serial.println("game unknown");    
+    }
+    
+  }
+  else if (strcmp(methodName, "stop") == 0)
+  {
+    LogInfo("Stop spel");
+  }
+  else
+  {
+    LogInfo("No method %s found", methodName);
+    responseMessage = "\"No method found\"";
+    result = 404;
+  }
+
+  *response_size = strlen(responseMessage) + 1;
+  *response = (unsigned char *)strdup(responseMessage);
+
+  return result;
+}
+
+static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result)
+{
+  if (result == IOTHUB_CLIENT_CONFIRMATION_OK)
+  {
+    Serial.println("Send Confirmation Callback finished.");
+  }
+}
+
+static void MessageCallback(const char* payLoad, int size)
+{
+  Serial.println("Message callback:");
+  Serial.println(payLoad);
+}
 
 void toggleSensor(int index) {
   bool waarde = activeSensors[index];
@@ -113,32 +259,6 @@ void setID() {
   leds.setBrightness(5);
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
-}
-
-void setup() {
-  Serial.begin(115200);
-
-  randomSeed(millis());
-  // wait until serial port opens for native USB devices
-  while (! Serial) {
-    delay(1);
-  }
-
-  Serial.println(F("dqsdqsdqsd pins inited..."));
-  delay(100);
-  pinMode(SHT_LOX1, OUTPUT);
-  pinMode(SHT_LOX2, OUTPUT);
-  pinMode(SHT_LOX3, OUTPUT);
-  //pinMode(SHT_LOX4, OUTPUT);
-
-  Serial.println(F("Shutdown pins inited..."));
-
-  digitalWrite(SHT_LOX1, LOW);
-  digitalWrite(SHT_LOX2, LOW);
-  digitalWrite(SHT_LOX3, LOW);
-  //digitalWrite(SHT_LOX4, LOW);
-
-  setID();
 }
 
 void setJewel(int jewel, int red, int green, int blue) {
@@ -268,9 +388,5 @@ void quickyTricky(int duration) {
 }
 
 void loop() {
-  //quickyTricky(30);
-  theRondo();
-  //read_dual_sensors();
-  //delay(2000);
-
+  Esp32MQTTClient_Check();
 }
