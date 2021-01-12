@@ -7,10 +7,47 @@
 \*------------------------------------*/
 
 :root {
+    /* colors */
+    --global-color-neutral-xx-light: #EDEDED;
+    --global-color-neutral-x-light: #D4D4D4;
+    --global-color-neutral-light: #BABABA;
+    --global-color-neutral: #A1A1A1;
+    --global-color-neutral-dark: #6E6E6E;
+    --global-color-neutral-x-dark: #3A3A3A;
 
+    --global-color-alpha-xx-light: #D8EFF6;
+    --global-color-alpha-x-light: #A7E2F6;
+    --global-color-alpha-light: #76D6F6;
+    --global-color-alpha: #44C9F6;
+    --global-color-alpha-dark: #00B8F6;
+    --global-color-alpha-x-dark: #0086B3;
+    --global-color-alpha-xx-dark: #005F80;
+    --global-color-alpha-xxx-dark: #00394D;
+    --global-color-alpha-xxxx-dark: #00131A;
+
+    --global-color-beta-xx-light: #ECBDD9;
+    --global-color-beta-x-light: #EC8EC6;
+    --global-color-beta-light: #EC5EB2;
+    --global-color-beta: #EC008C;
+    --global-color-beta-dark: #B3006A;
+    --global-color-beta-x-dark: #80004C;
+
+    --global-color-gamma-xx-light: #FFFBCC;
+    --global-color-gamma-x-light: #FFF899;
+    --global-color-gamma-light: #FFF466;
+    --global-color-gamma: #FFED00;
+    --global-color-gamma-dark: #E6D500;
+    --global-color-gamma-x-dark: #CCBE00;
+
+    --global-font-size: 16;
+
+    --global-baseline: calc(1rem / 2);
+    --global-whitespace-xxs: var(--global-baseline); /* 8 */
+    --global-whitespace-xs: calc(var(--global-baseline) * 2); /* 16 */
+    --global-whitespace-sm: calc(var(--global-baseline) * 3); /* 24 */
+    --global-whitespace-md: calc(var(--global-baseline) * 4); /* 32 */
+    --global-whitespace-lg: calc(var(--global-baseline) * 5); /* 40 */
 }
-
-/* CSS variables here */
 
 /*------------------------------------*\
 #GENERIC
@@ -23,10 +60,10 @@
 */
 
 html {
-    font-size: 16px;
+    font-size: calc(var(--global-font-size) / 16 * 100%);
     line-height: 1.5;
     font-family: Helvetica, arial, sans-serif;
-    color: grey;
+    color: var(--color-neutral-dark);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -47,13 +84,13 @@ html {
 */
 
 ::-moz-selection {
-    background: HotPink;
+    background: var(--color-alpha);
     color: white;
     text-shadow: none;
 }
 
 ::selection {
-    background: HotPink;
+    background: var(--color-alpha);
     color: white;
     text-shadow: none;
 }
@@ -82,32 +119,33 @@ img {
 h1,
 h2,
 h3 {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 h1 {
-    font-size: 36px;
-    line-height: 48px;
+    font-size: calc(36rem / var(--global-font-size));
+    line-height: calc(48rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h2 {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: calc(32rem / var(--global-font-size));
+    line-height: calc(40rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h3 {
-    font-size: 26px;
-    line-height: 32px;
+    font-size: calc(26rem / var(--global-font-size));
+    line-height: calc(32rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
 h4,
 h5,
 h6 {
-    font-size: 20px;
-    line-height: 24px;
+    font-size: calc(16rem / var(--global-font-size));
+    font-weight: 600;
+    line-height: calc(24rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
@@ -133,8 +171,8 @@ li ol {
 
 blockquote {
     font-style: normal;
-    font-size: 23px;
-    line-height: 32px;
+    font-size: calc(23rem / var(--global-font-size));
+    line-height: calc(32rem / var(--global-font-size));
     margin: 0 0 24px;
 }
 
@@ -145,8 +183,8 @@ blockquote * {
 
 figcaption {
     font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: calc(12rem / var(--global-font-size));
+    line-height: calc(16rem / var(--global-font-size));
     margin-top: 8px;
 }
 
@@ -158,18 +196,34 @@ hr {
 }
 
 a {
-    color: HotPink;
-    transition: all .1s ease-in-out;
+    transition: all var(--transition-alpha);
+    color: var(--color-alpha);
+    outline-color: var(--color-alpha);
+    outline-width: medium;
+    outline-offset: 2px;
 }
 
 a:visited,
 a:active {
-    color: HotPink;
+    color: var(--color-alpha);
 }
 
 a:hover,
 a:focus {
-    color: DeepPink;
+    color: var(--color-alpha-light);
+}
+
+label,
+input {
+    display: block;
+}
+
+select {
+    width: 100%;
+}
+
+input::placeholder {
+    color: var(--color-neutral-light);
 }
 
 /*------------------------------------*\
@@ -187,36 +241,6 @@ a:focus {
     padding: 24px 24px 0;
 }
 
-.o-row--login {
-    /* stuff here to align the card */
-}
-
-/* size modifiers */
-
-.o-row--lg {
-    padding-top: 48px;
-    padding-bottom: 24px;
-}
-
-.o-row--xl {
-    padding-top: 72px;
-    padding-bottom: 48px;
-}
-
-@media (min-width: 768px) {
-    .o-row {
-        padding-left: 48px;
-        padding-right: 48px;
-    }
-}
-
-@media (min-width: 992px) {
-    .o-row--xl {
-        padding-top: 96px;
-        padding-bottom: 72px;
-    }
-}
-
 /*
     Objects: Container
     ---
@@ -228,158 +252,6 @@ a:focus {
     margin-right: auto;
     max-width: 79.5em; /* 79.5 * 16px = 1272 */
     width: 100%;
-}
-
-/*
-    Objects: section
-    ---
-    Creates vertical whitespace between adjacent sections inside a row
-*/
-
-.o-section {
-    position: relative;
-}
-
-.o-section + .o-section {
-    padding-top: 24px;
-}
-
-@media (min-width: 768px) {
-    .o-section--lg + .o-section--lg,
-    .o-section--xl + .o-section--xl {
-        padding-top: 48px;
-    }
-}
-
-@media (min-width: 992px) {
-    .o-section--xl + .o-section--xl {
-        padding-top: 72px;
-    }
-}
-
-/*
-    Objects: Layout
-    ---
-    The layout object provides us with a column-style layout system. This object
-    contains the basic structural elements, but classes should be complemented
-    with width utilities
-*/
-
-.o-layout {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.o-layout__item {
-    width: 100%;
-}
-
-/* gutter modifiers, these affect o-layout__item too */
-
-.o-layout--gutter {
-    margin: 0 -12px;
-}
-
-.o-layout--gutter > .o-layout__item {
-    padding: 0 12px;
-}
-
-.o-layout--gutter-sm {
-    margin: 0 -6px;
-}
-
-.o-layout--gutter-sm > .o-layout__item {
-    padding: 0 6px;
-}
-
-.o-layout--gutter-lg {
-    margin: 0 -24px;
-}
-
-.o-layout--gutter-lg > .o-layout__item {
-    padding: 0 24px;
-}
-
-.o-layout--gutter-xl {
-    margin: 0 -48px;
-}
-
-.o-layout--gutter-xl > .o-layout__item {
-    padding: 0 48px;
-}
-
-/* reverse horizontal row modifier */
-
-.o-layout--row-reverse {
-    flex-direction: row-reverse;
-}
-
-/* Horizontal alignment modifiers*/
-
-.o-layout--justify-start {
-    justify-content: flex-start;
-}
-
-.o-layout--justify-end {
-    justify-content: flex-end;
-}
-
-.o-layout--justify-center {
-    justify-content: center;
-}
-
-.o-layout--justify-space-around {
-    justify-content: space-around;
-}
-
-.o-layout--justify-space-evenly {
-    justify-content: space-evenly;
-}
-
-.o-layout--justify-space-between {
-    justify-content: space-between;
-}
-
-/* Vertical alignment modifiers */
-
-.o-layout--align-start {
-    align-items: flex-start;
-}
-
-.o-layout--align-end {
-    align-items: flex-end;
-}
-
-.o-layout--align-center {
-    align-items: center;
-}
-
-.o-layout--align-baseline {
-    align-items: baseline;
-}
-
-/* Vertical alignment modifiers that only work if there is one than one flex item */
-
-.o-layout--align-content-start {
-    align-content: start;
-}
-
-.o-layout--align-content-end {
-    align-content: end;
-}
-
-.o-layout--align-content-center {
-    align-content: center;
-}
-
-.o-layout--align-content-space-around {
-    align-content: space-around;
-}
-
-.o-layout--align-content-space-between {
-    align-content: space-between;
 }
 
 /*
@@ -422,74 +294,32 @@ a:focus {
     -webkit-appearance: none;
 }
 
+/*
+    Object: Hide accessible
+    ---
+    Accessibly hide any element
+*/
+
+.o-hide-accessible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 /*------------------------------------*\
 #COMPONENTS
 \*------------------------------------*/
 
 /*
-    Component: App
+    Component: Name
     ---
-    Main app wrapper
+    Description
 */
-
-.c-app {
-    max-width: 29em; /* 400 / 16px = 25em + 4em padding */
-    padding: 2em; /* 32 / 16px = 2em */
-    margin: 0 auto;
-    
-}
-
-
-
-
-.c-input {
-
-}
-
-.c-input:focus {
-}
-
-/*
-    Component: Label
-    ---
-    Class to put on all form labels
-*/
-
-.c-label {
-
-}
-
-/* If a input is focused within the form-field class change te color of the label */
-
-.c-form-field:focus-within .c-label {
-
-}
-
-/*
-    Component: Button
-    ---
-    Class to put on form buttons or links
-*/
-
-.c-button {
-
-}
-
-.c-button:hover {
-
-}
-
-.c-button:focus {
-
-}
-
-.c-button:active {
-
-}
-
-.c-button--block {
-
-}
 
 /*------------------------------------*\
 #UTILITIES
@@ -501,12 +331,12 @@ a:focus {
     Utility classes to put specific colors onto elements
 */
 
-.u-color-neutral-base {
-    color: Silver;
+.u-color-neutral {
+    color: var(--color-neutral);
 }
 
 .u-color-neutral-dark {
-    color: Black;
+    color: var(--color-neutral-dark);
 }
 
 /*
@@ -590,206 +420,7 @@ a:focus {
 */
 
 .u-text-sm {
-    font-size: 14px;
-}
-
-/*
-    Utility: Widths
-    ---
-    Utility classes to put specific widths onto elements
-    Will be mostly used on o-layout__item
-*/
-
-.u-width-auto {
-    width: auto !important;
-}
-
-.u-1-of-2 {
-    width: 50% !important;
-}
-
-.u-1-of-3 {
-    width: 33.3333333333% !important;
-}
-
-.u-2-of-3 {
-    width: 66.6666666667% !important;
-}
-
-.u-1-of-4 {
-    width: 25% !important;
-}
-
-.u-3-of-4 {
-    width: 75% !important;
-}
-
-.u-1-of-5 {
-    width: 20% !important;
-}
-
-.u-2-of-5 {
-    width: 40% !important;
-}
-
-.u-3-of-5 {
-    width: 60% !important;
-}
-
-.u-4-of-5 {
-    width: 80% !important;
-}
-
-.u-1-of-6 {
-    width: 16.6666666667% !important;
-}
-
-.u-5-of-6 {
-    width: 83.3333333333% !important;
-}
-
-@media (min-width: 576px) {
-    .u-1-of-2-bp1 {
-        width: 50% !important;
-    }
-    .u-1-of-3-bp1 {
-        width: 33.3333333333% !important;
-    }
-    .u-2-of-3-bp1 {
-        width: 66.6666666667% !important;
-    }
-    .u-1-of-4-bp1 {
-        width: 25% !important;
-    }
-    .u-3-of-4-bp1 {
-        width: 75% !important;
-    }
-    .u-1-of-5-bp1 {
-        width: 20% !important;
-    }
-    .u-2-of-5-bp1 {
-        width: 40% !important;
-    }
-    .u-3-of-5-bp1 {
-        width: 60% !important;
-    }
-    .u-4-of-5-bp1 {
-        width: 80% !important;
-    }
-    .u-1-of-6-bp1 {
-        width: 16.6666666667% !important;
-    }
-    .u-5-of-6-bp1 {
-        width: 83.3333333333% !important;
-    }
-}
-
-@media (min-width: 768px) {
-    .u-1-of-2-bp2 {
-        width: 50% !important;
-    }
-    .u-1-of-3-bp2 {
-        width: 33.3333333333% !important;
-    }
-    .u-2-of-3-bp2 {
-        width: 66.6666666667% !important;
-    }
-    .u-1-of-4-bp2 {
-        width: 25% !important;
-    }
-    .u-3-of-4-bp2 {
-        width: 75% !important;
-    }
-    .u-1-of-5-bp2 {
-        width: 20% !important;
-    }
-    .u-2-of-5-bp2 {
-        width: 40% !important;
-    }
-    .u-3-of-5-bp2 {
-        width: 60% !important;
-    }
-    .u-4-of-5-bp2 {
-        width: 80% !important;
-    }
-    .u-1-of-6-bp2 {
-        width: 16.6666666667% !important;
-    }
-    .u-5-of-6-bp2 {
-        width: 83.3333333333% !important;
-    }
-}
-
-@media (min-width: 992px) {
-    .u-1-of-2-bp3 {
-        width: 50% !important;
-    }
-    .u-1-of-3-bp3 {
-        width: 33.3333333333% !important;
-    }
-    .u-2-of-3-bp3 {
-        width: 66.6666666667% !important;
-    }
-    .u-1-of-4-bp3 {
-        width: 25% !important;
-    }
-    .u-3-of-4-bp3 {
-        width: 75% !important;
-    }
-    .u-1-of-5-bp3 {
-        width: 20% !important;
-    }
-    .u-2-of-5-bp3 {
-        width: 40% !important;
-    }
-    .u-3-of-5-bp3 {
-        width: 60% !important;
-    }
-    .u-4-of-5-bp3 {
-        width: 80% !important;
-    }
-    .u-1-of-6-bp3 {
-        width: 16.6666666667% !important;
-    }
-    .u-5-of-6-bp3 {
-        width: 83.3333333333% !important;
-    }
-}
-
-@media (min-width: 1200px) {
-    .u-1-of-2-bp4 {
-        width: 50% !important;
-    }
-    .u-1-of-3-bp4 {
-        width: 33.3333333333% !important;
-    }
-    .u-2-of-3-bp4 {
-        width: 66.6666666667% !important;
-    }
-    .u-1-of-4-bp4 {
-        width: 25% !important;
-    }
-    .u-3-of-4-bp4 {
-        width: 75% !important;
-    }
-    .u-1-of-5-bp4 {
-        width: 20% !important;
-    }
-    .u-2-of-5-bp4 {
-        width: 40% !important;
-    }
-    .u-3-of-5-bp4 {
-        width: 60% !important;
-    }
-    .u-4-of-5-bp4 {
-        width: 80% !important;
-    }
-    .u-1-of-6-bp4 {
-        width: 16.6666666667% !important;
-    }
-    .u-5-of-6-bp4 {
-        width: 83.3333333333% !important;
-    }
+    font-size: calc(14rem / var(--global-font-size));
 }
 
 /*------------------------------------*\
