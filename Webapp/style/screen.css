@@ -7,7 +7,37 @@
 \*------------------------------------*/
 
 :root {
-    
+    /* colors */
+    --global-color-neutral-xx-light: #EDEDED;
+    --global-color-neutral-x-light: #D4D4D4;
+    --global-color-neutral-light: #BABABA;
+    --global-color-neutral: #A1A1A1;
+    --global-color-neutral-dark: #6E6E6E;
+    --global-color-neutral-x-dark: #3A3A3A;
+
+    --global-color-alpha-xx-light: #D8EFF6;
+    --global-color-alpha-x-light: #A7E2F6;
+    --global-color-alpha-light: #76D6F6;
+    --global-color-alpha: #44C9F6;
+    --global-color-alpha-dark: #00B8F6;
+    --global-color-alpha-x-dark: #0086B3;
+    --global-color-alpha-xx-dark: #005F80;
+    --global-color-alpha-xxx-dark: #00394D;
+    --global-color-alpha-xxxx-dark: #00131A;
+
+    --global-color-beta-xx-light: #ECBDD9;
+    --global-color-beta-x-light: #EC8EC6;
+    --global-color-beta-light: #EC5EB2;
+    --global-color-beta: #EC008C;
+    --global-color-beta-dark: #B3006A;
+    --global-color-beta-x-dark: #80004C;
+
+    --global-color-gamma-xx-light: #FFFBCC;
+    --global-color-gamma-x-light: #FFF899;
+    --global-color-gamma-light: #FFF466;
+    --global-color-gamma: #FFED00;
+    --global-color-gamma-dark: #E6D500;
+    --global-color-gamma-x-dark: #CCBE00;
 }
 
 /*------------------------------------*\
