@@ -8,6 +8,8 @@
 
 :root {
     /* colors */
+    --global-color-white-transparent:  #FFFFFF32;
+
     --global-color-neutral-xx-light: #EDEDED;
     --global-color-neutral-x-light: #D4D4D4;
     --global-color-neutral-light: #BABABA;
@@ -66,16 +68,12 @@
 html {
     font-size: calc(var(--global-font-size) / 16 * 100%);
     line-height: 1.5;
-    font-family: Helvetica, arial, sans-serif;
+    font-family: 'Open Sans', Helvetica, arial, sans-serif;
     color: var(--color-neutral-dark);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: white;
-}
-
-body {
-    min-height: 100vh;
 }
 
 *,
@@ -337,6 +335,109 @@ input::placeholder {
     max-width: calc(41 * var(--global-baseline));
     margin-left: auto;
     margin-right: auto;
+    min-height: 100vh;
+}
+
+/*
+    Component: Start page
+    ---
+    Main app container
+*/
+
+.c-startpage {
+    color: white;
+    text-align: center;
+}
+
+.c-logo__svg {
+    max-width: 100%;
+    fill: #FFFFFF;
+}
+
+/*
+    Component: Start page menu
+    ---
+    Main menu to select gamemodes
+*/
+
+.c-menu {
+
+}
+
+.c-menu__title {
+    font-size: calc(29rem / var(--global-font-size));
+    line-height: calc(43.5rem / var(--global-font-size));
+    font-weight: 600;
+    margin-bottom: var(--global-whitespace-xxs);
+}
+
+.c-menu__list {
+    margin-bottom: 0;
+}
+
+.c-gamemode {
+    cursor: pointer;
+
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+
+    color: var(--global-color-neutral-x-dark);
+    background: #FFFFFF;
+
+    margin-bottom: var(--global-whitespace-xxs);
+
+    border-radius: var(--global-baseline);
+
+    padding: calc(var(--global-baseline) / 8 * 10.5)
+}
+
+.c-gamemode:hover,
+.c-gamemode:focus {
+    box-shadow: 0 0 0 3px var(--global-color-white-transparent);
+}
+
+.c-gamemode:active {
+    background-color: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: App
+    ---
+    Main app container
+*/
+
+.c-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #FFFFFF;
+
+    padding: 0 var(--global-whitespace-sm);
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.c-footer__text {
+    margin: 0;
+    font-size: calc(14rem / var(--global-font-size));
+    color: var(--global-color-neutral-x-dark);
+}
+
+.c-footer__logos {
+    display: flex;
+    align-items: center;
+}
+
+.c-footer__logo {
+    padding: calc(var(--global-baseline) / 2);
+    height: 56px;
+    width: 56px;
+    fill: #44C9F6;
 }
 
 /*
