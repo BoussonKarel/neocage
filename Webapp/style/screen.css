@@ -535,6 +535,7 @@ input::placeholder {
     font-size: calc(29rem / var(--global-font-size));
     line-height: calc(43.5rem / var(--global-font-size));
     font-weight: 600; /* semibold */
+    text-align: center;
 }
 
 /*
@@ -543,20 +544,12 @@ input::placeholder {
     Grey cards with information in them
 */
 
-.c-status{
-}
-
-
 .c-card{
     background-color: var(--global-color-neutral-xx-light);
     padding: var(--global-whitespace-sm);
     border-radius: var(--global-baseline);
     text-align: center;
     margin-bottom: var(--global-whitespace-sm);
-}
-
-.c-card__title{
-    font-size: calc(29rem / var(--global-font-size));
 }
 
 .c-card__value{
@@ -568,10 +561,6 @@ input::placeholder {
     justify-content: space-between;
     text-align: center;
 }
-
-/* .c-minicards > :first-child{
-    margin: 0 var(--global-whitespace-sm) 0 0;
-} */
 
 .c-minicard{
     flex-basis: calc(50% - 12px);
@@ -586,10 +575,6 @@ input::placeholder {
         display: inline;
         text-align: center;
     }
-    
-    /* .c-minicards > :first-child{
-        margin: 0 var(--global-whitespace-sm) 0 0;
-    } */
     
     .c-minicard{
         width:100%;
