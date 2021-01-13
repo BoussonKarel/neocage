@@ -71,7 +71,7 @@ const showGamemodes = (data) => {
         name = gamemode.name;
         released = gamemode.released;
 
-        gamemodeList.innerHTML += `<li class="c-list__item js-gamemode">${name}</li>`;
+        gamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
 
        
    
