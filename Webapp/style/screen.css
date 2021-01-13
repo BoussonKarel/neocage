@@ -523,10 +523,18 @@ input::placeholder {
     Titles on pages
 */
 
-.c-title{
+.c-title {
     font-size: calc(32rem / var(--global-font-size));
+    line-height: calc(48rem / var(--global-font-size));
+    font-weight: 700; /* bold */
     text-align: center;
     margin: var(--global-whitespace-xs) 0 var(--global-whitespace-xs) 0;
+}
+
+.c-subtitle {
+    font-size: calc(29rem / var(--global-font-size));
+    line-height: calc(43.5rem / var(--global-font-size));
+    font-weight: 600; /* semibold */
 }
 
 /*
