@@ -380,32 +380,24 @@ void quickyTricky(int duration) {
 
 }
 
-void gameUpdate() {
+void D2C(String typeUpdate) {
   DynamicJsonDocument doc(1024);
-  doc["type"] = "game_update";
+  doc["type"] = typeUpdate;
   doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
-
   char json[256];
   serializeJson(doc, json);
-  //Serial.println(String(json));
-
   EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
   Esp32MQTTClient_SendEventInstance(message);
 }
 
+void gameUpdate() {
+  D2C("game_update");
+}
+
 void gameOff() {
   //Scores doorsturen
-  DynamicJsonDocument doc(1024);
-  doc["type"] = "game_end";
-  doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
+  D2C("game_end");
 
-  char json[256];
-  serializeJson(doc, json);
-  //Serial.println(String(json));
-
-  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
-  Esp32MQTTClient_SendEventInstance(message);
-  
   //Alles resetten
   for(int i = 0; i < JEWEL_COUNT; i++) {
     activeSensors[i] = false;
