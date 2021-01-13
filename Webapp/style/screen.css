@@ -475,8 +475,7 @@ input::placeholder {
     padding: var(--global-whitespace-xs);
     
     max-width: calc(41 * var(--global-baseline) - var(--global-whitespace-xs));
-
-    margin: auto auto;
+    margin: var(--global-whitespace-xs) auto 0;
 }
 
 .c-popup--shown {
@@ -560,7 +559,7 @@ input::placeholder {
 }
 
 .c-status__info {
-    margin-bottom: var(--global-whitespace-lg);
+    margin-bottom: var(--global-whitespace-sm);
 }
 
 /*
