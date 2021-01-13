@@ -159,10 +159,10 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
   else if (strcmp(methodName, "currentgame") == 0)
   {
     if(currentGame != "") {
-      
+      D2C("current_game");
     }
     else {
-      responseMessage = "null";
+      responseMessage = "{\"id\": null}";
       result = 404;
     }
   }
@@ -381,13 +381,25 @@ void quickyTricky(int duration) {
 }
 
 void D2C(String typeUpdate) {
-  DynamicJsonDocument doc(1024);
-  doc["type"] = typeUpdate;
-  doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
-  char json[256];
-  serializeJson(doc, json);
-  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
-  Esp32MQTTClient_SendEventInstance(message);
+  if(typeUpdate == "current_game") {
+    DynamicJsonDocument doc(1024);
+    doc["id"] = gameID; 
+    doc["gamemode"] = currentGame; 
+    doc["duration"] = currentDuration; 
+    doc["score"] = gameScore;
+    char json[256];
+    serializeJson(doc, json);
+    EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
+    Esp32MQTTClient_SendEventInstance(message);
+  } else {
+    DynamicJsonDocument doc(1024);
+    doc["type"] = typeUpdate;
+    doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
+    char json[256];
+    serializeJson(doc, json);
+    EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
+    Esp32MQTTClient_SendEventInstance(message);
+  }
 }
 
 void gameUpdate() {
