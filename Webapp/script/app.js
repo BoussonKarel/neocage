@@ -305,7 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(document.querySelector('.js-app')) {
         getGamemodes();
-        getHighscores("doubletrouble");
         console.log("We bevinden ons in de app view");
     } else if(document.querySelector('.js-game')){
         console.log("We bevinden ons in de game view");
