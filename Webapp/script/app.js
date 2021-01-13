@@ -71,7 +71,7 @@ const showGamemodes = (data) => {
         name = gamemode.name;
         released = gamemode.released;
 
-        gamemodeList.innerHTML += `<li class="c-list__item js-gamemode">${name}</li>`;
+        gamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
 
        
    
@@ -305,7 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(document.querySelector('.js-app')) {
         getGamemodes();
-        getHighscores("doubletrouble");
         console.log("We bevinden ons in de app view");
     } else if(document.querySelector('.js-game')){
         console.log("We bevinden ons in de game view");
