@@ -3,6 +3,18 @@ const URL = `https://neocage.azurewebsites.net/api`;
 let currentGame = {};
 
 
+function convertSeconds(seconds) {
+    time = Number(seconds);
+    var m = Math.floor(time % 3600 / 60);
+    var s = Math.floor(time % 3600 % 60);
+
+    var mDisplay = m > 9 ? m : `${0}${m}`;
+    var sDisplay = s > 9 ? s : `${0}${s}`;
+    
+    return `${mDisplay}:${sDisplay}`;
+};
+
+
 
 //MQTT Client
 client = new Paho.MQTT.Client("13.81.105.139", 80, "")
@@ -46,6 +58,8 @@ const showGame = (data) => {
 
 const showGamemodes = (data) => {
 
+    let gamemodeList = document.querySelector('.js-gamemodes')
+
 
     data.forEach((gamemode) => {
     
@@ -56,15 +70,16 @@ const showGamemodes = (data) => {
         id = gamemode.id;
         name = gamemode.name;
         released = gamemode.released;
-    // console.log(gamemode);
-    
-    });
 
+        gamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
+
+       
+   
+    });
 
 handleButtons();
 
 };
-
 
 
 const showAllGamemodes = (data) => {
@@ -80,21 +95,30 @@ const showAllGamemodes = (data) => {
         name = gamemode.name;
         released = gamemode.released;
     
+
         
     });
 };
 
 const showGamemodeInfo = (gamemode) => {
-    //Naam van de gamemode tonen
+    //Naam en spelregels van de gamemode tonen
+    let title, rules;
+
+    console.log(`Gamemode : ${gamemode}`)
+
+    title = document.querySelector('.js-gametitle');
+    rules = document.querySelector('.js-gamerules');
+
+
+    title.innerHTML = gamemode.name;
+    rules.innerHTML = gamemode.description;
 
     
     //Speluitleg tonen
     
 
     getHighscores(gamemode.id);
-        
-
-    
+          
 
     // de Game starten
 };
@@ -102,15 +126,46 @@ const showGamemodeInfo = (gamemode) => {
 
 const showHighscores = (data) => {
 
+    let scoreboard = document.querySelector('.js-scoreboard')
+    let htmlString = '';
+
+    
     data.forEach((highscore) => {
-        let username, score, id;
+        
+       
+        console.log(highscore)
+        let username, score;
         
         username = highscore.username;
-        score = highscore.score;
-        id = highscore.id;
 
-        console.log(score, username)
+        switch(highscore.gamemode) {
+            case 'quickytricky':    
+            score = highscore.score;
+            
+            
+            break;
+            case 'doubletrouble':
+            score = convertSeconds(highscore.score);
+            
+            break;
+            case 'therondo':
+
+            score = `00:${highscore.score}`
+            break;
+
+            default:
+    
+            break;
+        }
+
+
+        htmlString += ` <tr>
+        <td>${username}</td>
+        <td>${score}</td>
+    </tr>`  
     });
+
+    scoreboard.innerHTML += htmlString;
 
 
 };
@@ -171,7 +226,7 @@ const handleMQTTData = function(payload) {
 
     switch(type) {
         case 'game_end':
-        console.log('De game is gestopt')
+        console.log('De game is gedaan')
 
         break;
         case 'game_update':
@@ -185,8 +240,6 @@ const handleMQTTData = function(payload) {
 };
 
 
-    
-    
     //#endregion
 
     //#region ***  Event Listeners - ListenTo___ ***
@@ -196,7 +249,7 @@ const listenToMQTTConnect = function() {
     client.subscribe("/neocage");
 };
             
-    client.connect({onSuccess:listenToMQTTConnect});
+    
             
             // called when a message arrives on the topic
 const listenToMQTTMessage = function(message) {
@@ -211,9 +264,6 @@ const listenToMQTTMessage = function(message) {
     client.onMessageArrived = listenToMQTTMessage;
     
     //#endregion
-
-
-
 
 
     //#region ***API-Calls - Get___ ***
@@ -251,7 +301,18 @@ const getHighscores = (gamemodeId) => {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM LOAD COMPLETE")
-    getGamemodes();
+
+
+    if(document.querySelector('.js-app')) {
+        getGamemodes();
+        console.log("We bevinden ons in de app view");
+    } else if(document.querySelector('.js-game')){
+        console.log("We bevinden ons in de game view");
+        client.connect({onSuccess:listenToMQTTConnect});
+        
+    };
+
+    
 });
     //#endregion
 

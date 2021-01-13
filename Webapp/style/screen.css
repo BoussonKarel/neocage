@@ -8,6 +8,8 @@
 
 :root {
     /* colors */
+    --global-color-white-transparent:  #FFFFFF32;
+
     --global-color-neutral-xx-light: #EDEDED;
     --global-color-neutral-x-light: #D4D4D4;
     --global-color-neutral-light: #BABABA;
@@ -25,12 +27,16 @@
     --global-color-alpha-xxx-dark: #00394D;
     --global-color-alpha-xxxx-dark: #00131A;
 
+    --global-color-alpha-transparent: #44C9F632;
+
     --global-color-beta-xx-light: #ECBDD9;
     --global-color-beta-x-light: #EC8EC6;
     --global-color-beta-light: #EC5EB2;
     --global-color-beta: #EC008C;
     --global-color-beta-dark: #B3006A;
     --global-color-beta-x-dark: #80004C;
+
+    --global-color-beta-transparent: #EC008C32;
 
     --global-color-gamma-xx-light: #FFFBCC;
     --global-color-gamma-x-light: #FFF899;
@@ -62,12 +68,16 @@
 html {
     font-size: calc(var(--global-font-size) / 16 * 100%);
     line-height: 1.5;
-    font-family: Helvetica, arial, sans-serif;
+    font-family: 'Open Sans', Helvetica, arial, sans-serif;
     color: var(--color-neutral-dark);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: white;
+}
+
+body {
+    height: calc(100vh - var(--global-whitespace-xs));
 }
 
 *,
@@ -84,15 +94,17 @@ html {
 */
 
 ::-moz-selection {
-    background: var(--color-alpha);
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
+    text-decoration-color: white;
 }
 
 ::selection {
-    background: var(--color-alpha);
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
+    text-decoration-color: white;
 }
 
 /*------------------------------------*\
@@ -311,19 +323,435 @@ input::placeholder {
     border: 0;
 }
 
+.o-link{
+    margin: 0;
+}
+
+.o-link::selection{
+    text-decoration-color: white;
+}
+
 /*------------------------------------*\
 #COMPONENTS
 \*------------------------------------*/
 
+.blue {
+    background: var(--global-color-alpha);
+}
+
 /*
-    Component: Name
+    Component: App
     ---
-    Description
+    Main app container
 */
+
+.c-app {
+    max-width: calc(41 * var(--global-baseline));
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+}
+
+/*
+    Component: Start page
+    ---
+    Main app container
+*/
+
+.c-startpage {
+    color: white;
+    text-align: center;
+}
+
+.c-logo__svg {
+    max-width: 100%;
+    fill: #FFFFFF;
+}
+
+/*
+    Component: Start page menu
+    ---
+    Main menu to select gamemodes
+*/
+
+.c-menu {
+
+}
+
+.c-menu__title {
+    font-size: calc(29rem / var(--global-font-size));
+    line-height: calc(43.5rem / var(--global-font-size));
+    font-weight: 600;
+    margin-bottom: var(--global-whitespace-xxs);
+}
+
+.c-menu__list {
+    margin-bottom: 0;
+}
+
+.c-gamemode {
+    cursor: pointer;
+
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+
+    color: var(--global-color-neutral-x-dark);
+    background: #FFFFFF;
+
+    margin-bottom: var(--global-whitespace-xxs);
+
+    border-radius: var(--global-baseline);
+
+    padding: calc(var(--global-baseline) / 8 * 10.5)
+}
+
+.c-gamemode:hover,
+.c-gamemode:focus {
+    box-shadow: 0 0 0 3px var(--global-color-white-transparent);
+}
+
+.c-gamemode:active {
+    background-color: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: App
+    ---
+    Main app container
+*/
+
+.c-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #FFFFFF;
+
+    padding: 0 var(--global-whitespace-sm);
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.c-footer__text {
+    margin: 0;
+    font-size: calc(14rem / var(--global-font-size));
+    color: var(--global-color-neutral-x-dark);
+}
+
+.c-footer__logos {
+    display: flex;
+    align-items: center;
+}
+
+.c-footer__logo {
+    padding: calc(var(--global-baseline) / 2);
+    height: 48px;
+    width: 48px;
+    fill: #44C9F6;
+}
+
+/*
+    Component: Popup
+    ---
+    Popup to show above everything
+*/
+
+.c-popup {
+    overflow-y: auto;
+    position: fixed;
+    
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%; /* Full width */
+    min-height: 100%; /* Full height */
+
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: none;
+}
+
+.c-popup__content{
+    position: relative;
+    background-color: #FFFFFF;
+    border-radius: var(--global-baseline);
+    padding: var(--global-whitespace-xs);
+    
+    max-width: calc(41 * var(--global-baseline) - var(--global-whitespace-xs));
+    margin: var(--global-whitespace-xs) auto 0;
+}
+
+.c-popup--shown {
+    display: block;
+}
+
+.c-popup__close {
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: var(--global-whitespace-xxs);
+    right: var(--global-whitespace-xxs);
+    fill: var(--global-color-neutral-dark);
+}
+
+.c-popup__close:hover,
+.c-popup__close:focus,
+.c-popup__close:active {
+    fill: var(--global-color-neutral-x-dark);  
+}
+
+/*
+    Component: Label
+.c-label{
+    ---
+    Label for name input to save score
+*/
+
+.c-label{
+    font-weight: 400;
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+    text-align: center;
+    padding: 0 var(--global-whitespace-xs);
+}
+
+/*
+    Component: Input
+    Input field for name to save score
+    ---
+*/
+
+.c-input{
+    margin: 0 auto;
+    width:100%;
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+    height: var(--global-whitespace-md);
+    outline: none;
+    margin-bottom: var(--global-whitespace-lg);
+    border-radius:calc(var(--global-baseline) / 2);
+}
+
+.c-input:focus{
+    outline: none;
+    border-color: var(--global-color-alpha);
+}
+
+/*
+    Component: Info
+    ---
+    Info popup
+*/
+
+.c-info__title {
+    margin-bottom: var(--global-whitespace-xs);
+}
+
+.c-infoblock {
+    margin-bottom: 16px;
+}
+
+.c-infoblock__title {
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+}
+
+/*
+    Component: Table
+    ---
+    Table with highscores
+*/
+.c-infoblock__table {
+
+    overflow-y: auto;
+    max-height: calc(25 * var(--global-baseline));
+    border: 1px solid var(--global-color-neutral-dark);
+}
+.c-table {
+
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.c-table__item {
+    word-break: break-all;
+    width: 70%;
+    padding: calc(var(--global-baseline) / 8 * 2) var(--global-whitespace-xxs); 
+}
+
+.c-table__row:nth-child(odd) {
+    background: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: countdown
+    ---
+*/
+    Grey cards with information in them
+
+.c-countdown__time {
+    margin-top: var(--global-whitespace-xxs);
+    font-size: calc(58rem / var(--global-font-size));
+    line-height: calc(57rem / var(--global-font-size));
+    font-weight: 600;
+    text-align: center;
+}
+
+/*
+    Component: Button
+    ---
+    Button for play, stop, save...
+*/
+
+.c-button {
+    cursor: pointer;
+    width: 100%;
+    height: 48px;
+    background: var(--button-backgroundColor, var(--global-color-alpha));
+    border-radius: calc(var(--global-baseline) / 2);
+}
+
+.c-button--save{
+    color: white;
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+    font-weight: 700; /* bold */
+    margin-bottom: var(--global-whitespace-xxs);
+}
+
+.c-button__svg {
+    fill: white;
+    height: 48px;
+    width: 48px;
+}
+
+.c-button:hover,
+.c-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--button-shadowcolor, var(--global-color-alpha-transparent));
+}
+
+.c-button:active {
+    background: var(--button-activeBackground, var(--global-color-alpha-light));
+}
+
+.c-button--stop {
+    --button-backgroundColor: var(--global-color-beta);
+    --button-shadowcolor: var(--global-color-beta-transparent);
+    --button-activeBackground: var(--global-color-beta-light);
+}
+
+/*
+    Component: title
+    ---
+    Titles on pages
+*/
+
+.c-title {
+    font-size: calc(32rem / var(--global-font-size));
+    line-height: calc(48rem / var(--global-font-size));
+    font-weight: 700; /* bold */
+    text-align: center;
+    margin: 0;
+}
+
+.c-subtitle {
+    font-size: calc(29rem / var(--global-font-size));
+    line-height: calc(43.5rem / var(--global-font-size));
+    font-weight: 600; /* semibold */
+    text-align: center;
+}
+
+.c-status{
+    height: 100%;
+}
+
+.c-status__info {
+    margin-bottom: var(--global-whitespace-sm);
+}
+
+
+.c-overview{
+    text-align: center;
+}
+
+.c-overview__title{
+    padding-bottom: var(--global-whitespace-xs);
+}
+
+
+/*
+    Component: card
+    ---
+    Grey cards with information in them
+*/
+
+.c-card{
+    background-color: var(--global-color-neutral-xx-light);
+    padding: var(--global-whitespace-sm);
+    border-radius: var(--global-baseline);
+    text-align: center;
+    margin-bottom: var(--global-whitespace-sm);
+    box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.16);
+}
+
+.c-card__value{
+    font-size: calc(56rem / var(--global-font-size));
+}
+
+.c-minicards{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.c-minicard{
+    flex-basis: calc(50% - 12px);
+    background-color: var(--global-color-neutral-xx-light);
+    border-radius: var(--global-baseline);
+    padding: var(--global-whitespace-sm) var(--global-whitespace-xs) var(--global-whitespace-sm) var(--global-whitespace-xs);
+    box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.16);
+
+}
+
+@media (max-width: 315px) {
+    .c-minicards{
+        display: inline;
+        text-align: center;
+    }
+    
+    .c-minicard{
+        width:100%;
+        margin-top: var(--global-whitespace-sm);
+    
+    }
+}
 
 /*------------------------------------*\
 #UTILITIES
 \*------------------------------------*/
+
+/*
+    Utilities: textcolor
+    ---
+    Utility classes to put specific colors onto text
+*/
+
+.u-alpha-textcolor{
+    color: var(--global-color-alpha);
+}
+
+.u-beta-textcolor{
+    color: var(--global-color-beta)
+}
+
 
 /*
     Utilities: color
