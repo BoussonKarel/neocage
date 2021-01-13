@@ -100,12 +100,14 @@ body {
     background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
+    text-decoration-color: white;
 }
 
 ::selection {
     background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
+    text-decoration-color: white;
 }
 
 /*------------------------------------*\
@@ -324,6 +326,14 @@ input::placeholder {
     border: 0;
 }
 
+.o-link{
+    margin: 0;
+}
+
+.o-link::selection{
+    text-decoration-color: white;
+}
+
 /*------------------------------------*\
 #COMPONENTS
 \*------------------------------------*/
@@ -454,6 +464,7 @@ input::placeholder {
 */
 
 .c-popup {
+    overflow-y: auto;
     position: fixed;
     
     top: 0;
@@ -498,6 +509,40 @@ input::placeholder {
 }
 
 /*
+    Component: Label
+    ---
+    Label for name input to save score
+*/
+
+.c-label{
+    font-weight: 400;
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+    text-align: center;
+    padding: 0 var(--global-whitespace-xs);
+}
+
+/*
+    Component: Input
+    ---
+    Input field for name to save score
+*/
+
+.c-input{
+    margin: 0 auto;
+    width:100%;
+    font-size: calc(18rem / var(--global-font-size));
+    line-height: calc(27rem / var(--global-font-size));
+    height: var(--global-whitespace-md);
+    outline: none;
+    margin-bottom: var(--global-whitespace-lg);
+}
+
+.c-input:focus{
+    border: 1px solid var(--global-color-alpha);
+}
+
+/*
     Component: Button
     ---
     Button for play, stop, save...
@@ -509,6 +554,14 @@ input::placeholder {
     height: 48px;
     background: var(--button-backgroundColor, var(--global-color-alpha));
     border-radius: calc(var(--global-baseline) / 2);
+}
+
+.c-button--save{
+    color: white;
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+    font-weight: 700; /* bold */
+    margin-bottom: var(--global-whitespace-xxs);
 }
 
 .c-button__svg {
@@ -544,7 +597,7 @@ input::placeholder {
     line-height: calc(48rem / var(--global-font-size));
     font-weight: 700; /* bold */
     text-align: center;
-    margin: var(--global-whitespace-xs) 0 var(--global-whitespace-xs) 0;
+    margin: 0;
 }
 
 .c-subtitle {
@@ -561,6 +614,16 @@ input::placeholder {
 .c-status__info {
     margin-bottom: var(--global-whitespace-sm);
 }
+
+
+.c-overview{
+    text-align: center;
+}
+
+.c-overview__title{
+    padding-bottom: var(--global-whitespace-xs);
+}
+
 
 /*
     Component: card
