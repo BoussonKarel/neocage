@@ -19,33 +19,50 @@
 
             <!-- div Gamestatus pagina -->
             <div class="c-status">
-                <h1 class ="c-title">Double trouble</h1>   
+                <div class="c-status__item">
+                    <h1 class ="c-title">Double trouble</h1>   
+                </div>
+                  
             
-                <!-- Timer -->
-                <div class="c-card">
-                    <h2 class="c-subtitle">Verstreken tijd</h2>
-                    <h5 class="c-card__value">00:23</h5>
-                </div>
+                <div class="c-status__item c-status__item--scroll">
+                    <!-- Timer -->
+                    <div class="c-card">
+                        <h2 class="c-subtitle">Verstreken tijd</h2>
+                        <h5 class="c-card__value">00:23</h5>
+                    </div>
 
-                <!-- score -->
-                <div class="c-card">
-                    <h2 class="c-subtitle">Huidige score</h2>
-                    <h5 class="c-card__value">11</h5>
-                </div>
-    
-                <h2 class="c-subtitle">Resterende targets</h2>
-                <!-- Score -->
-                <div class="c-minicards">
-                    <div class="c-minicard">
-                        <h2 class="c-subtitle u-alpha-textcolor">Team 1</h2>
-                        <h5 class="c-card__value u-alpha-textcolor">2</h5>
+                    <!-- score -->
+                    <div class="c-card">
+                        <h2 class="c-subtitle">Huidige score</h2>
+                        <h5 class="c-card__value">11</h5>
                     </div>
-                    <div class="c-minicard">
-                        <h2 class="c-subtitle u-beta-textcolor">Team 2</h2>
-                        <h5 class="c-card__value u-beta-textcolor">1</h5>
+        
+                    <h2 class="c-subtitle">Resterende targets</h2>
+                    <!-- Score -->
+                    <div class="c-minicards">
+                        <div class="c-minicard">
+                            <h2 class="c-subtitle u-alpha-textcolor">Team 1</h2>
+                            <h5 class="c-card__value u-alpha-textcolor">2</h5>
+                        </div>
+                        <div class="c-minicard">
+                            <h2 class="c-subtitle u-beta-textcolor">Team 2</h2>
+                            <h5 class="c-card__value u-beta-textcolor">1</h5>
+                        </div>
+                    </div>
+
+                    <div class="c-minicards">
+                        <div class="c-minicard">
+                            <h2 class="c-subtitle u-alpha-textcolor">Team 1</h2>
+                            <h5 class="c-card__value u-alpha-textcolor">2</h5>
+                        </div>
+                        <div class="c-minicard">
+                            <h2 class="c-subtitle u-beta-textcolor">Team 2</h2>
+                            <h5 class="c-card__value u-beta-textcolor">1</h5>
+                        </div>
                     </div>
                 </div>
-                <div class="u-bottompage">
+                
+                <div class="c-status__item">
                     <button class="o-button-reset c-button c-button--stop">
                         <svg class="c-button__svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 6h12v12H6z"/></svg>
                     </button>
@@ -55,25 +72,26 @@
       
             
             <!-- div Score pagina -->
-            <div class="c-popup c-overview">
-                
-                <h1 class="c-overview__title">Double Trouble (!)</h1>
+            <div class="c-popup">
+                <div class="c-popup__content c-overview">
+                    <h1 class=" c-title c-overview__title">Double Trouble</h1>
             
-                <!-- Score -->
-                <div class="c-overview__card c-card">
-                    <h2 class="c-subtitle">Tijd</h2>
-                    <h5 class="c-card__value">00:10</h5>             
-                </div>
+                    <!-- Score -->
+                    <div class="c-overview__card c-card">
+                        <h2 class="c-subtitle">Tijd</h2>
+                        <h5 class="c-card__value">00:10</h5>             
+                    </div>
 
-                <!-- Naam invoeren -->
-                <form class="c-overview__form c-form">
-                    <label class="c-label" for="naam">Vul je naam in om je score op te slaan</label><br>
-                    <input class="c-input" type="text" id="naam" name="naam"><br>
-                    <button class="c-button c-button--save">Score opslaan</button>
-                </form>
-                <button class="c-link c-link--skip"><u>Overslaan</u></button>
+                    <!-- Naam invoeren -->
+                    <form class="c-overview__form c-form">
+                        <label class="c-label" for="naam">Vul je naam in om je score op te slaan</label><br>
+                        <input class="c-input" type="text" id="naam" name="naam"><br>
+                        <button class="c-button c-button--save">Score opslaan</button>
+                    </form>
+                    <button class="c-link c-link--skip"><u>Overslaan</u></button>
                 </div>
-
+            </div>
+                
         </div>
     </body>
 </html>
