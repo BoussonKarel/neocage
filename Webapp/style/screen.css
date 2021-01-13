@@ -53,9 +53,6 @@
     --global-whitespace-sm: calc(var(--global-baseline) * 3); /* 24 */
     --global-whitespace-md: calc(var(--global-baseline) * 4); /* 32 */
     --global-whitespace-lg: calc(var(--global-baseline) * 5); /* 40 */
-
-    --c-status__title-height: calc(1rem / 16 * 80);
-    --c-status__button-height: calc(1rem / 16 * 56);
 }
 
 /*------------------------------------*\
@@ -452,8 +449,8 @@ input::placeholder {
 
 .c-footer__logo {
     padding: calc(var(--global-baseline) / 2);
-    height: 56px;
-    width: 56px;
+    height: 48px;
+    width: 48px;
     fill: #44C9F6;
 }
 
@@ -481,6 +478,7 @@ input::placeholder {
 }
 
 .c-popup__content{
+    position: relative;
     background-color: #FFFFFF;
     border-radius: var(--global-baseline);
     padding: var(--global-whitespace-xs);
@@ -510,11 +508,11 @@ input::placeholder {
 
 /*
     Component: Label
+.c-label{
     ---
     Label for name input to save score
 */
 
-.c-label{
     font-weight: 400;
     font-size: calc(18rem / var(--global-font-size));
     line-height: calc(27rem / var(--global-font-size));
@@ -524,8 +522,8 @@ input::placeholder {
 
 /*
     Component: Input
-    ---
     Input field for name to save score
+    ---
 */
 
 .c-input{
@@ -540,6 +538,67 @@ input::placeholder {
 
 .c-input:focus{
     border: 1px solid var(--global-color-alpha);
+}
+
+/*
+    Component: Info
+    ---
+    Info popup
+*/
+
+.c-info__title {
+    margin-bottom: var(--global-whitespace-xs);
+}
+
+.c-infoblock {
+    margin-bottom: 16px;
+}
+
+.c-infoblock__title {
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+}
+
+/*
+    Component: Table
+    ---
+    Table with highscores
+*/
+.c-infoblock__table {
+
+    overflow-y: auto;
+    max-height: calc(25 * var(--global-baseline));
+    border: 1px solid var(--global-color-neutral-dark);
+}
+.c-table {
+
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.c-table__item {
+    word-break: break-all;
+    width: 70%;
+    padding: calc(var(--global-baseline) / 8 * 2) var(--global-whitespace-xxs); 
+}
+
+.c-table__row:nth-child(odd) {
+    background: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: countdown
+    ---
+*/
+    Grey cards with information in them
+
+.c-countdown__time {
+    margin-top: var(--global-whitespace-xxs);
+    font-size: calc(58rem / var(--global-font-size));
+    line-height: calc(57rem / var(--global-font-size));
+    font-weight: 600;
+    text-align: center;
 }
 
 /*
@@ -671,8 +730,6 @@ input::placeholder {
     
     }
 }
-
-
 
 /*------------------------------------*\
 #UTILITIES
