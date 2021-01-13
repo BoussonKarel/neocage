@@ -107,6 +107,7 @@ void setup() {
 
 void Task0Code(void * parameter) {
   for(;;) {
+    vTaskDelay(1);
     if(currentGame=="quickytricky") {
       quickyTricky(currentDuration);
     }
@@ -154,6 +155,16 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
       Serial.println("game unknown");    
     }
     
+  }
+  else if (strcmp(methodName, "currentgame") == 0)
+  {
+    if(currentGame != "") {
+      
+    }
+    else {
+      responseMessage = "null";
+      result = 404;
+    }
   }
   else if (strcmp(methodName, "stop") == 0)
   {
@@ -299,6 +310,8 @@ void checkSensors() {
         //lastValue[i] = value;
         doneRondo[i] = true;
         lastGoal = i;
+        gameScore++;
+        gameUpdate();
         for(int i = 0; i < JEWEL_COUNT; i++) {
           lastValue[i] = 0;
         }
@@ -356,7 +369,6 @@ void quickyTricky(int duration) {
       }while(randNumber == lastGoal);
       activeSensors[randNumber] = true;
       Serial.println("Random number " + String(randNumber));
-      gameScore++;
       //Led aanzetten
       setJewel(lastGoal,0,0,255);      
       setJewel(randNumber,255,0,0);
@@ -368,16 +380,30 @@ void quickyTricky(int duration) {
 
 }
 
+void gameUpdate() {
+  DynamicJsonDocument doc(1024);
+  doc["type"] = "game_update";
+  doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
+
+  char json[256];
+  serializeJson(doc, json);
+  //Serial.println(String(json));
+
+  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
+  Esp32MQTTClient_SendEventInstance(message);
+}
+
 void gameOff() {
-  char charGameID[128], charCurrentGame[32];
-  gameID.toCharArray(charGameID,128);
-  currentGame.toCharArray(charCurrentGame,32);
   //Scores doorsturen
-  char messagePayload[MESSAGE_MAX_LEN];
-  char *messageData = "{\"type\":\"game_end\",\"payload\":{\"id\":\"%s\",\"gamemode\":\"%s\",\"duration\":%i,\"score\":%i}}";
-  snprintf(messagePayload, MESSAGE_MAX_LEN, messageData, charGameID, charCurrentGame,currentDuration,gameScore);
-  Serial.println(String(messagePayload));
-  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(messagePayload, MESSAGE);
+  DynamicJsonDocument doc(1024);
+  doc["type"] = "game_end";
+  doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
+
+  char json[256];
+  serializeJson(doc, json);
+  //Serial.println(String(json));
+
+  EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
   Esp32MQTTClient_SendEventInstance(message);
   
   //Alles resetten
