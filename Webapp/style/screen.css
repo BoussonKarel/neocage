@@ -513,6 +513,7 @@ input::placeholder {
     Label for name input to save score
 */
 
+.c-label{
     font-weight: 400;
     font-size: calc(18rem / var(--global-font-size));
     line-height: calc(27rem / var(--global-font-size));
@@ -534,10 +535,12 @@ input::placeholder {
     height: var(--global-whitespace-md);
     outline: none;
     margin-bottom: var(--global-whitespace-lg);
+    border-radius:calc(var(--global-baseline) / 2);
 }
 
 .c-input:focus{
-    border: 1px solid var(--global-color-alpha);
+    outline: none;
+    border-color: var(--global-color-alpha);
 }
 
 /*
