@@ -1,4 +1,4 @@
-const URL = `http://localhost:7071/api`;
+const URL = `https://neocage.azurewebsites.net/api`;
 
 let currentGame = {};
 
