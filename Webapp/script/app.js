@@ -2,7 +2,13 @@ const URL = `https://neocage.azurewebsites.net/api`;
 
 let currentGame = {};
 
+//#region ***  DOM references ***
+let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage;
+let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
+let htmlCardsholder, htmlGameStop, htmlPopupEnd;
+//#endregion
 
+//#region ***  Helper functions ***
 function convertSeconds(seconds) {
     time = Number(seconds);
     var m = Math.floor(time % 3600 / 60);
@@ -14,16 +20,17 @@ function convertSeconds(seconds) {
     return `${mDisplay}:${sDisplay}`;
 };
 
+const redirectToStartpage = function() {
+    document.location.href = "./index.html";
+}
 
+const redirectToGamepage = function() {
+    document.location.href = "./game.html";
+}
+//#endregion
 
 //MQTT Client
 client = new Paho.MQTT.Client("13.81.105.139", 80, "")
-
-
-//#region ***  DOM references ***
-
-//#endregion
-
 
 //#region ***  Game Functions ***
 const startGame = (game) => {
@@ -41,28 +48,18 @@ const stopGame = () => {
     handleData(`${URL}/game/stop`,console.log("Game Stopped"), ErrorStopGame, 'POST');
     currentGame = {};
 };
-
-
-
 //#endregion
 
 
 //#region ***  Callback-Visualisation - show___ ***
-
 const showGame = (data) => {
     console.log(data)
     console.log("game bezig")
 };
 
 
-
 const showGamemodes = (data) => {
-
-    let gamemodeList = document.querySelector('.js-gamemodes')
-
-
     data.forEach((gamemode) => {
-    
         let description, duration, id, name, released;
 
         description = gamemode.description;
@@ -71,22 +68,13 @@ const showGamemodes = (data) => {
         name = gamemode.name;
         released = gamemode.released;
 
-        gamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
-
-       
-   
+        htmlGamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
     });
-
-handleButtons();
-
 };
-
 
 const showAllGamemodes = (data) => {
     // console.log(data)
-
     data.forEach((gamemode) => {
-    
         let description, duration, id, name, released;
     
         description = gamemode.description;
@@ -94,45 +82,28 @@ const showAllGamemodes = (data) => {
         id = gamemode.id;
         name = gamemode.name;
         released = gamemode.released;
-    
-
-        
     });
 };
 
 const showGamemodeInfo = (gamemode) => {
     //Naam en spelregels van de gamemode tonen
-    let title, rules;
-
     console.log(`Gamemode : ${gamemode}`)
 
-    title = document.querySelector('.js-gametitle');
-    rules = document.querySelector('.js-gamerules');
+    htmlGameTitle.innerHTML = gamemode.name;
+    htmlGameDesc.innerHTML = gamemode.description;
 
-
-    title.innerHTML = gamemode.name;
-    rules.innerHTML = gamemode.description;
-
-    
     //Speluitleg tonen
     
-
     getHighscores(gamemode.id);
           
-
     // de Game starten
 };
 
 
 const showHighscores = (data) => {
-
-    let scoreboard = document.querySelector('.js-scoreboard')
     let htmlString = '';
 
-    
     data.forEach((highscore) => {
-        
-       
         console.log(highscore)
         let username, score;
         
@@ -140,40 +111,33 @@ const showHighscores = (data) => {
 
         switch(highscore.gamemode) {
             case 'quickytricky':    
-            score = highscore.score;
-            
-            
-            break;
+                score = highscore.score;
+                break;
             case 'doubletrouble':
-            score = convertSeconds(highscore.score);
-            
-            break;
+                score = convertSeconds(highscore.score);
+                break;
             case 'therondo':
-
-            score = `00:${highscore.score}`
-            break;
-
+                score = `00:${highscore.score}`
+                break;
             default:
-    
-            break;
+                break;
         }
 
-
-        htmlString += ` <tr>
-        <td>${username}</td>
-        <td>${score}</td>
-    </tr>`  
+        htmlString += ` <tr class="c-table__row">
+        <td class="c-table__item>${username}</td>
+        <td class="c-table__item>${score}</td>
+        </tr>`  
     });
 
-    scoreboard.innerHTML += htmlString;
-
-
+    htmlScoreboard.innerHTML += htmlString;
 };
 
-    //#endregion
+const showPopup = function(htmlPopup) {
+    htmlPopup.classList.add("c-popup--shown");
+}
+//#endregion
 
 //#region ***  Callback-Errors - Error___ ***
-
 const errorGamemodes = () => {
     console.log(`De gamemodes konden niet worden opgehaald.`)
 };
@@ -183,7 +147,6 @@ const errorCurrentGame = () => {
     console.log("Er is een fout opgetreden bij het ophalen van de huidige game")
 };
 
-
 const errorGame = () => {
     console.log("Het spel kon niet gestart worden")
 };
@@ -192,66 +155,93 @@ const errorStopGame = () => {
     console.log("Game kon niet gestopt worden, er is een fout opgetreden.")
 };
 
-
-
 const errorHighscores = () => {
     console.log("De highscores konden niet worden opgehaald")
 }
-
-
-        //#endregion
+//#endregion
 
     
-    //#region ***  Event Handlers - Handle___ ***
-
-
-const handleCurrentgameRequest = (data) => {
+//#region ***  Event Handlers - Handle___ ***
+const handleCurrentGame = (data) => {
+    /* Is er een game? */
     console.log(data);
-    currentGame = data;
 
+    if (data.content == null) {
+        console.log("No game");
+        currentGame = null;
+    }
+    else {
+        console.log("There is an active game");
+        currentGame = data;
+    }
+
+    if (currentGame != null) {
+        // Er is een game
+        console.log("Er is een game.");
+        if (htmlGamepage) {
+            console.log("Je zit op de gamepagina, gamegegevens inladen...");
+            initGamepage();
+        }
+        else if (htmlStartpage) {
+            console.log("Je zit op de startpagina, doorsturen naar gamepagina.");
+            redirectToGamepage();
+        }
+    }
+    else {
+        // Er is GEEN game
+        console.log("Er is geen game.");
+        if (htmlStartpage) {
+            console.log("Je zit op de startpagina. Er veranderd niets.");
+        }
+        else if (htmlGamepage) {
+            console.log("Je zit op de gamepagina, doorsturen naar de startpagina.");
+            redirectToStartpage();
+        }
+    }
 };
-
     
-const handleButtons = () => {
-
-};
-    
-
 const handleMQTTData = function(payload) {
     let type = payload.type
         
-
     let data = JSON.parse(payload.payload);
     console.log(data)
 
     switch(type) {
         case 'game_end':
-        console.log('De game is gedaan')
-
-        break;
+            console.log('De game is gedaan')
+            break;
         case 'game_update':
                 //Hier wat er moet gebeuren
-        console.log('Er is een Game Update uitgevoerd')
-        break;
+            console.log('Er is een Game Update uitgevoerd')
+            break;
         default:
-
-        break;
+            break;
     }
 };
+//#endregion
 
+//#region ***  Event Listeners - ListenTo___ ***
+const listenToPopupsClose = function() {
+    // Go trough all the popups
+    for (const popup of htmlPopups) {
+        // Search for their closing button
+        const closeButton = popup.querySelector(".js-popup-close");
 
-    //#endregion
-
-    //#region ***  Event Listeners - ListenTo___ ***
+        // If it's closable (has a button), add the event
+        if (closeButton) {
+            closeButton.addEventListener("click", function() {
+                popup.classList.remove("c-popup--shown");
+            });
+        }
+    }
+}
 
 const listenToMQTTConnect = function() {
     console.log("Connected to MQTT");
     client.subscribe("/neocage");
 };
             
-    
-            
-            // called when a message arrives on the topic
+// called when a message arrives on the topic
 const listenToMQTTMessage = function(message) {
     let topic = message.destinationName;
     let payload = JSON.parse(message.payloadString);
@@ -261,58 +251,65 @@ const listenToMQTTMessage = function(message) {
     handleMQTTData(payload);
 };
 
-    client.onMessageArrived = listenToMQTTMessage;
-    
-    //#endregion
+client.onMessageArrived = listenToMQTTMessage;
+//#endregion
 
-
-    //#region ***API-Calls - Get___ ***
-
+//#region ***API-Calls - Get___ ***
 const getGamemodes = async () => {
-    
-    handleData(`${URL}/gamemodes`,showGamemodes, errorGamemodes);
-    
-          
+    handleData(`${URL}/gamemodes`,showGamemodes, errorGamemodes);  
 };
           
-const getAllGamemodes = async () => {
-          
-    handleData(`${URL}/gamemodes/all`,showAllGamemodes, errorGamemodes);
-          
+const getAllGamemodes = async () => {   
+    handleData(`${URL}/gamemodes/all`,showAllGamemodes, errorGamemodes); 
 };
-
 
 const getCurrentGame = async () => {
-
-    handleData(`${URL}/games/current`,handleCurrentgameRequest, errorCurrentGame );
-    
-
+    handleData(`${URL}/games/current`, handleCurrentGame, errorCurrentGame);
 };
 
 const getHighscores = (gamemodeId) => {
-
-    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores );
-
+    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
 };
-
-    //#endregion
+//#endregion
     
-    //#region ***  INIT / DOMContentLoaded  ***
+//#region ***  INIT / DOMContentLoaded  ***
+const initStartpage = function() {
+
+}
+
+const initGamepage = function() {
+    client.connect({onSuccess:listenToMQTTConnect});
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM LOAD COMPLETE")
 
+    htmlStartpage = document.querySelector('.js-startpage');
+    htmlGamepage = document.querySelector('.js-gamepage');
 
-    if(document.querySelector('.js-app')) {
-        getGamemodes();
-        console.log("We bevinden ons in de app view");
-    } else if(document.querySelector('.js-game')){
-        console.log("We bevinden ons in de game view");
-        client.connect({onSuccess:listenToMQTTConnect});
-        
-    };
+    /* Startpage elements */
+    htmlGamemodeList = document.querySelector('.js-gamemodes');
+    htmlGameTitle = document.querySelector('.js-game-title');
+    htmlGameDesc = document.querySelector('.js-game-desc');
+    htmlGameStart = document.querySelector('.js-game-start');
+    htmlScoreboard = document.querySelector('js-scoreboard');
+    htmlPopupGame = document.querySelector('.js-popup-game');
+    htmlPopupCountdown = document.querySelector('.js-popup-countdown');
 
-    
+    /* Gamepage elements */
+    htmlCardsholder = document.querySelector('.js-cards-holder');
+    htmlGameStop = document.querySelector('.js-game-stop');
+    htmlPopupEnd = document.querySelector('.js-popup-end');
+
+    if (htmlStartpage) {
+        htmlPopups = [htmlPopupGame, htmlPopupCountdown];
+        initStartpage();
+    } else if (htmlGamepage) {
+        htmlPopups = [htmlPopupEnd];
+    }
+
+    listenToPopupsClose();
+
+    getCurrentGame();
 });
-    //#endregion
-
+//#endregion

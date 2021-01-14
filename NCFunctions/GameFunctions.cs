@@ -75,6 +75,11 @@ namespace NCFunctions
                 // User wants to get details about the current game
                 Game CurrentGame = await GameRepository.GetCurrentGameAsync();
 
+                if (CurrentGame == null)
+                {
+                    return new OkObjectResult(new NoContent());
+                }
+
                 return new OkObjectResult(CurrentGame);
             }
             catch (Exception ex)
