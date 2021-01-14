@@ -131,6 +131,10 @@ const showHighscores = (data) => {
 
     htmlScoreboard.innerHTML += htmlString;
 };
+
+const showPopup = function(htmlPopup) {
+    htmlPopup.classList.add("c-popup--shown");
+}
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
