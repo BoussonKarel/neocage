@@ -118,9 +118,9 @@ const showHighscores = (data) => {
                 break;
         }
 
-        htmlString += ` <tr>
-        <td>${username}</td>
-        <td>${score}</td>
+        htmlString += ` <tr class="c-table__row">
+        <td class="c-table__item>${username}</td>
+        <td class="c-table__item>${score}</td>
         </tr>`  
     });
 
