@@ -13,6 +13,8 @@ namespace NCFunctions.Models
         public string GamemodeId { get; set; }
         [JsonProperty("duration")]
         public int? Duration { get; set; }
+        [JsonProperty("timestarted")]
+        public DateTime TimeStarted { get; set; }
         [JsonProperty("score")]
         public int Score { get; set; } = 0;
         [JsonProperty("username")]

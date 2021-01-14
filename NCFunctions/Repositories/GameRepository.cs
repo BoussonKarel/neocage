@@ -32,6 +32,7 @@ namespace NCFunctions.Repositories
                 // Make Entity of it
                 GameEntity gameEntity = new GameEntity(game.Id, game.GamemodeId) {
                     Duration = game.Duration,
+                    TimeStarted = game.TimeStarted,
                     Score = game.Score,
                     Username = game.Username
                 };
@@ -48,6 +49,7 @@ namespace NCFunctions.Repositories
                     Id = resultEntity.Id,
                     GamemodeId = resultEntity.GamemodeId,
                     Duration = resultEntity.Duration,
+                    TimeStarted = resultEntity.TimeStarted,
                     Score = resultEntity.Score,
                     Username = resultEntity.Username
                 };
@@ -105,6 +107,7 @@ namespace NCFunctions.Repositories
                         Id = ge.Id,
                         GamemodeId = ge.GamemodeId,
                         Duration = ge.Duration,
+                        TimeStarted = ge.TimeStarted,
                         Score = ge.Score,
                         Username = ge.Username
                     });
@@ -126,6 +129,7 @@ namespace NCFunctions.Repositories
                 GameEntity gameEntity = new GameEntity(game.Id, game.GamemodeId)
                 {
                     Duration = game.Duration,
+                    TimeStarted = game.TimeStarted,
                     Score = game.Score,
                     Username = game.Username
                 };
@@ -143,6 +147,7 @@ namespace NCFunctions.Repositories
                     Id = resultEntity.Id,
                     GamemodeId = resultEntity.GamemodeId,
                     Duration = resultEntity.Duration,
+                    TimeStarted = resultEntity.TimeStarted,
                     Score = resultEntity.Score,
                     Username = resultEntity.Username
                 };
