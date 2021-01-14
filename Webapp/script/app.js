@@ -118,9 +118,9 @@ const showHighscores = (data) => {
                 break;
         }
 
-        htmlString += ` <tr>
-        <td>${username}</td>
-        <td>${score}</td>
+        htmlString += ` <tr class="c-table__row">
+        <td class="c-table__item>${username}</td>
+        <td class="c-table__item>${score}</td>
         </tr>`  
     });
 
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlPopupGame = document.querySelector('.js-popup-game');
     htmlPopupCountdown = document.querySelector('.js-popup-countdown');
     
-    htmlGamepage
+    
     if (htmlStartpage) {
         getGamemodes();
         console.log("We bevinden ons in de app view");
