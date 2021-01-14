@@ -2,8 +2,10 @@ const URL = `https://neocage.azurewebsites.net/api`;
 
 let currentGame = {};
 
+let gamemodes = [];
+
 //#region ***  DOM references ***
-let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage;
+let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
 let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
 let htmlCardsholder, htmlGameStop, htmlPopupEnd;
 //#endregion
@@ -34,18 +36,13 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 
 //#region ***  Game Functions ***
 const startGame = (game) => {
-    currentGame = getCurrentGame();
-    if(currentGame == {}){
-        currentGame = game;
-        handleData(`${URL}/game/start`,showGame(currentGame), ErrorGame, 'POST', game);
-    } else {
-        console.log("Er is al een game bezig.")
-    }
+    handleData(`${URL}/game/start`,handleGameStarted, errorGameStarted, 'POST', game);
+
 
 };
 
 const stopGame = () => {
-    handleData(`${URL}/game/stop`,console.log("Game Stopped"), ErrorStopGame, 'POST');
+    handleData(`${URL}/game/stop`,console.log("Game Stopped"), errorStopGame, 'POST');
     currentGame = {};
 };
 //#endregion
@@ -59,7 +56,12 @@ const showGame = (data) => {
 
 
 const showGamemodes = (data) => {
-    data.forEach((gamemode) => {
+    let listcontent = "";
+
+    gamemodes = data;
+
+    for(let i in data) {
+        gamemode = data[i];
         let description, duration, id, name, released;
 
         description = gamemode.description;
@@ -68,40 +70,33 @@ const showGamemodes = (data) => {
         name = gamemode.name;
         released = gamemode.released;
 
-        htmlGamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
-    });
+        listcontent += `<li class="c-gamemode js-gamemode" data-index=${i}>${name}</li>`; 
+
+    };
+
+    htmlGamemodeList.innerHTML = listcontent;
+
+    listenToGamemodes();
 };
 
-const showAllGamemodes = (data) => {
-    // console.log(data)
-    data.forEach((gamemode) => {
-        let description, duration, id, name, released;
-    
-        description = gamemode.description;
-        duration = gamemode.duration;
-        id = gamemode.id;
-        name = gamemode.name;
-        released = gamemode.released;
-    });
-};
 
 const showGamemodeInfo = (gamemode) => {
-    //Naam en spelregels van de gamemode tonen
-    console.log(`Gamemode : ${gamemode}`)
+
+
 
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
 
     //Speluitleg tonen
     
-    getHighscores(gamemode.id);
-          
+    console.log(gamemode.id)
+    getHighscores(gamemode.id);   
     // de Game starten
 };
 
 
 const showHighscores = (data) => {
-    let htmlString = '';
+    let htmlString = "";
 
     data.forEach((highscore) => {
         console.log(highscore)
@@ -123,13 +118,19 @@ const showHighscores = (data) => {
                 break;
         }
 
-        htmlString += ` <tr class="c-table__row">
-        <td class="c-table__item>${username}</td>
-        <td class="c-table__item>${score}</td>
-        </tr>`  
+        htmlString += `<tr class="c-table__row">
+        <td class="c-table__item">${username}</td>
+        <td class="c-table__item">${score}</td>
+    </tr> `  
+
+
+
+        console.log(username)
+        console.log(score)
     });
 
-    htmlScoreboard.innerHTML += htmlString;
+    console.log(htmlString)
+    htmlScoreboard.innerHTML = htmlString;
 };
 
 const showPopup = function(htmlPopup) {
@@ -221,6 +222,21 @@ const handleMQTTData = function(payload) {
 //#endregion
 
 //#region ***  Event Listeners - ListenTo___ ***
+const listenToGamemodes = function() {
+    const buttons = document.querySelectorAll(".js-gamemode")
+
+    for(let btn of buttons) {
+        btn.addEventListener("click",function(){
+            const gamemode = gamemodes[btn.dataset.index]
+            showGamemodeInfo(gamemode)
+
+            showPopup(htmlPopupGame)
+        })
+    }
+};
+
+
+
 const listenToPopupsClose = function() {
     // Go trough all the popups
     for (const popup of htmlPopups) {
@@ -260,7 +276,7 @@ const getGamemodes = async () => {
 };
           
 const getAllGamemodes = async () => {   
-    handleData(`${URL}/gamemodes/all`,showAllGamemodes, errorGamemodes); 
+    handleData(`${URL}/gamemodes/all`,showGamemodes, errorGamemodes); 
 };
 
 const getCurrentGame = async () => {
@@ -274,7 +290,7 @@ const getHighscores = (gamemodeId) => {
     
 //#region ***  INIT / DOMContentLoaded  ***
 const initStartpage = function() {
-
+getGamemodes();
 }
 
 const initGamepage = function() {
@@ -292,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlGameTitle = document.querySelector('.js-game-title');
     htmlGameDesc = document.querySelector('.js-game-desc');
     htmlGameStart = document.querySelector('.js-game-start');
-    htmlScoreboard = document.querySelector('js-scoreboard');
+    htmlScoreboard = document.querySelector('.js-scoreboard');
     htmlPopupGame = document.querySelector('.js-popup-game');
     htmlPopupCountdown = document.querySelector('.js-popup-countdown');
 
