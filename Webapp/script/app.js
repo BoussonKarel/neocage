@@ -36,7 +36,8 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 
 //#region ***  Game Functions ***
 const startGame = (game) => {
-    handleData(`${URL}/game/start`,handleGameStarted, errorGameStarted, 'POST', game);
+    console.log("Er wordt een game gestart: ", game)
+    handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', game);
 
 
 };
@@ -49,10 +50,11 @@ const stopGame = () => {
 
 
 //#region ***  Callback-Visualisation - show___ ***
-const showGame = (data) => {
-    console.log(data)
-    console.log("game bezig")
-};
+
+
+const showGameStarted = function(){
+    showPopup(htmlPopupCountdown);
+}
 
 
 const showGamemodes = (data) => {
@@ -82,16 +84,12 @@ const showGamemodes = (data) => {
 
 const showGamemodeInfo = (gamemode) => {
 
-
-
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
 
-    //Speluitleg tonen
-    
-    console.log(gamemode.id)
-    getHighscores(gamemode.id);   
-    // de Game starten
+    htmlGameStart.addEventListener("click",function(){
+        startGame(gamemode);
+    })
 };
 
 
@@ -99,7 +97,6 @@ const showHighscores = (data) => {
     let htmlString = "";
 
     data.forEach((highscore) => {
-        console.log(highscore)
         let username, score;
         
         username = highscore.username;
@@ -125,11 +122,9 @@ const showHighscores = (data) => {
 
 
 
-        console.log(username)
-        console.log(score)
+
     });
 
-    console.log(htmlString)
     htmlScoreboard.innerHTML = htmlString;
 };
 
@@ -139,6 +134,11 @@ const showPopup = function(htmlPopup) {
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
+
+const errorGameStarted = () => {
+    console.log("Game kon niet worden gestart")
+}
+
 const errorGamemodes = () => {
     console.log(`De gamemodes konden niet worden opgehaald.`)
 };
@@ -228,6 +228,7 @@ const listenToGamemodes = function() {
     for(let btn of buttons) {
         btn.addEventListener("click",function(){
             const gamemode = gamemodes[btn.dataset.index]
+            getHighscores(gamemode.id); 
             showGamemodeInfo(gamemode)
 
             showPopup(htmlPopupGame)
