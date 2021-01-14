@@ -102,7 +102,7 @@ void setup() {
   setID();
 
   //MultiThreading
-  xTaskCreatePinnedToCore(Task0Code,"Task0",10000,NULL,0,&Task0,0);
+  xTaskCreatePinnedToCore(Task0Code,"Task0",8192,NULL,0,&Task0,0);
 }
 
 void Task0Code(void * parameter) {
@@ -119,7 +119,7 @@ void Task0Code(void * parameter) {
 
 static int  DeviceMethodCallback(const char *methodName, const unsigned char *payload, int size, unsigned char **response, int *response_size)
 {
-  LogInfo("Try to invoke method %s", methodName);
+  LogInfo("Trying to invoke method %s", methodName);
   const char *responseMessage = "\"Successfully invoke device method\"";
   int result = 200;
 
@@ -127,7 +127,7 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
   {
     //Eerst currentgame method -> 404 returnen 
      //Startgame -> payload ophalen welke game en welke duration
-     StaticJsonDocument<800> doc;
+    StaticJsonDocument<800> doc;
      
     // Deserialize the JSON document
     DeserializationError error = deserializeJson(doc, payload);
@@ -159,16 +159,49 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
   else if (strcmp(methodName, "currentgame") == 0)
   {
     if(currentGame != "") {
-      D2C("current_game");
+      DynamicJsonDocument doc(1024);
+      doc["id"] = gameID; 
+      doc["gamemode"] = currentGame; 
+      doc["duration"] = currentDuration; 
+      doc["score"] = gameScore;
+      char json[256];
+      serializeJson(doc, json);
+      Serial.println(json);
+      responseMessage = json;
+      result = 200;
     }
     else {
       responseMessage = "{\"id\": null}";
       result = 404;
     }
   }
-  else if (strcmp(methodName, "stop") == 0)
+  else if (strcmp(methodName, "stopgame") == 0)
   {
     LogInfo("Stop spel");
+    //gameOff();    
+    DynamicJsonDocument doc(1024);
+    doc["stopped"] = "true";
+    char json[256];
+    serializeJson(doc, json);
+    Serial.println(json);   
+    responseMessage = json;    
+    for(int i = 0; i < JEWEL_COUNT; i++) {
+      activeSensors[i] = false;
+      lastValue[i] = 0;
+    }
+    currentGame = "";
+    gameID = "";
+    currentDuration = 0;
+    gameScore = 0;  
+    //Serial.println("Game score " + String(currentScore)); 
+    leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+    leds.show();
+    delay(1000);
+    leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
+    leds.show();
+    delay(1000);
+    leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
+    leds.show();
   }
   else
   {
@@ -381,17 +414,15 @@ void quickyTricky(int duration) {
 }
 
 void D2C(String typeUpdate) {
-  if(typeUpdate == "current_game") {
+  if (typeUpdate == "stopgame"){
     DynamicJsonDocument doc(1024);
-    doc["id"] = gameID; 
-    doc["gamemode"] = currentGame; 
-    doc["duration"] = currentDuration; 
-    doc["score"] = gameScore;
+    doc["stopped"] = true; 
     char json[256];
     serializeJson(doc, json);
     EVENT_INSTANCE* message = Esp32MQTTClient_Event_Generate(json, MESSAGE);
     Esp32MQTTClient_SendEventInstance(message);
-  } else {
+  } 
+  else {
     DynamicJsonDocument doc(1024);
     doc["type"] = typeUpdate;
     doc["payload"] = "{\"id\":\""+gameID+"\",\"gamemode\":\""+currentGame+"\",\"duration\":"+currentDuration+",\"score\":"+gameScore+"}";
@@ -433,4 +464,5 @@ void gameOff() {
 
 void loop() {
   Esp32MQTTClient_Check();
+  vTaskDelay(1);
 }
