@@ -3,7 +3,7 @@ const URL = `https://neocage.azurewebsites.net/api`;
 let currentGame = {};
 
 //#region ***  DOM references ***
-let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlGamemodeList, htmlScoreboard, htmlStartpage, htmlGamepage;
+let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage;
 let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
 let htmlCardsholder, htmlGameStop, htmlPopupEnd;
 //#endregion
