@@ -153,9 +153,35 @@ const errorHighscores = () => {
 
     
 //#region ***  Event Handlers - Handle___ ***
-const handleCurrentgameRequest = (data) => {
+const handleCurrentGame = (data) => {
+    /* Is er een game? */
     console.log(data);
     currentGame = data;
+
+    if (data == null) {
+        /* Geen game, homepage */
+        if (htmlStartpage) {
+            /* Gebruiker zit juist */
+            console.log("We bevinden ons op de startpagina.");
+            initStartpage();
+        }
+        else {
+            /* Gebruiker zit fout */
+            console.log("We bevinden ons op de startpagina, maar moeten hier niet zijn!");
+        }
+    }
+    else {
+        /* Wel een game, gamepage */
+        if (htmlGamepage) {
+            /* Gebruiker zit juist */
+            console.log("We bevinden ons op de gamepagina.");
+            initGamepage();
+        }
+        else {
+            /* Gebruiker zit fout */
+            console.log("We bevinden ons op de gamepagina, maar moeten hier niet zijn!");
+        }
+    }
 };
     
 const handleMQTTData = function(payload) {
@@ -179,6 +205,21 @@ const handleMQTTData = function(payload) {
 //#endregion
 
 //#region ***  Event Listeners - ListenTo___ ***
+const listenToPopupsClose = function() {
+    // Go trough all the popups
+    for (const popup of htmlPopups) {
+        // Search for their closing button
+        const closeButton = popup.querySelector(".js-popup-close");
+
+        // If it's closable (has a button), add the event
+        if (closeButton) {
+            closeButton.addEventListener("click", function() {
+                popup.classList.remove("c-popup--shown");
+            });
+        }
+    }
+}
+
 const listenToMQTTConnect = function() {
     console.log("Connected to MQTT");
     client.subscribe("/neocage");
@@ -207,15 +248,31 @@ const getAllGamemodes = async () => {
 };
 
 const getCurrentGame = async () => {
-    handleData(`${URL}/games/current`,handleCurrentgameRequest, errorCurrentGame );
+    handleData(`${URL}/games/current`, handleCurrentGame, errorCurrentGame);
 };
 
 const getHighscores = (gamemodeId) => {
-    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores );
+    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
 };
 //#endregion
     
 //#region ***  INIT / DOMContentLoaded  ***
+const initStartpage = function() {
+    htmlPopups = [htmlPopupGame, htmlPopupCountdown];
+
+    getGamemodes();
+
+    listenToPopupsClose();
+}
+
+const initGamepage = function() {
+    htmlPopups = [htmlPopupEnd];
+
+    client.connect({onSuccess:listenToMQTTConnect});
+
+    listenToPopupsClose();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM LOAD COMPLETE")
 
@@ -230,23 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlScoreboard = document.querySelector('js-scoreboard');
     htmlPopupGame = document.querySelector('.js-popup-game');
     htmlPopupCountdown = document.querySelector('.js-popup-countdown');
-    
-    htmlGamepage
-    if (htmlStartpage) {
-        getGamemodes();
-        console.log("We bevinden ons in de app view");
-        htmlPopups = [htmlPopupGame, htmlPopupCountdown];
-    }
 
     /* Gamepage elements */
     htmlCardsholder = document.querySelector('.js-cards-holder');
     htmlGameStop = document.querySelector('.js-game-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
 
-    if (htmlGamepage){
-        console.log("We bevinden ons in de game view");
-        htmlPopups = [htmlPopupGame, htmlPopupCountdown];
-        client.connect({onSuccess:listenToMQTTConnect});
-    };
+    getCurrentGame();
 });
 //#endregion
