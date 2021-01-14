@@ -164,6 +164,12 @@ const showGameStatus = function(game) {
 
     htmlCardsholder.innerHTML = cardsContent;
 }
+
+const showEndOfGame = function(game) {
+    showPopup(htmlPopupEnd);
+
+    // Fill popup
+}
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
@@ -231,20 +237,25 @@ const handleCurrentGame = (data) => {
     
 const handleMQTTData = function(payload) {
     let type = payload.type
-        
-    let data = JSON.parse(payload.payload);
-    console.log(data)
 
-    switch(type) {
-        case 'game_end':
-            console.log('De game is gedaan')
-            break;
-        case 'game_update':
-                //Hier wat er moet gebeuren
-            console.log('Er is een Game Update uitgevoerd')
-            break;
-        default:
-            break;
+    if (type == "game_end" || type == "game_update") {
+        let data = JSON.parse(payload.payload);
+
+        currentGame = data;
+        showGameStatus(currentGame);
+
+        switch(type) {
+            case 'game_end':
+                console.log('De game is gedaan.')
+                // Extra shit bij einde game
+                showEndOfGame(currentGame);
+                break;
+            case 'game_update':
+                console.log('De game is geupdate.')
+                break;
+            default:
+                break;
+        }
     }
 };
 //#endregion
