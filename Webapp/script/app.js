@@ -19,6 +19,14 @@ function convertSeconds(seconds) {
     
     return `${mDisplay}:${sDisplay}`;
 };
+
+const redirectToStartpage = function() {
+    document.location.href = "./index.html";
+}
+
+const redirectToGamepage = function() {
+    document.location.href = "./game.html";
+}
 //#endregion
 
 //MQTT Client
@@ -62,9 +70,6 @@ const showGamemodes = (data) => {
 
         htmlGamemodeList.innerHTML += `<li class="c-gamemode js-gamemode">${name}</li>`;
     });
-
-handleButtons();
-
 };
 
 const showAllGamemodes = (data) => {
@@ -156,30 +161,37 @@ const errorHighscores = () => {
 const handleCurrentGame = (data) => {
     /* Is er een game? */
     console.log(data);
-    currentGame = data;
 
-    if (data == null) {
-        /* Geen game, homepage */
-        if (htmlStartpage) {
-            /* Gebruiker zit juist */
-            console.log("We bevinden ons op de startpagina.");
-            initStartpage();
+    if (data.content == null) {
+        console.log("No game");
+        currentGame = null;
+    }
+    else {
+        console.log("There is an active game");
+        currentGame = data;
+    }
+
+    if (currentGame != null) {
+        // Er is een game
+        console.log("Er is een game.");
+        if (htmlGamepage) {
+            console.log("Je zit op de gamepagina, gamegegevens inladen...");
+            initGamepage();
         }
-        else {
-            /* Gebruiker zit fout */
-            console.log("We bevinden ons op de startpagina, maar moeten hier niet zijn!");
+        else if (htmlStartpage) {
+            console.log("Je zit op de startpagina, doorsturen naar gamepagina.");
+            redirectToGamepage();
         }
     }
     else {
-        /* Wel een game, gamepage */
-        if (htmlGamepage) {
-            /* Gebruiker zit juist */
-            console.log("We bevinden ons op de gamepagina.");
-            initGamepage();
+        // Er is GEEN game
+        console.log("Er is geen game.");
+        if (htmlStartpage) {
+            console.log("Je zit op de startpagina. Er veranderd niets.");
         }
-        else {
-            /* Gebruiker zit fout */
-            console.log("We bevinden ons op de gamepagina, maar moeten hier niet zijn!");
+        else if (htmlGamepage) {
+            console.log("Je zit op de gamepagina, doorsturen naar de startpagina.");
+            redirectToStartpage();
         }
     }
 };
@@ -258,26 +270,18 @@ const getHighscores = (gamemodeId) => {
     
 //#region ***  INIT / DOMContentLoaded  ***
 const initStartpage = function() {
-    htmlPopups = [htmlPopupGame, htmlPopupCountdown];
 
-    getGamemodes();
-
-    listenToPopupsClose();
 }
 
 const initGamepage = function() {
-    htmlPopups = [htmlPopupEnd];
-
     client.connect({onSuccess:listenToMQTTConnect});
-
-    listenToPopupsClose();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM LOAD COMPLETE")
 
-    htmlStartpage = document.querySelector('js-startpage');
-    htmlGamepage = document.querySelector('js-gamepage');
+    htmlStartpage = document.querySelector('.js-startpage');
+    htmlGamepage = document.querySelector('.js-gamepage');
 
     /* Startpage elements */
     htmlGamemodeList = document.querySelector('.js-gamemodes');
@@ -292,6 +296,15 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlCardsholder = document.querySelector('.js-cards-holder');
     htmlGameStop = document.querySelector('.js-game-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
+
+    if (htmlStartpage) {
+        htmlPopups = [htmlPopupGame, htmlPopupCountdown];
+        initStartpage();
+    } else if (htmlGamepage) {
+        htmlPopups = [htmlPopupEnd];
+    }
+
+    listenToPopupsClose();
 
     getCurrentGame();
 });
