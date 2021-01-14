@@ -1,11 +1,11 @@
-const URL = `https://neocage.azurewebsites.net/api`;
+const URL = `http://localhost:7071/api`;
 
 let currentGame = {};
 
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage;
 let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
-let htmlCardsholder, htmlGameStop, htmlPopupEnd;
+let htmlStatusGame, htmlCardsholder, htmlGameStop, htmlPopupEnd;
 //#endregion
 
 //#region ***  Helper functions ***
@@ -37,7 +37,7 @@ const startGame = (game) => {
     currentGame = getCurrentGame();
     if(currentGame == {}){
         currentGame = game;
-        handleData(`${URL}/game/start`,showGame(currentGame), ErrorGame, 'POST', game);
+        
     } else {
         console.log("Er is al een game bezig.")
     }
@@ -135,6 +135,35 @@ const showHighscores = (data) => {
 const showPopup = function(htmlPopup) {
     htmlPopup.classList.add("c-popup--shown");
 }
+
+const showGameStatus = function(game) {
+    htmlStatusGame.innerHTML = game.gamemode;
+
+    console.log(htmlCardsholder);
+    let cardsContent = "";
+
+    // TIJD
+    if (game.duration == null) {
+        cardsContent += `<div class="c-card">
+                <h2 class="c-subtitle">Verstreken tijd</h2>
+                <h5 class="c-card__value">XX:XX</h5>
+            </div>`;
+    }
+    else {
+        cardsContent += `<div class="c-card">
+                <h2 class="c-subtitle">Resterende tijd</h2>
+                <h5 class="c-card__value">YY:YY</h5>
+            </div>`;
+    }
+
+    // SCORE
+    cardsContent +=`<div class="c-card">
+            <h2 class="c-subtitle">Score</h2>
+            <h5 class="c-card__value">${game.score}</h5>
+        </div>`;
+
+    htmlCardsholder.innerHTML = cardsContent;
+}
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
@@ -166,13 +195,13 @@ const handleCurrentGame = (data) => {
     /* Is er een game? */
     console.log(data);
 
-    if (data.content == null) {
-        console.log("No game");
-        currentGame = null;
-    }
-    else {
+    if (data.id) {
         console.log("There is an active game");
         currentGame = data;
+    }
+    else {
+        console.log("No game");
+        currentGame = null;
     }
 
     if (currentGame != null) {
@@ -278,6 +307,8 @@ const initStartpage = function() {
 }
 
 const initGamepage = function() {
+    showGameStatus(currentGame);
+
     client.connect({onSuccess:listenToMQTTConnect});
 }
 
@@ -297,6 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlPopupCountdown = document.querySelector('.js-popup-countdown');
 
     /* Gamepage elements */
+    htmlStatusGame = document.querySelector('.js-status-game');
     htmlCardsholder = document.querySelector('.js-cards-holder');
     htmlGameStop = document.querySelector('.js-game-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
