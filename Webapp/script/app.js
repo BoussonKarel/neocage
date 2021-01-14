@@ -52,7 +52,8 @@ const stopGame = () => {
 //#region ***  Callback-Visualisation - show___ ***
 
 
-const showGameStarted = function(){
+const showGameStarted = function(data){
+    console.log(data)
     showPopup(htmlPopupCountdown);
 }
 
