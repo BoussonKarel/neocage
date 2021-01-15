@@ -22,6 +22,7 @@ namespace NCFunctions.Entities
 
         public Guid Id { get; set; }
         public string GamemodeId { get; set; }
+        public string Gamemode { get; set; }
         public int? Duration { get; set; }
         public DateTime TimeStarted { get; set; }
         public int Score { get; set; } = 0;

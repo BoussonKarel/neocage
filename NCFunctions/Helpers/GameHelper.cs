@@ -25,6 +25,7 @@ namespace NCFunctions.Helpers
                     {
                         Id = Guid.NewGuid(),
                         GamemodeId = gamemode.Id,
+                        Gamemode = gamemode.Name,
                         TimeStarted = DateTime.Now,
                         Duration = gamemode.Duration,
                         Score = 0
