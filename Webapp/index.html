@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Exerlights</title>
+        <title>ExerLights</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <div class="c-popup js-popup-countdown">
+        <div class="c-popup js-popup-countdown c-popup--shown">
             <div class="c-popup__content c-countdown">
                 <!-- <button class="o-button-reset c-popup__close js-popup-close">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -149,10 +149,17 @@
                     The Rondo
                 </div>
                 <div class="c-subtitle c-countdown__text">
-                    begint in
+                    wordt gestart in
                 </div>
-                <div class="c-countdown__time js-countdown">
-                    5
+                <div class="c-timer o-container">
+                    <svg class="c-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <g class="c-timer__circle">
+                            <circle class="c-timer__path--elapsed" cx="50" cy="50" r="45" />
+                            <circle class="c-timer__path--remaining js-timer-circle" cx="50" cy="50" r="45" />
+                        </g>
+                    </svg>
+                    <span class="c-timer__text js-timer-seconds">5</span>
+                    </span>
                 </div>
             </div>
         </div>
