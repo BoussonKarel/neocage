@@ -124,26 +124,10 @@ const showHighscores = (data) => {
             
             username = highscore.username;
 
-<<<<<<< HEAD
     
             switch(highscore.gamemode_id) {
                 case 'quickytricky':    
                     score = `${highscore.score} ptn`;
-=======
-    if(data.length < 1){
-    htmlString = `<tr class="c-table__row">
-    <td class="c-table__item">No Highscores available (yet)</td>
-    `
-    } else {
-        data.forEach((highscore) => {
-            let username, score;
-            
-            username = highscore.username;
-    
-            switch(highscore.gamemode) {
-                case 'quickytricky':    
-                    score = highscore.score;
->>>>>>> highscores_fix
                     break;
                 case 'doubletrouble':
                     score = convertSeconds(highscore.score);
@@ -158,18 +142,13 @@ const showHighscores = (data) => {
             htmlString += `<tr class="c-table__row">
             <td class="c-table__item">${username}</td>
             <td class="c-table__item">${score}</td>
-<<<<<<< HEAD
         </tr> `; 
-=======
-        </tr> `  
->>>>>>> highscores_fix
     
     
     
     
         });
     };
-<<<<<<< HEAD
 
    
 
@@ -189,10 +168,6 @@ const showTimer = function(startTime, duration) {
         // Compare to now, how many seconds till the endTime?
         let msTillEnd = endTime - now;
         
-=======
-
-   
->>>>>>> highscores_fix
 
         let sTillEnd = Math.ceil(msTillEnd / 1000);
 
