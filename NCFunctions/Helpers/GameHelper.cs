@@ -33,6 +33,17 @@ namespace NCFunctions.Helpers
                     // Game details naar device sturen in start methode
                     await IoTHubHelper.StartGameMethod(CurrentGame);
 
+                    // Game started sturen over MQTT
+                    // type "game_update", payload is the game info
+                    string gamePayload = JsonConvert.SerializeObject(CurrentGame);
+                    MqttMessage message = new MqttMessage("game_start", gamePayload);
+
+                    // Serialize
+                    string mqttBody = JsonConvert.SerializeObject(message);
+
+                    // Send to topic /neocage
+                    MqttHelper.SendMessage("/neocage", mqttBody);
+
                     return CurrentGame;
                 }
                 else
