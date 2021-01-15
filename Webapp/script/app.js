@@ -112,6 +112,7 @@ const showGamemodeInfo = (gamemode) => {
 
 const showHighscores = (data) => {
     let htmlString = "";
+    console.log("highscores tonen")
 
     if(data.length < 1){
         htmlString = `<tr class="c-table__row">
@@ -122,8 +123,9 @@ const showHighscores = (data) => {
             let username, score;
             
             username = highscore.username;
+
     
-            switch(highscore.gamemode) {
+            switch(highscore.gamemode_id) {
                 case 'quickytricky':    
                     score = `${highscore.score} ptn`;
                     break;
