@@ -51,8 +51,9 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 
 //#region ***  Game Functions ***
 const startGame = (game) => {
-    console.log("Er wordt een game gestart: ", game)
-    handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', game);
+    let body = JSON.stringify(game)
+    console.log("Er wordt een game gestart: ", body)
+    handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', body);
 
 
 };
