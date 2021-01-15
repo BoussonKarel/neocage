@@ -1,33 +1,37 @@
 const URL = `https://neocage.azurewebsites.net/api`;
+// const URL = `http://localhost:7071/api`;
 
 let currentGame = {};
 
 let gamemodes = [];
 
+const max_stroke_dasharray = 283;
+
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
 let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
-let htmlStatusGame, htmlCardsholder, htmlGameStop, htmlPopupEnd;
+let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
 //#region ***  Helper functions ***
-function convertSeconds(seconds) {
-    time = Number(seconds);
-    var m = Math.floor(time % 3600 / 60);
-    var s = Math.floor(time % 3600 % 60);
-
-    var mDisplay = m > 9 ? m : `${0}${m}`;
-    var sDisplay = s > 9 ? s : `${0}${s}`;
-    
-    return `${mDisplay}:${sDisplay}`;
-};
-
 const redirectToStartpage = function() {
     document.location.href = "./index.html";
 }
 
 const redirectToGamepage = function() {
     document.location.href = "./game.html";
+}
+
+function formatTimeLeft(time) {
+    const minutes = Math.floor(time / 60);
+    
+    let seconds = time % 60;
+    
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+    
+    return `${minutes}:${seconds}`;
 }
 //#endregion
 
@@ -133,39 +137,67 @@ const showPopup = function(htmlPopup) {
     htmlPopup.classList.add("c-popup--shown");
 }
 
-const showGameStatus = function(game) {
-    htmlStatusGame.innerHTML = game.gamemode;
+const showTimer = function(startTime, duration) {
+    let endTime = startTime + (duration * 1000);
 
-    console.log(htmlCardsholder);
+    const timer = setInterval(function() {
+        let now = Date.now();
+
+        // Compare to now, how many seconds till the endTime?
+        let msTillEnd = endTime - now;
+        
+
+        let sTillEnd = Math.ceil(msTillEnd / 1000);
+
+        let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
+        if (stroke_dasharray < 0) {
+            stroke_dasharray = 0;
+        }
+        if (msTillEnd < 0) {
+            clearInterval(timer);
+        }
+
+        htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+        htmlTimerSeconds.innerHTML = sTillEnd;
+    }, 30);
+}
+
+const showGameStatus = function(game) {
+    console.log("Showing game:", game)
+    htmlStatusTitle.innerHTML = game.gamemode;
+
+    console.log(htmlStatusCards);
     let cardsContent = "";
 
-    // TIJD
-    if (game.duration == null) {
-        cardsContent += `<div class="c-card">
-                <h2 class="c-subtitle">Verstreken tijd</h2>
-                <h5 class="c-card__value">XX:XX</h5>
-            </div>`;
-    }
-    else {
-        cardsContent += `<div class="c-card">
-                <h2 class="c-subtitle">Resterende tijd</h2>
-                <h5 class="c-card__value">YY:YY</h5>
-            </div>`;
-    }
-
     // SCORE
-    cardsContent +=`<div class="c-card">
+    cardsContent +=
+        `<div class="c-card o-container">
             <h2 class="c-subtitle">Score</h2>
             <h5 class="c-card__value">${game.score}</h5>
         </div>`;
 
-    htmlCardsholder.innerHTML = cardsContent;
+    let startTime = new Date(game.timestarted).getTime();
+
+    showTimer(startTime, game.duration);
+
+    htmlStatusCards.innerHTML = cardsContent;
 }
 
 const showEndOfGame = function(game) {
     showPopup(htmlPopupEnd);
 
     // Fill popup
+    htmlEndTitle.innerHTML = game.gamemode;
+    
+    let cardsContent = "";
+    // SCORE
+    cardsContent +=
+        `<div class="c-card o-container">
+            <h2 class="c-subtitle">Score</h2>
+            <h5 class="c-card__value">${game.score}</h5>
+        </div>`;
+
+    htmlEndCards.innerHTML = cardsContent;
 }
 //#endregion
 
@@ -357,10 +389,14 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlPopupCountdown = document.querySelector('.js-popup-countdown');
 
     /* Gamepage elements */
-    htmlStatusGame = document.querySelector('.js-status-game');
-    htmlCardsholder = document.querySelector('.js-cards-holder');
+    htmlStatusTitle = document.querySelector('.js-status-title');
+    htmlTimercircle = document.querySelector('.js-timer-circle');
+    htmlTimerSeconds = document.querySelector('.js-timer-seconds');
+    htmlStatusCards = document.querySelector('.js-status-cards');
     htmlGameStop = document.querySelector('.js-game-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
+    htmlEndTitle = document.querySelector('.js-end-title');
+    htmlEndCards = document.querySelector('.js-end-cards');
 
     if (htmlStartpage) {
         htmlPopups = [htmlPopupGame, htmlPopupCountdown];
