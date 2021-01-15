@@ -96,35 +96,44 @@ const showGamemodeInfo = (gamemode) => {
 
 const showHighscores = (data) => {
     let htmlString = "";
+    console.log(data)
 
-    data.forEach((highscore) => {
-        let username, score;
-        
-        username = highscore.username;
+    if(data.length < 1){
+    htmlString = `<tr class="c-table__row">
+    <td class="c-table__item">No Highscores available (yet)</td>
+    `
+    } else {
+        data.forEach((highscore) => {
+            let username, score;
+            
+            username = highscore.username;
+    
+            switch(highscore.gamemode) {
+                case 'quickytricky':    
+                    score = highscore.score;
+                    break;
+                case 'doubletrouble':
+                    score = convertSeconds(highscore.score);
+                    break;
+                case 'therondo':
+                    score = `00:${highscore.score}`
+                    break;
+                default:
+                    break;
+            }
+    
+            htmlString += `<tr class="c-table__row">
+            <td class="c-table__item">${username}</td>
+            <td class="c-table__item">${score}</td>
+        </tr> `  
+    
+    
+    
+    
+        });
+    };
 
-        switch(highscore.gamemode) {
-            case 'quickytricky':    
-                score = highscore.score;
-                break;
-            case 'doubletrouble':
-                score = convertSeconds(highscore.score);
-                break;
-            case 'therondo':
-                score = `00:${highscore.score}`
-                break;
-            default:
-                break;
-        }
-
-        htmlString += `<tr class="c-table__row">
-        <td class="c-table__item">${username}</td>
-        <td class="c-table__item">${score}</td>
-    </tr> `  
-
-
-
-
-    });
+   
 
     htmlScoreboard.innerHTML = htmlString;
 };
