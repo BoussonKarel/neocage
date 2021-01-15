@@ -20,7 +20,7 @@ function convertSeconds(seconds) {
 };
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
-let htmlPopupGame, htmlPopupStarting, htmlPopups = [];
+let htmlPopupGame, htmlPopupLoading, htmlPopups = [];
 let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
@@ -54,7 +54,7 @@ const startGame = (game) => {
     let body = JSON.stringify(game)
     console.log("Er wordt een game gestart: ", body)
 
-    showPopup(htmlPopupStarting);
+    showLoadingPopup();
     handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', body);
 };
 
@@ -216,6 +216,14 @@ const showEndOfGame = function(game) {
         </div>`;
 
     htmlEndCards.innerHTML = cardsContent;
+}
+
+const showLoadingPopup = function() {
+    htmlPopupLoading.classList.add("c-popup--shown");
+}
+
+const hideLoadingPopup = function() {
+    htmlPopupLoading.classList.remove("c-popup--shown");
 }
 //#endregion
 
@@ -404,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlGameStart = document.querySelector('.js-game-start');
     htmlScoreboard = document.querySelector('.js-scoreboard');
     htmlPopupGame = document.querySelector('.js-popup-game');
-    htmlPopupStarting = document.querySelector('.js-popup-starting');
+    htmlPopupLoading = document.querySelector('.js-popup-loading');
 
     /* Gamepage elements */
     htmlStatusTitle = document.querySelector('.js-status-title');
@@ -417,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlEndCards = document.querySelector('.js-end-cards');
 
     if (htmlStartpage) {
-        htmlPopups = [htmlPopupGame, htmlPopupStarting];
+        htmlPopups = [htmlPopupGame, htmlPopupLoading];
         initStartpage();
     } else if (htmlGamepage) {
         htmlPopups = [htmlPopupEnd];
