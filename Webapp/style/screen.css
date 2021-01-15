@@ -755,7 +755,7 @@ input::placeholder {
 
 /* Sets the containers height and width */
 .c-timer {
-    --stroke-width: 4px;
+    --timer-stroke-width: 4px;
 
     position: relative;
     border-radius: 100%;
@@ -767,12 +767,12 @@ input::placeholder {
 }
 
 .c-timer__path--elapsed {
-    stroke-width: var(--stroke-width);
+    stroke-width: var(--timer-stroke-width: 4px;);
     stroke: var(--global-color-neutral-xx-light);
 }
 
 .c-timer__path--remaining {
-    stroke-width: var(--stroke-width);
+    stroke-width: var(--timer-stroke-width: 4px;);
     stroke: var(--global-color-alpha);
 
     transform: rotate(-90deg);
@@ -792,6 +792,74 @@ input::placeholder {
   
     font-size: calc(56rem / var(--global-font-size));
     font-weight: 600;
+}
+
+/*
+    Component: loading cursor svg
+    ---
+    Nice loading svg
+*/
+@keyframes stroke {
+    100%, 0% {
+        stroke: var(--global-color-alpha);
+    }
+    33% {
+        stroke: var(--global-color-beta);
+    }
+    66% {
+        stroke: var(--global-color-gamma);
+    }
+}
+
+@keyframes loading {
+    0%, 20% {
+        stroke-dashoffset: 250;
+        transform: rotate(0deg);
+    }
+    50%, 70% {
+        stroke-dashoffset: 75;
+        transform: rotate(75deg);
+    }
+    100% {
+        stroke-dashoffset: 250;
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.c-loading {
+    --loading-stroke-width: var(--global-baseline);
+    --loading-dimensions: calc(var(--global-baseline) * 10);
+
+    display: flex;
+    justify-content: center;
+}
+
+.c-loading__svg {
+    width: var(--loading-dimensions);
+    height: var(--loading-dimensions);
+
+    animation: rotate 2s linear infinite;
+}
+
+.c-loading__circle {
+    fill: none;
+    stroke-width: var(--loading-stroke-width);
+    stroke: var(--global-color-gamma);
+    stroke-dasharray: 283;
+    stroke-dashoffset: 75;
+
+    animation: loading 2s linear infinite, stroke 5s linear infinite;
+    
+    transform-origin: center center;
 }
 
 /*------------------------------------*\
