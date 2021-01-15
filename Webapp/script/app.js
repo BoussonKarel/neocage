@@ -100,7 +100,7 @@ const showHighscores = (data) => {
     if(data.length < 1){
         htmlString = `<tr class="c-table__row">
         <td class="c-table__item">No Highscores Available (yet)</td>
-    </tr> `; ;
+    </tr> `;
     }else{
         data.forEach((highscore) => {
             let username, score;
