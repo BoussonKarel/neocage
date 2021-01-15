@@ -53,6 +53,8 @@
     --global-whitespace-sm: calc(var(--global-baseline) * 3); /* 24 */
     --global-whitespace-md: calc(var(--global-baseline) * 4); /* 32 */
     --global-whitespace-lg: calc(var(--global-baseline) * 5); /* 40 */
+
+    --pi: 3.14159265359;
 }
 
 /*------------------------------------*\
@@ -378,10 +380,6 @@ input::placeholder {
     Main menu to select gamemodes
 */
 
-.c-menu {
-
-}
-
 .c-menu__title {
     font-size: calc(29rem / var(--global-font-size));
     line-height: calc(43.5rem / var(--global-font-size));
@@ -425,6 +423,7 @@ input::placeholder {
 */
 
 .c-footer {
+    position: sticky;
     left: 0;
     bottom: 0;
     right: 0;
@@ -537,7 +536,6 @@ input::placeholder {
     line-height: calc(27rem / var(--global-font-size));
     height: var(--global-whitespace-md);
     outline: none;
-    margin-bottom: var(--global-whitespace-lg);
     border-radius:calc(var(--global-baseline) / 2);
 }
 
@@ -747,6 +745,53 @@ input::placeholder {
         margin-top: var(--global-whitespace-sm);
     
     }
+}
+
+/*
+    Component: progress bar card
+    ---
+    Progress bar card 
+*/
+
+/* Sets the containers height and width */
+.c-timer {
+    --stroke-width: 4px;
+
+    position: relative;
+    border-radius: 100%;
+}
+
+.c-timer__circle {
+    fill: none;
+    stroke: none;
+}
+
+.c-timer__path--elapsed {
+    stroke-width: var(--stroke-width);
+    stroke: var(--global-color-neutral-xx-light);
+}
+
+.c-timer__path--remaining {
+    stroke-width: var(--stroke-width);
+    stroke: var(--global-color-alpha);
+
+    transform: rotate(-90deg);
+    transform-origin: center;
+}
+
+.c-timer__text {
+    position: absolute;
+    top: 0;
+  
+    height: 100%;
+    width: 100%;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    font-size: calc(56rem / var(--global-font-size));
+    font-weight: 600;
 }
 
 /*------------------------------------*\

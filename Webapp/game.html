@@ -29,26 +29,41 @@
             <!-- div Gamestatus pagina -->
             <div class="c-status o-container">
                 <div class="c-status__title">
-                    <h1 class ="c-title js-status-game">Game naam</h1>   
+                    <h1 class ="c-title js-status-title">Game naam</h1>   
                 </div>
             
-                <div class="c-status__info js-cards-holder">
-                    <!-- Timer -->
-                    <div class="c-card">
-                        <h2 class="c-subtitle">Verstreken tijd</h2>
-                        <h5 class="c-card__value">XX:XX</h5>
+                <div class="c-status__info">
+                    <!-- Progress bar -->
+                    <div class="c-timer o-container">
+                        <svg class="c-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <g class="c-timer__circle">
+                                <circle class="c-timer__path--elapsed" cx="50" cy="50" r="45" />
+                                <circle class="c-timer__path--remaining js-timer-circle" cx="50" cy="50" r="45" />
+                            </g>
+                        </svg>
+                        <span class="c-timer__text js-timer-seconds"></span>
+                            
+                        </span>
                     </div>
-        
-                    <h2 class="c-subtitle">Team game</h2>
-                    <!-- Score -->
-                    <div class="c-minicards">
-                        <div class="c-minicard">
-                            <h2 class="c-subtitle u-alpha-textcolor">Team X</h2>
-                            <h5 class="c-card__value u-alpha-textcolor">X</h5>
+
+                    <div class="js-status-cards o-container">
+                        <!-- Score -->
+                        <div class="c-card">
+                            <h2 class="c-subtitle">Score</h2>
+                            <h5 class="c-card__value">XX</h5>
                         </div>
-                        <div class="c-minicard">
-                            <h2 class="c-subtitle u-beta-textcolor">Team X</h2>
-                            <h5 class="c-card__value u-beta-textcolor">X</h5>
+
+                        <h2 class="c-subtitle">Team game</h2>
+                        <!-- Score for teams -->
+                        <div class="c-minicards">
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-alpha-textcolor">Team X</h2>
+                                <h5 class="c-card__value u-alpha-textcolor">X</h5>
+                            </div>
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-beta-textcolor">Team X</h2>
+                                <h5 class="c-card__value u-beta-textcolor">X</h5>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,19 +80,22 @@
                     <button class="o-button-reset c-popup__close js-popup-close">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                     </button>
-                    <h1 class=" c-title c-overview__title">Double Trouble</h1>
+                    <h1 class=" c-title c-overview__title js-end-title">Double Trouble</h1>
             
                     <!-- Score -->
-                    <div class="c-overview__card c-card">
-                        <h2 class="c-subtitle">Tijd</h2>
-                        <h5 class="c-card__value">00:10</h5>             
+                    <div class="js-end-cards o-container">
+                        <!-- Score -->
+                        <div class="c-card">
+                            <h2 class="c-subtitle">Score</h2>
+                            <h5 class="c-card__value">XX</h5>
+                        </div>
                     </div>
 
                     <!-- Naam invoeren -->
                     <form class="c-overview__form c-form">
-                        <label class="c-label" for="naam">Vul je naam in om je score op te slaan</label><br>
-                        <input class="c-input" type="text" id="naam" name="naam"><br>
-                        <button class="o-button-reset c-button c-button--save">Score opslaan</button>
+                        <label class="c-label " for="naam">Vul je naam in om je score op te slaan</label><br>
+                        <input class="c-input js-input-name" type="text" id="naam" name="naam"><br>
+                        <button class="o-button-reset c-button c-button--save js-input-submit">Score opslaan</button>
                     </form>
                     <p class="o-link">
                         <a href="./index.html">Overslaan</a>    
