@@ -20,7 +20,7 @@ function convertSeconds(seconds) {
 };
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
-let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
+let htmlPopupGame, htmlPopupStarting, htmlPopups = [];
 let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
@@ -53,9 +53,9 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 const startGame = (game) => {
     let body = JSON.stringify(game)
     console.log("Er wordt een game gestart: ", body)
+
+    showPopup(htmlPopupStarting);
     handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', body);
-
-
 };
 
 const stopGame = () => {
@@ -69,8 +69,7 @@ const stopGame = () => {
 
 
 const showGameStarted = function(data){
-    console.log(data)
-    showPopup(htmlPopupCountdown);
+    console.log("Game succesfully started!", data)
 }
 
 
@@ -143,9 +142,6 @@ const showHighscores = (data) => {
             <td class="c-table__item">${username}</td>
             <td class="c-table__item">${score}</td>
         </tr> `; 
-    
-    
-    
     
         });
     };
@@ -408,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlGameStart = document.querySelector('.js-game-start');
     htmlScoreboard = document.querySelector('.js-scoreboard');
     htmlPopupGame = document.querySelector('.js-popup-game');
-    htmlPopupCountdown = document.querySelector('.js-popup-countdown');
+    htmlPopupStarting = document.querySelector('.js-popup-starting');
 
     /* Gamepage elements */
     htmlStatusTitle = document.querySelector('.js-status-title');
@@ -421,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlEndCards = document.querySelector('.js-end-cards');
 
     if (htmlStartpage) {
-        htmlPopups = [htmlPopupGame, htmlPopupCountdown];
+        htmlPopups = [htmlPopupGame, htmlPopupStarting];
         initStartpage();
     } else if (htmlGamepage) {
         htmlPopups = [htmlPopupEnd];
