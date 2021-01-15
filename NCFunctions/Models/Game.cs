@@ -9,8 +9,10 @@ namespace NCFunctions.Models
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }
-        [JsonProperty("gamemode")]
+        [JsonProperty("gamemode_id")]
         public string GamemodeId { get; set; }
+        [JsonProperty("gamemode")]
+        public string Gamemode { get; set; }
         [JsonProperty("duration")]
         public int? Duration { get; set; }
         [JsonProperty("timestarted")]
