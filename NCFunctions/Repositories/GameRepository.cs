@@ -116,6 +116,8 @@ namespace NCFunctions.Repositories
                     });
                 }
 
+                games.Sort();
+
                 return games;
             }
             catch (Exception ex)
