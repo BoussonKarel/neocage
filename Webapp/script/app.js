@@ -109,7 +109,7 @@ const showHighscores = (data) => {
     
             switch(highscore.gamemode) {
                 case 'quickytricky':    
-                    score = highscore.score;
+                    score = `${highscore.score} ptn`;
                     break;
                 case 'doubletrouble':
                     score = convertSeconds(highscore.score);
