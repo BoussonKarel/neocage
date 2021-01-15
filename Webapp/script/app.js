@@ -96,7 +96,6 @@ const showGamemodeInfo = (gamemode) => {
 
 const showHighscores = (data) => {
     let htmlString = "";
-    console.log(data)
 
     if(data.length < 1){
     htmlString = `<tr class="c-table__row">
