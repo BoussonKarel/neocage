@@ -7,6 +7,17 @@ let gamemodes = [];
 
 const max_stroke_dasharray = 283;
 
+function convertSeconds(seconds) {
+    time = Number(seconds);
+    var m = Math.floor(time % 3600 / 60);
+    var s = Math.floor(time % 3600 % 60);
+
+    var mDisplay = m > 9 ? m : `${0}${m}`;
+    var sDisplay = s > 9 ? s : `${0}${s}`;
+    
+    return `${mDisplay}:${sDisplay}`;
+
+};
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
 let htmlPopupGame, htmlPopupCountdown, htmlPopups = [];
