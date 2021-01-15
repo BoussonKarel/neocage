@@ -51,8 +51,9 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 
 //#region ***  Game Functions ***
 const startGame = (game) => {
-    console.log("Er wordt een game gestart: ", game)
-    handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', game);
+    let body = JSON.stringify(game)
+    console.log("Er wordt een game gestart: ", body)
+    handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', body);
 
 
 };
@@ -111,6 +112,7 @@ const showGamemodeInfo = (gamemode) => {
 
 const showHighscores = (data) => {
     let htmlString = "";
+    console.log("highscores tonen")
 
     if(data.length < 1){
         htmlString = `<tr class="c-table__row">
@@ -121,8 +123,9 @@ const showHighscores = (data) => {
             let username, score;
             
             username = highscore.username;
+
     
-            switch(highscore.gamemode) {
+            switch(highscore.gamemode_id) {
                 case 'quickytricky':    
                     score = `${highscore.score} ptn`;
                     break;
