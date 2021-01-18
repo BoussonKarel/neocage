@@ -1,5 +1,5 @@
 const URL = `https://neocage.azurewebsites.net/api`;
-// const URL = `http://localhost:7071/api`;
+//const URL = `http://localhost:7071/api`;
 
 let currentGame = {};
 
@@ -21,7 +21,7 @@ function convertSeconds(seconds) {
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
 let htmlPopupGame, htmlPopupLoading, htmlPopups = [];
-let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
+let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlStopGame, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
 //#region ***  Helper functions ***
@@ -59,21 +59,21 @@ const startGame = (game) => {
 };
 
 const stopGame = () => {
-    handleData(`${URL}/game/stop`,console.log("Game Stopped"), errorStopGame, 'POST');
-    currentGame = {};
+    showLoadingPopup();
+    handleData(`${URL}/game/stop`, callbackGameStopped, errorStopGame, 'POST');
 };
 //#endregion
 
-
 //#region ***  Callback-Visualisation - show___ ***
-
-
 const showGameStarted = function(data){
     console.log("Game succesfully started!", data)
+    // hideLoadingPopup();
+    redirectToGamepage();
 }
 
-
 const showGamemodes = (data) => {
+    hideLoadingPopup();
+
     let listcontent = "";
 
     gamemodes = data;
@@ -99,6 +99,7 @@ const showGamemodes = (data) => {
 
 
 const showGamemodeInfo = (gamemode) => {
+    hideLoadingPopup();
 
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
@@ -110,6 +111,8 @@ const showGamemodeInfo = (gamemode) => {
 
 
 const showHighscores = (data) => {
+    hideLoadingPopup();
+
     let htmlString = "";
     console.log("highscores tonen")
 
@@ -156,31 +159,53 @@ const showPopup = function(htmlPopup) {
 }
 
 const showTimer = function(startTime, duration) {
-    let endTime = startTime + (duration * 1000);
+    // Als er een duration is
+    if (duration != null) {
+        let endTime = startTime + (duration * 1000);
 
-    const timer = setInterval(function() {
-        let now = Date.now();
+        const timer = setInterval(function() {
+            let now = Date.now();
+    
+            // Compare to now, how many seconds till the endTime?
+            let msTillEnd = endTime - now;
+            
+    
+            let sTillEnd = Math.ceil(msTillEnd / 1000);
+    
+            let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
+            if (stroke_dasharray < 0) {
+                stroke_dasharray = 0;
+            }
+            if (msTillEnd < 0) {
+                clearInterval(timer);
+            }
+    
+            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+            htmlTimerSeconds.innerHTML = sTillEnd;
+        }, 30);
+    }
+    else {
+        // duration = null, toon verstreken tijd
+        const timer = setInterval(function() {
+            // One circle every 60 seconds
+            duration = 60;
 
-        // Compare to now, how many seconds till the endTime?
-        let msTillEnd = endTime - now;
-        
-
-        let sTillEnd = Math.ceil(msTillEnd / 1000);
-
-        let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
-        if (stroke_dasharray < 0) {
-            stroke_dasharray = 0;
-        }
-        if (msTillEnd < 0) {
-            clearInterval(timer);
-        }
-
-        htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
-        htmlTimerSeconds.innerHTML = sTillEnd;
-    }, 30);
+            let now = Date.now();
+            // How many (milli)seconds have passed since the start
+            let msPassed = (now - startTime);
+            let sPassed = Math.ceil(msPassed / 1000);
+    
+            let stroke_dasharray = (msPassed / (duration*1000) * max_stroke_dasharray) % max_stroke_dasharray;
+    
+            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+            htmlTimerSeconds.innerHTML = sPassed;
+        }, 30);
+    }
 }
 
 const showGameStatus = function(game) {
+    hideLoadingPopup();
+
     console.log("Showing game:", game)
     htmlStatusTitle.innerHTML = game.gamemode;
 
@@ -199,9 +224,13 @@ const showGameStatus = function(game) {
     showTimer(startTime, game.duration);
 
     htmlStatusCards.innerHTML = cardsContent;
+
+    listenToStopButton();
 }
 
 const showEndOfGame = function(game) {
+    hideLoadingPopup();
+
     showPopup(htmlPopupEnd);
 
     // Fill popup
@@ -227,35 +256,46 @@ const hideLoadingPopup = function() {
 }
 //#endregion
 
-//#region ***  Callback-Errors - Error___ ***
+//#region ***  Callback-No visualization - callback__ ***
+const callbackGameStopped = function() {
+    console.log("Game stopped");
+    redirectToStartpage();
+}
+//#endregion
 
+//#region ***  Callback-Errors - Error___ ***
 const errorGameStarted = () => {
+    hideLoadingPopup();
     console.log("Game kon niet worden gestart")
 }
 
 const errorGamemodes = () => {
+    hideLoadingPopup();
     console.log(`De gamemodes konden niet worden opgehaald.`)
 };
     
 const errorCurrentGame = () => {
+    hideLoadingPopup();
     currentGame = {};
     console.log("Er is een fout opgetreden bij het ophalen van de huidige game")
 };
 
 const errorGame = () => {
+    hideLoadingPopup();
     console.log("Het spel kon niet gestart worden")
 };
 
 const errorStopGame = () => {
+    hideLoadingPopup();
     console.log("Game kon niet gestopt worden, er is een fout opgetreden.")
 };
 
 const errorHighscores = () => {
+    hideLoadingPopup();
     console.log("De highscores konden niet worden opgehaald")
 }
 //#endregion
 
-    
 //#region ***  Event Handlers - Handle___ ***
 const handleCurrentGame = (data) => {
     /* Is er een game? */
@@ -298,23 +338,35 @@ const handleCurrentGame = (data) => {
 const handleMQTTData = function(payload) {
     let type = payload.type
 
-    if (type == "game_end" || type == "game_update") {
-        let data = JSON.parse(payload.payload);
+    if (htmlStartpage) {
+        if (type == "game_start") {
+            redirectToGamepage();
+        }
+    }
 
-        currentGame = data;
-        showGameStatus(currentGame);
+    if (htmlGamepage) {
+        if (type == "game_end" || type == "game_update") {
+            let data = JSON.parse(payload.payload);
+    
+            currentGame = data;
+            showGameStatus(currentGame);
+    
+            switch(type) {
+                case 'game_end':
+                    console.log('De game is gedaan.')
+                    // Extra shit bij einde game
+                    showEndOfGame(currentGame);
+                    break;
+                case 'game_update':
+                    console.log('De game is geupdate.')
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        switch(type) {
-            case 'game_end':
-                console.log('De game is gedaan.')
-                // Extra shit bij einde game
-                showEndOfGame(currentGame);
-                break;
-            case 'game_update':
-                console.log('De game is geupdate.')
-                break;
-            default:
-                break;
+        if (type == "game_stop") {
+            redirectToStartpage();
         }
     }
 };
@@ -352,6 +404,11 @@ const listenToPopupsClose = function() {
     }
 }
 
+const listenToStopButton = function() {
+    htmlStopGame.removeEventListener("click", stopGame);
+    htmlStopGame.addEventListener("click", stopGame);
+}
+
 const listenToMQTTConnect = function() {
     console.log("Connected to MQTT");
     client.subscribe("/neocage");
@@ -372,25 +429,31 @@ client.onMessageArrived = listenToMQTTMessage;
 
 //#region ***API-Calls - Get___ ***
 const getGamemodes = async () => {
+    showLoadingPopup();
     handleData(`${URL}/gamemodes`,showGamemodes, errorGamemodes);  
 };
           
 const getAllGamemodes = async () => {   
+    showLoadingPopup();
     handleData(`${URL}/gamemodes/all`,showGamemodes, errorGamemodes); 
 };
 
 const getCurrentGame = async () => {
+    showLoadingPopup();
     handleData(`${URL}/games/current`, handleCurrentGame, errorCurrentGame);
 };
 
 const getHighscores = (gamemodeId) => {
+    showLoadingPopup();
     handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
 };
 //#endregion
     
 //#region ***  INIT / DOMContentLoaded  ***
 const initStartpage = function() {
-getGamemodes();
+    getGamemodes();
+
+    client.connect({onSuccess:listenToMQTTConnect});
 }
 
 const initGamepage = function() {
@@ -419,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlTimercircle = document.querySelector('.js-timer-circle');
     htmlTimerSeconds = document.querySelector('.js-timer-seconds');
     htmlStatusCards = document.querySelector('.js-status-cards');
-    htmlGameStop = document.querySelector('.js-game-stop');
+    htmlStopGame = document.querySelector('.js-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
     htmlEndTitle = document.querySelector('.js-end-title');
     htmlEndCards = document.querySelector('.js-end-cards');
