@@ -30,7 +30,7 @@ namespace NCFunctions.Helpers
                 // Add game to the payload
                 method.SetPayloadJson(payloadGame);
 
-                await client.InvokeDeviceMethodAsync(_DEVICEID, method);
+                client.InvokeDeviceMethodAsync(_DEVICEID, method);
             }
             catch (Exception ex)
             {

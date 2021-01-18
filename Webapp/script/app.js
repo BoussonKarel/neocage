@@ -254,6 +254,10 @@ const showLoadingPopup = function() {
 const hideLoadingPopup = function() {
     htmlPopupLoading.classList.remove("c-popup--shown");
 }
+
+const showError = function(title, msg) {
+    console.error(title, msg)
+}
 //#endregion
 
 //#region ***  Callback-No visualization - callback__ ***
@@ -264,35 +268,30 @@ const callbackGameStopped = function() {
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
-const errorGameStarted = () => {
-    hideLoadingPopup();
-    console.log("Game kon niet worden gestart")
-}
-
 const errorGamemodes = () => {
     hideLoadingPopup();
-    console.log(`De gamemodes konden niet worden opgehaald.`)
+    showError("Er ging iets fout.", "Gamemodes konden niet worden opgehaald.")
 };
     
 const errorCurrentGame = () => {
     hideLoadingPopup();
     currentGame = {};
-    console.log("Er is een fout opgetreden bij het ophalen van de huidige game")
+    showError("Er ging iets fout.", "Kon huidige game informatie niet ophalen.")
 };
 
-const errorGame = () => {
+const errorGameStarted = () => {
     hideLoadingPopup();
-    console.log("Het spel kon niet gestart worden")
+    showError("Er ging iets fout.", "Game kon niet worden gestart.")
 };
 
 const errorStopGame = () => {
     hideLoadingPopup();
-    console.log("Game kon niet gestopt worden, er is een fout opgetreden.")
+    showError("Er ging iets fout.", "Game kon niet worden gestopt.")
 };
 
 const errorHighscores = () => {
     hideLoadingPopup();
-    console.log("De highscores konden niet worden opgehaald")
+    showError("Er ging iets fout.", "Highscores konden niet worden opgehaald.")
 }
 //#endregion
 
