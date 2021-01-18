@@ -20,7 +20,7 @@ function convertSeconds(seconds) {
 };
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
-let htmlPopupGame, htmlPopupLoading, htmlPopups = [];
+let htmlPopupGame, htmlPopupLoading, htmlPopupError, htmlPopups = [];
 let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlStopGame, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
@@ -257,6 +257,13 @@ const hideLoadingPopup = function() {
 
 const showError = function(title, msg) {
     console.error(title, msg)
+
+    const errorTitle = htmlPopupError.querySelector('.js-error-title');
+    const errorMsg = htmlPopupError.querySelector('.js-error-msg');
+    errorTitle.innerHTML = title;
+    errorMsg.innerHTML = msg;
+
+    showPopup(htmlPopupError);
 }
 //#endregion
 
@@ -467,6 +474,8 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlStartpage = document.querySelector('.js-startpage');
     htmlGamepage = document.querySelector('.js-gamepage');
 
+    htmlPopupError = document.querySelector('.js-popup-error');
+
     /* Startpage elements */
     htmlGamemodeList = document.querySelector('.js-gamemodes');
     htmlGameTitle = document.querySelector('.js-game-title');
@@ -487,10 +496,10 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlEndCards = document.querySelector('.js-end-cards');
 
     if (htmlStartpage) {
-        htmlPopups = [htmlPopupGame, htmlPopupLoading];
+        htmlPopups = [htmlPopupGame, htmlPopupLoading, htmlPopupError];
         initStartpage();
     } else if (htmlGamepage) {
-        htmlPopups = [htmlPopupEnd];
+        htmlPopups = [htmlPopupEnd, htmlPopupLoading, htmlPopupError];
     }
 
     listenToPopupsClose();
