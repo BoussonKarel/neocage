@@ -1,5 +1,5 @@
-//const URL = `https://neocage.azurewebsites.net/api`;
-const URL = `http://localhost:7071/api`;
+const URL = `https://neocage.azurewebsites.net/api`;
+//const URL = `http://localhost:7071/api`;
 
 let currentGame = {};
 
@@ -59,20 +59,21 @@ const startGame = (game) => {
 };
 
 const stopGame = () => {
+    showLoadingPopup();
     handleData(`${URL}/game/stop`, callbackGameStopped, errorStopGame, 'POST');
 };
 //#endregion
 
-
 //#region ***  Callback-Visualisation - show___ ***
-
-
 const showGameStarted = function(data){
     console.log("Game succesfully started!", data)
+    // hideLoadingPopup();
+    redirectToGamepage();
 }
 
-
 const showGamemodes = (data) => {
+    hideLoadingPopup();
+
     let listcontent = "";
 
     gamemodes = data;
@@ -98,6 +99,7 @@ const showGamemodes = (data) => {
 
 
 const showGamemodeInfo = (gamemode) => {
+    hideLoadingPopup();
 
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
@@ -109,6 +111,8 @@ const showGamemodeInfo = (gamemode) => {
 
 
 const showHighscores = (data) => {
+    hideLoadingPopup();
+
     let htmlString = "";
     console.log("highscores tonen")
 
@@ -200,6 +204,8 @@ const showTimer = function(startTime, duration) {
 }
 
 const showGameStatus = function(game) {
+    hideLoadingPopup();
+
     console.log("Showing game:", game)
     htmlStatusTitle.innerHTML = game.gamemode;
 
@@ -223,6 +229,8 @@ const showGameStatus = function(game) {
 }
 
 const showEndOfGame = function(game) {
+    hideLoadingPopup();
+
     showPopup(htmlPopupEnd);
 
     // Fill popup
@@ -246,7 +254,9 @@ const showLoadingPopup = function() {
 const hideLoadingPopup = function() {
     htmlPopupLoading.classList.remove("c-popup--shown");
 }
+//#endregion
 
+//#region ***  Callback-No visualization - callback__ ***
 const callbackGameStopped = function() {
     console.log("Game stopped");
     redirectToStartpage();
@@ -254,34 +264,38 @@ const callbackGameStopped = function() {
 //#endregion
 
 //#region ***  Callback-Errors - Error___ ***
-
 const errorGameStarted = () => {
+    hideLoadingPopup();
     console.log("Game kon niet worden gestart")
 }
 
 const errorGamemodes = () => {
+    hideLoadingPopup();
     console.log(`De gamemodes konden niet worden opgehaald.`)
 };
     
 const errorCurrentGame = () => {
+    hideLoadingPopup();
     currentGame = {};
     console.log("Er is een fout opgetreden bij het ophalen van de huidige game")
 };
 
 const errorGame = () => {
+    hideLoadingPopup();
     console.log("Het spel kon niet gestart worden")
 };
 
 const errorStopGame = () => {
+    hideLoadingPopup();
     console.log("Game kon niet gestopt worden, er is een fout opgetreden.")
 };
 
 const errorHighscores = () => {
+    hideLoadingPopup();
     console.log("De highscores konden niet worden opgehaald")
 }
 //#endregion
 
-    
 //#region ***  Event Handlers - Handle___ ***
 const handleCurrentGame = (data) => {
     /* Is er een game? */
@@ -324,23 +338,35 @@ const handleCurrentGame = (data) => {
 const handleMQTTData = function(payload) {
     let type = payload.type
 
-    if (type == "game_end" || type == "game_update") {
-        let data = JSON.parse(payload.payload);
+    if (htmlStartpage) {
+        if (type == "game_start") {
+            redirectToGamepage();
+        }
+    }
 
-        currentGame = data;
-        showGameStatus(currentGame);
+    if (htmlGamepage) {
+        if (type == "game_end" || type == "game_update") {
+            let data = JSON.parse(payload.payload);
+    
+            currentGame = data;
+            showGameStatus(currentGame);
+    
+            switch(type) {
+                case 'game_end':
+                    console.log('De game is gedaan.')
+                    // Extra shit bij einde game
+                    showEndOfGame(currentGame);
+                    break;
+                case 'game_update':
+                    console.log('De game is geupdate.')
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        switch(type) {
-            case 'game_end':
-                console.log('De game is gedaan.')
-                // Extra shit bij einde game
-                showEndOfGame(currentGame);
-                break;
-            case 'game_update':
-                console.log('De game is geupdate.')
-                break;
-            default:
-                break;
+        if (type == "game_stop") {
+            redirectToStartpage();
         }
     }
 };
@@ -403,25 +429,31 @@ client.onMessageArrived = listenToMQTTMessage;
 
 //#region ***API-Calls - Get___ ***
 const getGamemodes = async () => {
+    showLoadingPopup();
     handleData(`${URL}/gamemodes`,showGamemodes, errorGamemodes);  
 };
           
 const getAllGamemodes = async () => {   
+    showLoadingPopup();
     handleData(`${URL}/gamemodes/all`,showGamemodes, errorGamemodes); 
 };
 
 const getCurrentGame = async () => {
+    showLoadingPopup();
     handleData(`${URL}/games/current`, handleCurrentGame, errorCurrentGame);
 };
 
 const getHighscores = (gamemodeId) => {
+    showLoadingPopup();
     handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
 };
 //#endregion
     
 //#region ***  INIT / DOMContentLoaded  ***
 const initStartpage = function() {
-getGamemodes();
+    getGamemodes();
+
+    client.connect({onSuccess:listenToMQTTConnect});
 }
 
 const initGamepage = function() {
