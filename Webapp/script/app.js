@@ -1,5 +1,5 @@
-const URL = `https://neocage.azurewebsites.net/api`;
-// const URL = `http://localhost:7071/api`;
+//const URL = `https://neocage.azurewebsites.net/api`;
+const URL = `http://localhost:7071/api`;
 
 let currentGame = {};
 
@@ -156,28 +156,48 @@ const showPopup = function(htmlPopup) {
 }
 
 const showTimer = function(startTime, duration) {
-    let endTime = startTime + (duration * 1000);
+    // Als er een duration is
+    if (duration != null) {
+        let endTime = startTime + (duration * 1000);
 
-    const timer = setInterval(function() {
-        let now = Date.now();
+        const timer = setInterval(function() {
+            let now = Date.now();
+    
+            // Compare to now, how many seconds till the endTime?
+            let msTillEnd = endTime - now;
+            
+    
+            let sTillEnd = Math.ceil(msTillEnd / 1000);
+    
+            let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
+            if (stroke_dasharray < 0) {
+                stroke_dasharray = 0;
+            }
+            if (msTillEnd < 0) {
+                clearInterval(timer);
+            }
+    
+            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+            htmlTimerSeconds.innerHTML = sTillEnd;
+        }, 30);
+    }
+    else {
+        // duration = null, toon verstreken tijd
+        const timer = setInterval(function() {
+            // One circle every 60 seconds
+            duration = 60;
 
-        // Compare to now, how many seconds till the endTime?
-        let msTillEnd = endTime - now;
-        
-
-        let sTillEnd = Math.ceil(msTillEnd / 1000);
-
-        let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
-        if (stroke_dasharray < 0) {
-            stroke_dasharray = 0;
-        }
-        if (msTillEnd < 0) {
-            clearInterval(timer);
-        }
-
-        htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
-        htmlTimerSeconds.innerHTML = sTillEnd;
-    }, 30);
+            let now = Date.now();
+            // How many (milli)seconds have passed since the start
+            let msPassed = (now - startTime);
+            let sPassed = Math.ceil(msPassed / 1000);
+    
+            let stroke_dasharray = (msPassed / (duration*1000) * max_stroke_dasharray) % max_stroke_dasharray;
+    
+            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+            htmlTimerSeconds.innerHTML = sPassed;
+        }, 30);
+    }
 }
 
 const showGameStatus = function(game) {
