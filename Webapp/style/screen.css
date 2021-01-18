@@ -489,6 +489,11 @@ input::placeholder {
     margin: var(--global-whitespace-xs) auto 0;
 }
 
+/* .c-popup__content-error{
+    margin: 50% auto 0;
+    transform: translatey(50%);
+} */
+
 .c-popup--shown {
     display: block;
 }
@@ -508,9 +513,45 @@ input::placeholder {
     fill: var(--global-color-neutral-x-dark);  
 }
 
+
+/*
+    Component: Error
+    ---
+    Message popup when an error occured
+*/
+.c-error{
+
+}
+
+.c-error__info{
+}
+
+.c-error__title{
+    font-weight: 600;
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+    text-align: center;
+    margin: 0;
+    padding: 0 0 var(--global-whitespace-xs) 0;
+    /* padding: 0 var(--global-whitespace-xs); */
+}
+
+.c-error__info-icon{
+    width:13%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c-error__info-text{
+    width: 85%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+
 /*
     Component: Label
-.c-label{
     ---
     Label for name input to save score
 */
@@ -877,7 +918,8 @@ input::placeholder {
 }
 
 .u-beta-textcolor{
-    color: var(--global-color-beta)
+    color: var(--global-color-beta);
+    fill: var(--global-color-beta);;
 }
 
 
