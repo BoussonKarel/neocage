@@ -457,6 +457,41 @@ input::placeholder {
 }
 
 /*
+    Component: Error
+    ---
+    Message popup when an error occured
+*/
+.c-error{
+
+}
+
+.c-error__info{
+}
+
+.c-error__title{
+    font-weight: 600;
+    font-size: calc(20rem / var(--global-font-size));
+    line-height: calc(30rem / var(--global-font-size));
+    text-align: center;
+    margin: 0;
+    padding: 0 0 var(--global-whitespace-xs) 0;
+    /* padding: 0 var(--global-whitespace-xs); */
+}
+
+.c-error__info-icon{
+    width:13%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c-error__info-text{
+    width: 85%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+/*
     Component: Popup
     ---
     Popup to show above everything
@@ -767,12 +802,12 @@ input::placeholder {
 }
 
 .c-timer__path--elapsed {
-    stroke-width: var(--timer-stroke-width: 4px;);
+    stroke-width: var(--timer-stroke-width);
     stroke: var(--global-color-neutral-xx-light);
 }
 
 .c-timer__path--remaining {
-    stroke-width: var(--timer-stroke-width: 4px;);
+    stroke-width: var(--timer-stroke-width);
     stroke: var(--global-color-alpha);
 
     transform: rotate(-90deg);
@@ -877,7 +912,8 @@ input::placeholder {
 }
 
 .u-beta-textcolor{
-    color: var(--global-color-beta)
+    color: var(--global-color-beta);
+    fill: var(--global-color-beta);
 }
 
 
