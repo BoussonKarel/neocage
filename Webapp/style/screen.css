@@ -490,6 +490,20 @@ input::placeholder {
     vertical-align: middle;
 }
 
+/*
+    Component: Validation
+    ---
+    
+*/
+
+.c-validation{
+    font-weight: 400;
+    font-size: calc(12rem / var(--global-font-size));
+    line-height: calc(18rem / var(--global-font-size));
+    height: calc(18rem / var(--global-font-size));
+    color: var(--global-color-beta);
+    display:none;
+}
 
 /*
     Component: Popup
@@ -659,6 +673,7 @@ input::placeholder {
     font-size: calc(20rem / var(--global-font-size));
     line-height: calc(30rem / var(--global-font-size));
     font-weight: 700; /* bold */
+    margin-top: var(--global-whitespace-xs);
     margin-bottom: var(--global-whitespace-xxs);
 }
 
@@ -916,6 +931,16 @@ input::placeholder {
     fill: var(--global-color-beta);
 }
 
+
+/*
+    Utilities: validatin error
+    ---
+    Make input red when validation error
+*/
+
+.u-validation-error{
+    border-color: var(--global-color-beta);
+}
 
 /*
     Utilities: color
