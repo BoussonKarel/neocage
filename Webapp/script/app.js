@@ -20,7 +20,7 @@ function convertSeconds(seconds) {
 };
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
-let htmlPopupGame, htmlPopupLoading, htmlPopups = [];
+let htmlPopupGame, htmlPopupLoading, htmlPopups = [], htmlSaveButton, htmlInputName;
 let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
@@ -216,6 +216,29 @@ const showEndOfGame = function(game) {
         </div>`;
 
     htmlEndCards.innerHTML = cardsContent;
+
+        //Save Button
+    htmlSaveButton.addEventListener("click",function(){
+        if(htmlInputName.innerText){
+            let username = htmlInputName.innerText
+            console.log(username);
+    
+            //username toevoegen aan de game
+            game.username = username;
+            //game stringifyen tot RequestBody
+            let body = JSON.stringify(game)
+            console.log("Deze Game wordt opgeslagen ", body)
+    
+            handleData(`${URL}/games`,handleGameSaved, errorGameSaved, 'PUT', body);
+            showLoadingPopup();
+            } else {
+                console.log("Vul een username in aub.")
+            }
+    
+        });
+    
+        //Skip Button
+
 }
 
 const showLoadingPopup = function() {
@@ -255,8 +278,20 @@ const errorHighscores = () => {
 }
 //#endregion
 
+
+const errorGameSaved = () => {
+    console.log("De game kon niet opgeslagen worden")
+}
     
 //#region ***  Event Handlers - Handle___ ***
+
+const handleGameSaved = (data) => {
+    console.log("de game is succensvol opgeslagen; ", data);
+    //redirect naar homepage
+}
+
+
+
 const handleCurrentGame = (data) => {
     /* Is er een game? */
     console.log(data);
@@ -400,6 +435,7 @@ const initGamepage = function() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    
     console.log("DOM LOAD COMPLETE")
 
     htmlStartpage = document.querySelector('.js-startpage');
@@ -423,6 +459,9 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlPopupEnd = document.querySelector('.js-popup-end');
     htmlEndTitle = document.querySelector('.js-end-title');
     htmlEndCards = document.querySelector('.js-end-cards');
+    htmlSaveButton = document.querySelector('.js-input-submit');
+    htmlInputName = document.querySelector('.js-input-name');
+    
 
     if (htmlStartpage) {
         htmlPopups = [htmlPopupGame, htmlPopupLoading];
