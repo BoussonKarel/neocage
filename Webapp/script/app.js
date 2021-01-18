@@ -21,7 +21,7 @@ function convertSeconds(seconds) {
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
 let htmlPopupGame, htmlPopupLoading, htmlPopups = [];
-let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
+let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlStopGame, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
 //#region ***  Helper functions ***
@@ -59,8 +59,7 @@ const startGame = (game) => {
 };
 
 const stopGame = () => {
-    handleData(`${URL}/game/stop`,console.log("Game Stopped"), errorStopGame, 'POST');
-    currentGame = {};
+    handleData(`${URL}/game/stop`, callbackGameStopped, errorStopGame, 'POST');
 };
 //#endregion
 
@@ -219,6 +218,8 @@ const showGameStatus = function(game) {
     showTimer(startTime, game.duration);
 
     htmlStatusCards.innerHTML = cardsContent;
+
+    listenToStopButton();
 }
 
 const showEndOfGame = function(game) {
@@ -244,6 +245,11 @@ const showLoadingPopup = function() {
 
 const hideLoadingPopup = function() {
     htmlPopupLoading.classList.remove("c-popup--shown");
+}
+
+const callbackGameStopped = function() {
+    console.log("Game stopped");
+    redirectToStartpage();
 }
 //#endregion
 
@@ -372,6 +378,11 @@ const listenToPopupsClose = function() {
     }
 }
 
+const listenToStopButton = function() {
+    htmlStopGame.removeEventListener("click", stopGame);
+    htmlStopGame.addEventListener("click", stopGame);
+}
+
 const listenToMQTTConnect = function() {
     console.log("Connected to MQTT");
     client.subscribe("/neocage");
@@ -439,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlTimercircle = document.querySelector('.js-timer-circle');
     htmlTimerSeconds = document.querySelector('.js-timer-seconds');
     htmlStatusCards = document.querySelector('.js-status-cards');
-    htmlGameStop = document.querySelector('.js-game-stop');
+    htmlStopGame = document.querySelector('.js-stop');
     htmlPopupEnd = document.querySelector('.js-popup-end');
     htmlEndTitle = document.querySelector('.js-end-title');
     htmlEndCards = document.querySelector('.js-end-cards');
