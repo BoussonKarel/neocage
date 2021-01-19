@@ -20,13 +20,16 @@ namespace NCFunctions.Helpers
                 // Is er al een game?
                 if (CurrentGame == null)
                 {
+                    DateTime timeStarted = DateTime.Now;
+                    timeStarted = timeStarted.AddSeconds(10);
+
                     // Er is nog geen game bezig, game aanmaken
                     CurrentGame = new Game()
                     {
                         Id = Guid.NewGuid(),
                         GamemodeId = gamemode.Id,
                         Gamemode = gamemode.Name,
-                        TimeStarted = DateTime.Now,
+                        TimeStarted = timeStarted,
                         Duration = gamemode.Duration,
                         Score = 0
                     };
