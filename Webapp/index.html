@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="nl" class="blue">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ExerLights</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="mask-icon" href="safari-pinned-tab.svg" color="#e85e00">
+
+
+
+        <link rel="stylesheet" href="./style/normalize.css">
+        <link rel="stylesheet" href="./style/screen.css">
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+
+        <script src="./script/dataHandler.js"></script>
+        <script src="./script/app.js"></script>
+    </head>
+    <body class="js-startpage">
+        <div class="c-app">
+            <div class="c-startpage o-container">
+                <div class="c-logo">
+                    <!-- <svg class="c-logo__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2523 816"><g id="Exerlights" transform="translate(-212 -379)"><text id="ExerL_ghts" data-name="ExerL ghts" transform="translate(212 1055)" fill="#fff" font-size="700" font-family="AgencyFB-Bold, Agency FB" font-weight="700"><tspan x="0" y="0">ExerL ghts</tspan></text><rect id="Rectangle_2" data-name="Rectangle 2" width="798" height="71" transform="translate(497 520)" fill="#fff"/><rect id="Rectangle_3" data-name="Rectangle 3" width="533" height="71" transform="translate(1443 520)" fill="#fff"/><rect id="Rectangle_4" data-name="Rectangle 4" width="351" height="80" transform="translate(1681 709) rotate(90)" fill="#fff"/><rect id="Rectangle_5" data-name="Rectangle 5" width="585" height="71" transform="translate(2124 520)" fill="#fff"/></g></svg> -->
+                    <img class="c-logo__svg" src="./images/ExerLight_logo.png" alt="Exerlights Logo">
+                    </div>
+                <div class="c-menu">
+                    <h2 class="c-menu__title">
+                        Kies een spel
+                    </h2>
+                    <ul class="c-menu__list o-list js-gamemodes">
+                    </ul>
+                </div>
+            </div>
+            <footer class="c-footer">
+                <div class="c-footer__logos">
+                    <svg class="c-footer__logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 308.12 342.74">
+                        <g>
+                          <path fill="#52d3f7" class="cls-1" d="M265.19,299.42l-52.59,29-52.59-29v60.65l31.51,18.19a42.15,42.15,0,0,0,42.15,0l31.52-18.19Z" transform="translate(-58.54 -41.17)"/>
+                          <path fill="#52d3f7" class="cls-1" d="M345.58,111.42,233.67,46.82a42.15,42.15,0,0,0-42.15,0l-111.9,64.6a42.17,42.17,0,0,0-21.08,36.51V277.15a42.16,42.16,0,0,0,21.08,36.5L99.1,324.9V155.06a9.08,9.08,0,0,1,13.62-7.86l100,56.3,99.79-56.3a9.08,9.08,0,0,1,13.63,7.86V324.9l19.48-11.25a42.16,42.16,0,0,0,21.08-36.5V147.93A42.17,42.17,0,0,0,345.58,111.42Z" transform="translate(-58.54 -41.17)"/>
+                        </g>
+                    </svg>
+                    <svg class="c-footer__logo" xmlns="http://www.w3.org/2000/svg" width="64.809" height="71.879" viewBox="0 0 64.809 71.879">
+                        <g id="small_logo_sport_en_bewegen" data-name="small logo sport en bewegen" transform="translate(0 -0.002)">
+                            <path fill="#52d3f7" id="Path_1" data-name="Path 1" d="M0,20.89c.86-3.52,3.26-5.61,6.34-7.31C13.45,9.63,20.47,5.5,27.51,1.42a9.09,9.09,0,0,1,9.75,0Q48.6,8,60,14.51a9,9,0,0,1,4.8,8.35V49.05a9,9,0,0,1-4.9,8.41q-11.31,6.49-22.6,13a9.09,9.09,0,0,1-9.76,0c-4-2.31-7.94-4.58-11.92-6.88-.34-.19-.66-.41-1-.63a7.78,7.78,0,0,0,2.82-4.48,35,35,0,0,1,2.14-5.17,45.92,45.92,0,0,1,6-9.87c1.14-1.47,1.63-1.63,3-.45a59.452,59.452,0,0,1,4.64,4.48c1.79,1.87,3.56,3.77,5.23,5.75,1.17,1.43,2.37,2.79,2.6,4.79,0,.31.62.6,1,.83a20.06,20.06,0,0,0,1.85.94,5.65,5.65,0,0,0,2.08.78,2.29,2.29,0,0,0,1.66-1c.19-.3-.21-1.2-.6-1.56a32.309,32.309,0,0,0-3-2.24c.3-.48.49-.83.71-1.15.56-.81.32-1.42-.36-2.07-1.23-1.17-2.39-2.41-3.51-3.67s-2.17-2.93-4-3.75c-.58-.27-.93-1.12-1.29-1.77C34.25,40.74,33,38,31.41,35.52,29,31.68,29.8,27.83,31,23.92c0-.07,0-.18.08-.22a48.579,48.579,0,0,1,4.54-3.17,22.44,22.44,0,0,1,4-1.39,5.74,5.74,0,0,1,1.56-.45,22.231,22.231,0,0,1,2.65.21l-.25-.81.33-.16-.76-.51.82-.48-1.34-.27-.23-.2,1-.3-.27-.42c-.57.1-1.32.45-1.66.21s-.39-1.06-.8-1.61a4.54,4.54,0,0,1-.13.72c-.39,1.88-.92,2.57-2.75,2.35-2.16-.27-3.61,1-5.29,1.77a3.79,3.79,0,0,1-2.47.55,5.38,5.38,0,0,0-2,.45c-.55.16-1.08.35-1.81.59a3.708,3.708,0,0,1,.11-1.62c.88-1.38.21-2.58-.46-3.66a2.23,2.23,0,0,0-4,.36,3.63,3.63,0,0,0,.41,3.8,7.16,7.16,0,0,1,.67,1.43H21.27a24.23,24.23,0,0,1-2.92.28A10.44,10.44,0,0,1,15,20.84a4.35,4.35,0,0,0-3.24-.19h-.12c-1.5.51-2.8.38-3.71-1.1A1.63,1.63,0,0,0,7,18.81l.29,1.51-1.72-.44-.23.37.69.56-.86.31,1.3.61-.91.48L6,23.29a7.51,7.51,0,0,1,5.16.11,3.31,3.31,0,0,0,1.87.14,3.82,3.82,0,0,1,2.84.52c.87.45,1.83.72,2.74,1.11a2,2,0,0,1,.78.58c1.61,2.16,1.71,4.7,1.9,7.25.24,3.06-.67,5.85-1.56,8.68a47.29,47.29,0,0,1-1.57,4.85c-.48,1.08-1.48,1.91-2.06,3-.76,1.38-1.32,2.88-2,4.3a7.48,7.48,0,0,1-1.24,1.88c-1,1-.76,2,.09,2.91l.54.68L11.8,61.49c-2.89-1.73-5.75-3.32-8.47-5.1C1.44,55.15.63,53.11,0,51Z"/>
+                        </g>
+                    </svg>
+                </div>
+                <p class="c-footer__text">
+                    Gemaakt door MCT<br>in opdracht van Sport en Beweging.
+                </p>
+            </footer>
+        </div>
+
+        <div class="c-popup js-popup-game">
+            <div class="c-popup__content c-info">
+                <button class="o-button-reset c-popup__close js-popup-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+                <h1 class="c-title c-info__title js-game-title">
+                    The Rondo
+                </h1>
+                <div class="c-info__rules c-infoblock">
+                    <div class="c-infoblock__title">
+                        Spelregels
+                    </div>
+                    <div class="c-infoblock__text js-game-desc">
+                        De bedoeling van The Rondo is dat je alle targets zo snel mogelijk raakt. Alle targets van de kooi gaan aan. Jouw taak is om zo snel mogelijk alle targets te raken. Wees creatief om die topscore te verbreken.
+                    </div>
+                </div>
+                <div class="c-info__score c-infoblock">
+                    <div class="c-infoblock__title">
+                        Scorebord
+                    </div>
+                    <div class="c-infoblock__table">
+                        <table cellspacing="0" class="c-table">
+                            <tbody class="c-table__body js-scoreboard">
+                                <tr class="c-table__row">
+                                    <td class="c-table__item">No Highscores Available (yet)</td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <button class="o-button-reset c-button js-game-start">
+                    <svg class="c-button__svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                        <path d="M0 0h24v24H0z" fill="none"/><path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="c-popup js-popup-loading">
+            <div class="c-popup__content c-loading">
+                <svg class="c-loading__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="c-loading__circle" cx="50" cy="50" r="45" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="c-popup c-popup-error js-popup-error">
+            <div class="c-popup__content">
+                <button class="o-button-reset c-popup__close js-popup-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+                <div class="c-error__title js-error-title">Er is een fout opgetreden</div>
+                <div class="c-error__info">
+                    <svg class="c-error__info-icon u-beta-textcolor" xmlns="http://www.w3.org/2000/svg" height="37" viewBox="0 0 24 24" width="37"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                    <div class="c-error__info-text js-error-msg">Hier komt de informatie over de error!</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

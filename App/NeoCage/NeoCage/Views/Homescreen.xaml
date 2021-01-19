@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NeoCage.Views.Homescreen" NavigationPage.HasNavigationBar="False" BackgroundColor="White">
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Image x:Name="img" Source="NeoCage_logo.png" Margin="10,0,10,20"/>
+
+            <Grid RowSpacing="20" Margin="10" HeightRequest="500">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="90"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" HorizontalOptions="Fill" BackgroundColor="White" BorderWidth="1" CornerRadius="5" BorderColor="#3a3a3a" TextColor="Black" Font="27" FontFamily="Segoe UI" Text="The Rondo"></Button>
+                <Button Grid.Row="1" HorizontalOptions="Fill" BackgroundColor="White" BorderWidth="1" CornerRadius="5" BorderColor="#3a3a3a" TextColor="Black" Font="27" FontFamily="Segoe UI" Text="Quicky tricky"></Button>
+                <Button Grid.Row="2" HorizontalOptions="Fill" BackgroundColor="White" BorderWidth="1" CornerRadius="5" BorderColor="#3a3a3a" TextColor="Black" Font="27" FontFamily="Segoe UI" Text="Double Trouble"></Button>
+            </Grid>
+            
+            <Grid RowSpacing="0" Padding="0,0,10,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0" Margin="0,0,80,10" HorizontalOptions="End" Source="MCT_logo.png"/>
+                <Image Grid.Row="0" HorizontalOptions="End" Source="SB_logo.png"/>
+                <Label Grid.Row="1" HorizontalOptions="End" FontFamily="Segoe UI" TextColor="#3a3a3a" Text="Gemaakt door MCT"></Label>
+                <Label Grid.Row="2" HorizontalOptions="End" FontFamily="Segoe UI" TextColor="#3a3a3a" Text="In opdracht van Sport en Beweging"></Label>
+                
+
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
