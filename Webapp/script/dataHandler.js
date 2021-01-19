@@ -18,21 +18,21 @@ const handleData = function (url, callbackFunctionName, callbackErrorFunctionNam
           console.warn('>> Er is geen callback errorfunctie meegegeven als parameter');
         }
       } else {
-        console.info('>> Er is een response teruggekomen van de server');
+        // console.info('>> Er is een response teruggekomen van de server');
         return response.json();
       }
     })
     .then(function (jsonObject) {
       if (jsonObject) {
-        console.info('>> JSONobject is aangemaakt');
-        console.info(`>> Callbackfunctie ${callbackFunctionName.name}(response) wordt opgeroepen`);
+        //console.info('>> JSONobject is aangemaakt');
+        //console.info(`>> Callbackfunctie ${callbackFunctionName.name}(response) wordt opgeroepen`);
         callbackFunctionName(jsonObject);
       }
-    });
-  /*.catch(function(error) {
-      console.warn(`>>fout bij verwerken json: ${error}`);
+    })
+    .catch(function(error) {
+      console.warn(`>> Fout bij verwerken json: ${error}`);
       if (callbackErrorFunctionName) {
         callbackErrorFunctionName(undefined);
       }
-    })*/
+    })
 };

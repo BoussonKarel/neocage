@@ -10,7 +10,7 @@ namespace NCFunctions.Helpers
 {
     public class IoTHubHelper
     {
-        private const string _DEVICEID = "ESPBRUGGE01";
+        private static string _DEVICEID = Environment.GetEnvironmentVariable("deviceid");
         public static ServiceClient GetServiceClient()
         {
             return ServiceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("IoTHubAdmin"));
@@ -30,7 +30,7 @@ namespace NCFunctions.Helpers
                 // Add game to the payload
                 method.SetPayloadJson(payloadGame);
 
-                await client.InvokeDeviceMethodAsync(_DEVICEID, method);
+                client.InvokeDeviceMethodAsync(_DEVICEID, method);
             }
             catch (Exception ex)
             {

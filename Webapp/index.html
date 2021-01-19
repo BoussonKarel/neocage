@@ -3,11 +3,19 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>NeoCage</title>
+        <title>ExerLights</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="mask-icon" href="safari-pinned-tab.svg" color="#e85e00">
+
+
 
         <link rel="stylesheet" href="./style/normalize.css">
         <link rel="stylesheet" href="./style/screen.css">
@@ -20,27 +28,16 @@
     </head>
     <body class="js-startpage">
         <div class="c-app">
-            <div class="c-startpage">
+            <div class="c-startpage o-container">
                 <div class="c-logo">
-                    <svg class="c-logo__svg" xmlns="http://www.w3.org/2000/svg" width="421" height="133" viewBox="0 0 421 133"><g id="Group_1" data-name="Group 1" transform="translate(-868 -444)"><text id="Ne_Cage" data-name="Ne  Cage" transform="translate(868 552)" font-size="100" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0" xml:space="preserve">Ne  Cage</tspan></text><g id="Laag_2" data-name="Laag 2" transform="translate(1002.876 500.866)"><g id="Laag_1" data-name="Laag 1" transform="translate(-0.01 0)"><path id="Path_3" data-name="Path 3" d="M26.416,0A26.417,26.417,0,1,0,52.824,26.414,26.417,26.417,0,0,0,26.416,0ZM40.934,7.762l5.591,5.591-5.591,5.591-5.591-5.591ZM22.447,3.811h7.93v7.93h-7.93ZM11.955,7.762l5.591,5.591-5.591,5.591L6.364,13.353ZM3.783,30.377v-7.93H11.7v7.93ZM14.265,45.063,8.675,39.472l5.591-5.591,5.591,5.591Zm16.111,3.951h-7.93v-7.93h7.93Zm-3.96-12.673a9.905,9.905,0,1,1,7.023-2.9A9.905,9.905,0,0,1,26.416,36.341Zm14.518,8.74-5.591-5.591L40.934,33.9l5.591,5.591ZM41.083,30.4V22.448h7.93v7.93Z" transform="translate(0.01 0)"/></g></g></g></svg>
-                </div>
+                    <!-- <svg class="c-logo__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2523 816"><g id="Exerlights" transform="translate(-212 -379)"><text id="ExerL_ghts" data-name="ExerL ghts" transform="translate(212 1055)" fill="#fff" font-size="700" font-family="AgencyFB-Bold, Agency FB" font-weight="700"><tspan x="0" y="0">ExerL ghts</tspan></text><rect id="Rectangle_2" data-name="Rectangle 2" width="798" height="71" transform="translate(497 520)" fill="#fff"/><rect id="Rectangle_3" data-name="Rectangle 3" width="533" height="71" transform="translate(1443 520)" fill="#fff"/><rect id="Rectangle_4" data-name="Rectangle 4" width="351" height="80" transform="translate(1681 709) rotate(90)" fill="#fff"/><rect id="Rectangle_5" data-name="Rectangle 5" width="585" height="71" transform="translate(2124 520)" fill="#fff"/></g></svg> -->
+                    <img class="c-logo__svg" src="./images/ExerLight_logo.png" alt="Exerlights Logo">
+                    </div>
                 <div class="c-menu">
                     <h2 class="c-menu__title">
                         Kies een spel
                     </h2>
                     <ul class="c-menu__list o-list js-gamemodes">
-                        <!-- <li class="c-gamemode js-gamemode">
-                            The Rondo
-                        </li>
-                        <li class="c-gamemode js-gamemode">
-                            Quicky Tricky
-                        </li>
-                        <li class="c-gamemode js-gamemode">
-                            Double Trouble
-                        </li>
-                        <li class="c-gamemode js-gamemode">
-                            Training mode
-                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -64,7 +61,7 @@
             </footer>
         </div>
 
-        <div class="c-popup c-popup--shown  js-popup-game">
+        <div class="c-popup js-popup-game">
             <div class="c-popup__content c-info">
                 <button class="o-button-reset c-popup__close js-popup-close">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -86,38 +83,9 @@
                     </div>
                     <div class="c-infoblock__table">
                         <table cellspacing="0" class="c-table">
-                            <tbody class="c-table__body" class="js-scoreboard">
+                            <tbody class="c-table__body js-scoreboard">
                                 <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaronaaaaaaaaaaaaaaaaaaaaa</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
-                                </tr> 
-                                <tr class="c-table__row">
-                                    <td class="c-table__item">Aaron</td>
-                                    <td class="c-table__item">0:10</td>
+                                    <td class="c-table__item">No Highscores Available (yet)</td>
                                 </tr> 
                             </tbody>
                         </table>
@@ -131,19 +99,23 @@
             </div>
         </div>
 
-        <div class="c-popup js-popup-countdown">
-            <div class="c-popup__content c-countdown">
-                <!-- <button class="o-button-reset c-popup__close js-popup-close">
+        <div class="c-popup js-popup-loading">
+            <div class="c-popup__content c-loading">
+                <svg class="c-loading__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="c-loading__circle" cx="50" cy="50" r="45" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="c-popup c-popup-error js-popup-error">
+            <div class="c-popup__content">
+                <button class="o-button-reset c-popup__close js-popup-close">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button> -->
-                <div class="c-title c-countdown__game">
-                    The Rondo
-                </div>
-                <div class="c-subtitle c-countdown__text">
-                    begint in
-                </div>
-                <div class="c-countdown__time js-countdown">
-                    5
+                </button>
+                <div class="c-error__title js-error-title">Er is een fout opgetreden</div>
+                <div class="c-error__info">
+                    <svg class="c-error__info-icon u-beta-textcolor" xmlns="http://www.w3.org/2000/svg" height="37" viewBox="0 0 24 24" width="37"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                    <div class="c-error__info-text js-error-msg">Hier komt de informatie over de error!</div>
                 </div>
             </div>
         </div>

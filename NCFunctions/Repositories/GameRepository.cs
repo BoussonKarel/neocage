@@ -31,7 +31,9 @@ namespace NCFunctions.Repositories
             {
                 // Make Entity of it
                 GameEntity gameEntity = new GameEntity(game.Id, game.GamemodeId) {
+                    Gamemode = game.Gamemode,
                     Duration = game.Duration,
+                    TimeStarted = game.TimeStarted,
                     Score = game.Score,
                     Username = game.Username
                 };
@@ -47,7 +49,9 @@ namespace NCFunctions.Repositories
                 {
                     Id = resultEntity.Id,
                     GamemodeId = resultEntity.GamemodeId,
+                    Gamemode = resultEntity.Gamemode,
                     Duration = resultEntity.Duration,
+                    TimeStarted = resultEntity.TimeStarted,
                     Score = resultEntity.Score,
                     Username = resultEntity.Username
                 };
@@ -104,11 +108,15 @@ namespace NCFunctions.Repositories
                     {
                         Id = ge.Id,
                         GamemodeId = ge.GamemodeId,
+                        Gamemode = ge.Gamemode,
                         Duration = ge.Duration,
+                        TimeStarted = ge.TimeStarted,
                         Score = ge.Score,
                         Username = ge.Username
                     });
                 }
+
+                games.Sort();
 
                 return games;
             }
@@ -125,7 +133,9 @@ namespace NCFunctions.Repositories
                 // Make Entity of it
                 GameEntity gameEntity = new GameEntity(game.Id, game.GamemodeId)
                 {
+                    Gamemode = game.Gamemode,
                     Duration = game.Duration,
+                    TimeStarted = game.TimeStarted,
                     Score = game.Score,
                     Username = game.Username
                 };
@@ -142,7 +152,9 @@ namespace NCFunctions.Repositories
                 {
                     Id = resultEntity.Id,
                     GamemodeId = resultEntity.GamemodeId,
+                    Gamemode = resultEntity.Gamemode,
                     Duration = resultEntity.Duration,
+                    TimeStarted = resultEntity.TimeStarted,
                     Score = resultEntity.Score,
                     Username = resultEntity.Username
                 };

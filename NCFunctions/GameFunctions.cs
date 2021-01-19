@@ -53,7 +53,7 @@ namespace NCFunctions
                 // Stop the game
                 await GameHelper.StopGame();
 
-                return new OkObjectResult("");
+                return new OkObjectResult(new NoContent());
             }
             catch (Exception ex)
             {

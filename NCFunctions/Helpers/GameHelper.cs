@@ -20,17 +20,33 @@ namespace NCFunctions.Helpers
                 // Is er al een game?
                 if (CurrentGame == null)
                 {
+                    DateTime timeStarted = DateTime.Now;
+                    timeStarted = timeStarted.AddSeconds(10);
+
                     // Er is nog geen game bezig, game aanmaken
                     CurrentGame = new Game()
                     {
                         Id = Guid.NewGuid(),
                         GamemodeId = gamemode.Id,
+                        Gamemode = gamemode.Name,
+                        TimeStarted = timeStarted,
                         Duration = gamemode.Duration,
                         Score = 0
                     };
 
                     // Game details naar device sturen in start methode
                     await IoTHubHelper.StartGameMethod(CurrentGame);
+
+                    // Game started sturen over MQTT
+                    // type "game_start", payload is the game info
+                    string gamePayload = JsonConvert.SerializeObject(CurrentGame);
+                    MqttMessage message = new MqttMessage("game_start", gamePayload);
+
+                    // Serialize
+                    string mqttBody = JsonConvert.SerializeObject(message);
+
+                    // Send to topic /neocage
+                    MqttHelper.SendMessage("/neocage", mqttBody);
 
                     return CurrentGame;
                 }
@@ -60,6 +76,15 @@ namespace NCFunctions.Helpers
                 {
                     // Er is al een game bezig, stuur stop methode
                     await IoTHubHelper.StopGameMethod();
+
+                    // Send game_stop w/ no data to frontend
+                    MqttMessage message = new MqttMessage("game_stop", "");
+
+                    // Serialize
+                    string mqttBody = JsonConvert.SerializeObject(message);
+
+                    // Send to topic /neocage
+                    MqttHelper.SendMessage("/neocage", mqttBody);
                 }
             }
             catch (Exception ex)
