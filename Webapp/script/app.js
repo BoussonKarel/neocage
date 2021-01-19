@@ -418,6 +418,8 @@ const handleGameSaved = (data) => {
 
 
 const handleCurrentGame = (data) => {
+    hideLoadingPopup();
+    
     /* Is er een game? */
     console.log("> Is er een game?");
 
