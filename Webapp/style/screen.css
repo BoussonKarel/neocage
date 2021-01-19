@@ -368,6 +368,12 @@ input::placeholder {
   text-align: center;
 }
 
+/*
+    Component: logo svg
+    ---
+    Exerlights logo on top of screen
+*/
+
 .c-logo__svg {
   max-width: 100%;
   max-height: 133px;
@@ -390,6 +396,12 @@ input::placeholder {
 .c-menu__list {
   margin-bottom: 0;
 }
+
+/*
+    Component: Gamemode
+    ---
+    Main menu to select gamemodes
+*/
 
 .c-gamemode {
   cursor: pointer;
@@ -417,9 +429,9 @@ input::placeholder {
 }
 
 /*
-    Component: App
+    Component: Footer
     ---
-    Main app container
+    Footer on bottom of page
 */
 
 .c-footer {
@@ -461,11 +473,6 @@ input::placeholder {
     ---
     Message popup when an error occured
 */
-.c-error {
-}
-
-.c-error__info {
-}
 
 .c-error__title {
   font-weight: 600;
@@ -716,6 +723,12 @@ Grey cards with information in them .c-countdown__time {
   text-align: center;
 }
 
+/*
+    Component: Status
+    ---
+    Game status div
+*/
+
 .c-status {
   flex-grow: 1;
 }
@@ -762,6 +775,12 @@ Grey cards with information in them .c-countdown__time {
 .c-card__value {
   font-size: calc(56rem / var(--global-font-size));
 }
+
+/*
+    Component: minicards
+    ---
+    Mini grey cards for Double trouble with information in them
+*/
 
 .c-minicards {
   display: flex;
