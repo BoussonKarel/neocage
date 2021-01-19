@@ -168,23 +168,38 @@ const showTimer = function(startTime, duration) {
 
         const timer = setInterval(function() {
             let now = Date.now();
-    
-            // Compare to now, how many seconds till the endTime?
-            let msTillEnd = endTime - now;
-            
-    
-            let sTillEnd = Math.ceil(msTillEnd / 1000);
-    
-            let stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
-            if (stroke_dasharray < 0) {
+
+            let stroke_dasharray, timerText;
+            // Check is starttime has passed
+            if (startTime > now) {
+                // How many ms left till start?
+                let msTillStart = startTime - now;
+                // How many s left till start?
+                let sTillStart = Math.ceil(msTillStart / 1000);
+
                 stroke_dasharray = 0;
+                timerText = sTillStart;
             }
-            if (msTillEnd < 0) {
-                clearInterval(timer);
+            else {
+                // How many ms left?
+                let msTillEnd = endTime - now;
+                // How many s left?
+                let sTillEnd = Math.ceil(msTillEnd / 1000);
+
+                // Calculate circle elapsed stroke
+                stroke_dasharray = msTillEnd / (duration*1000) * max_stroke_dasharray;
+                if (stroke_dasharray < 0) {
+                    stroke_dasharray = 0;
+                }
+                if (msTillEnd < 0) {
+                    clearInterval(timer);
+                }
+
+                timerText = sTillEnd;
             }
-    
+
             htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
-            htmlTimerSeconds.innerHTML = sTillEnd;
+            htmlTimerSeconds.innerHTML = timerText;
         }, 30);
     }
     else {
