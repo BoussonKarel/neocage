@@ -164,7 +164,7 @@ const showPopup = function(htmlPopup) {
 
 const showTimer = function(startTime, duration) {
     // Als er een duration is
-    if (duration != null) {
+    if (duration > 0) {
         let endTime = startTime + (duration * 1000);
 
         const timer = setInterval(function() {
