@@ -5,6 +5,9 @@ let currentGame = {};
 
 let gamemodes = [];
 
+// The amount of things that are loading, to give a correct loading popup
+let loadingEvents = 0;
+
 const max_stroke_dasharray = 283;
 
 function convertSeconds(seconds) {
@@ -74,8 +77,8 @@ const showGameStarted = function(data){
 }
 
 const showGamemodes = (data) => {
-    console.log("- Gamemodes succesvol opgehaald.");
     hideLoadingPopup();
+    console.log("- Gamemodes succesvol opgehaald.");
 
     let listcontent = "";
 
@@ -102,8 +105,6 @@ const showGamemodes = (data) => {
 
 
 const showGamemodeInfo = (gamemode) => {
-    hideLoadingPopup();
-
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
 
@@ -343,11 +344,17 @@ const showEndOfGame = function(game) {
 }
 
 const showLoadingPopup = function() {
+    loadingEvents += 1;
     htmlPopupLoading.classList.add("c-popup--shown");
 }
 
 const hideLoadingPopup = function() {
-    htmlPopupLoading.classList.remove("c-popup--shown");
+    loadingEvents -= 1;
+    if (loadingEvents < 1) {
+        htmlPopupLoading.classList.remove("c-popup--shown");
+        loadingEvents = 0;
+    }
+    // console.log(loadingEvents, "zaken aan het inladen")
 }
 
 const showError = function(title, msg) {
@@ -396,8 +403,6 @@ const errorHighscores = () => {
     showError("Er ging iets fout.", "Highscores konden niet worden opgehaald.")
 }
 //#endregion
-
-
 const errorGameSaved = () => {
     showError("Er ging iets fout.", "Highscore kon niet worden opgeslagen.")
 }
