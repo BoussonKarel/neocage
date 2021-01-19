@@ -52,13 +52,15 @@ client = new Paho.MQTT.Client("13.81.105.139", 80, "")
 //#region ***  Game Functions ***
 const startGame = (game) => {
     let body = JSON.stringify(game)
-    console.log("Er wordt een game gestart: ", body)
+    console.log(`> Game '${game.name}' wordt gestart...`)
 
     showLoadingPopup();
     handleData(`${URL}/game/start`,showGameStarted, errorGameStarted, 'POST', body);
 };
 
 const stopGame = () => {
+    console.log(`> Stop commando wordt verstuurd...`)
+
     showLoadingPopup();
     handleData(`${URL}/game/stop`, callbackGameStopped, errorStopGame, 'POST');
 };
@@ -66,12 +68,13 @@ const stopGame = () => {
 
 //#region ***  Callback-Visualisation - show___ ***
 const showGameStarted = function(data){
-    console.log("Game succesfully started!", data)
+    console.log(`- Game '${data.gamemode}' succesvol gestart.`);
     // hideLoadingPopup();
     redirectToGamepage();
 }
 
 const showGamemodes = (data) => {
+    console.log("- Gamemodes succesvol opgehaald.");
     hideLoadingPopup();
 
     let listcontent = "";
@@ -106,15 +109,15 @@ const showGamemodeInfo = (gamemode) => {
 
     htmlGameStart.addEventListener("click",function(){
         startGame(gamemode);
-    })
+    });
 };
 
 
 const showHighscores = (data) => {
+    console.log("- Highscores succesvol opgehaald.");
     hideLoadingPopup();
 
     let htmlString = "";
-    console.log("highscores tonen")
 
     if(data.length < 1){
         htmlString = `<tr class="c-table__row">
@@ -204,9 +207,9 @@ const showTimer = function(startTime, duration) {
 }
 
 const showGameStatus = function(game) {
+    console.log("- Game status wordt geupdate.");
     hideLoadingPopup();
 
-    console.log("Showing game:", game)
     htmlStatusTitle.innerHTML = game.gamemode;
 
     console.log(htmlStatusCards);
@@ -229,6 +232,7 @@ const showGameStatus = function(game) {
 }
 
 const showEndOfGame = function(game) {
+    console.log("- Game eindoverzicht wordt getoond.");
     hideLoadingPopup();
 
     showPopup(htmlPopupEnd);
@@ -256,7 +260,7 @@ const showEndOfGame = function(game) {
             game.username = username;
             //game stringifyen tot RequestBody
             let body = JSON.stringify(game)
-            console.log("Deze Game wordt opgeslagen ", body)
+            console.log("> Game wordt geupdate met gebruikersnaam.");
     
             handleData(`${URL}/games`,handleGameSaved, errorGameSaved, 'PUT', body);
             showLoadingPopup();
@@ -279,7 +283,7 @@ const hideLoadingPopup = function() {
 }
 
 const showError = function(title, msg) {
-    console.error(title, msg)
+    console.error(title, "-", msg)
 
     const errorTitle = htmlPopupError.querySelector('.js-error-title');
     const errorMsg = htmlPopupError.querySelector('.js-error-msg');
@@ -292,7 +296,7 @@ const showError = function(title, msg) {
 
 //#region ***  Callback-No visualization - callback__ ***
 const callbackGameStopped = function() {
-    console.log("Game stopped");
+    console.log("- Game succesvol gestopt.");
     redirectToStartpage();
 }
 //#endregion
@@ -327,13 +331,14 @@ const errorHighscores = () => {
 
 
 const errorGameSaved = () => {
-    console.log("De game kon niet opgeslagen worden")
+    showError("Er ging iets fout.", "Highscore kon niet worden opgeslagen.")
 }
     
 //#region ***  Event Handlers - Handle___ ***
 
 const handleGameSaved = (data) => {
-    console.log("de game is succensvol opgeslagen; ", data);
+    console.log("- Highscore succesvol opgeslagen.");
+    redirectToStartpage();
     //redirect naar homepage
 }
 
@@ -341,37 +346,32 @@ const handleGameSaved = (data) => {
 
 const handleCurrentGame = (data) => {
     /* Is er een game? */
-    console.log(data);
+    console.log("> Is er een game?");
 
     if (data.id) {
-        console.log("There is an active game");
+        console.log("- Ja");
         currentGame = data;
     }
     else {
-        console.log("No game");
+        console.log("- Nee");
         currentGame = null;
     }
 
     if (currentGame != null) {
         // Er is een game
-        console.log("Er is een game.");
         if (htmlGamepage) {
-            console.log("Je zit op de gamepagina, gamegegevens inladen...");
+            // Gamegegevens enz. inladen
             initGamepage();
         }
         else if (htmlStartpage) {
-            console.log("Je zit op de startpagina, doorsturen naar gamepagina.");
+            // Doorsturen naar de gamepagina
             redirectToGamepage();
         }
     }
     else {
         // Er is GEEN game
-        console.log("Er is geen game.");
-        if (htmlStartpage) {
-            console.log("Je zit op de startpagina. Er veranderd niets.");
-        }
-        else if (htmlGamepage) {
-            console.log("Je zit op de gamepagina, doorsturen naar de startpagina.");
+        if (htmlGamepage) {
+            // Doorsturen naar de startpagina.
             redirectToStartpage();
         }
     }
@@ -379,6 +379,8 @@ const handleCurrentGame = (data) => {
     
 const handleMQTTData = function(payload) {
     let type = payload.type
+    
+    console.log(`+ Bericht ontvangen van de backend type '${type}'`)
 
     if (htmlStartpage) {
         if (type == "game_start") {
@@ -391,19 +393,12 @@ const handleMQTTData = function(payload) {
             let data = JSON.parse(payload.payload);
     
             currentGame = data;
+            // Game status updaten
             showGameStatus(currentGame);
-    
-            switch(type) {
-                case 'game_end':
-                    console.log('De game is gedaan.')
-                    // Extra shit bij einde game
-                    showEndOfGame(currentGame);
-                    break;
-                case 'game_update':
-                    console.log('De game is geupdate.')
-                    break;
-                default:
-                    break;
+
+            if (type == "game_end") {
+                // Popup met eindoverzicht vullen en tonen
+                showEndOfGame(currentGame);
             }
         }
 
@@ -429,8 +424,6 @@ const listenToGamemodes = function() {
     }
 };
 
-
-
 const listenToPopupsClose = function() {
     // Go trough all the popups
     for (const popup of htmlPopups) {
@@ -452,7 +445,7 @@ const listenToStopButton = function() {
 }
 
 const listenToMQTTConnect = function() {
-    console.log("Connected to MQTT");
+    console.log("+ Verbonden met MQTT");
     client.subscribe("/neocage");
 };
             
@@ -461,8 +454,7 @@ const listenToMQTTMessage = function(message) {
     let topic = message.destinationName;
     let payload = JSON.parse(message.payloadString);
                 
-    console.log("MQTT Message arrived on " + topic)
-                
+    // console.log("MQTT bericht ontvangen op " + topic)   
     handleMQTTData(payload);
 };
 
@@ -471,21 +463,25 @@ client.onMessageArrived = listenToMQTTMessage;
 
 //#region ***API-Calls - Get___ ***
 const getGamemodes = async () => {
+    console.log("> Gamemodes ophalen...")
     showLoadingPopup();
     handleData(`${URL}/gamemodes`,showGamemodes, errorGamemodes);  
 };
           
 const getAllGamemodes = async () => {   
+    console.log("> ALLE gamemodes ophalen...")
     showLoadingPopup();
     handleData(`${URL}/gamemodes/all`,showGamemodes, errorGamemodes); 
 };
 
 const getCurrentGame = async () => {
+    console.log("> Huidige game ophalen...")
     showLoadingPopup();
     handleData(`${URL}/games/current`, handleCurrentGame, errorCurrentGame);
 };
 
 const getHighscores = (gamemodeId) => {
+    console.log("> Highscores voor gamemode ophalen...")
     showLoadingPopup();
     handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
 };
@@ -505,8 +501,7 @@ const initGamepage = function() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    
-    console.log("DOM LOAD COMPLETE")
+    console.log("+ DOM LOAD COMPLETE")
 
     htmlStartpage = document.querySelector('.js-startpage');
     htmlGamepage = document.querySelector('.js-gamepage');
