@@ -231,11 +231,31 @@ const showGameStatus = function(game) {
     let cardsContent = "";
 
     // SCORE
-    cardsContent +=
+    if(game.gamemode == "doubletrouble"){
+        let score = game.score;
+        let player_1 = Math.floor(score / 10);
+        let player_2 = score % 10;
+
+        cardsContent +=
+            `<div class="c-minicards">
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-alpha-textcolor">Speler 1</h2>
+                                <h5 class="c-card__value u-alpha-textcolor">${player_1}</h5>
+                            </div>
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-beta-textcolor">Speler 2</h2>
+                                <h5 class="c-card__value u-beta-textcolor">${player_2}</h5>
+                            </div>
+                        </div>`;
+    } else {
+        cardsContent +=
         `<div class="c-card o-container">
-            <h2 class="c-subtitle">Score</h2>
-            <h5 class="c-card__value">${game.score}</h5>
+        <h2 class="c-subtitle">Score</h2>
+        <h5 class="c-card__value">${game.score}</h5>
         </div>`;
+    }
+
+    
 
     let startTime = new Date(game.timestarted).getTime();
 
@@ -257,11 +277,29 @@ const showEndOfGame = function(game) {
     
     let cardsContent = "";
     // SCORE
-    cardsContent +=
+    if(game.gamemode == "doubletrouble"){
+        let score = game.score;
+        let player_1 = Math.floor(score / 10);
+        let player_2 = score % 10;
+
+        cardsContent +=
+            `<div class="c-minicards">
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-alpha-textcolor">Speler 1</h2>
+                                <h5 class="c-card__value u-alpha-textcolor">${player_1}</h5>
+                            </div>
+                            <div class="c-minicard">
+                                <h2 class="c-subtitle u-beta-textcolor">Speler 2</h2>
+                                <h5 class="c-card__value u-beta-textcolor">${player_2}</h5>
+                            </div>
+                        </div>`;
+    } else {
+        cardsContent +=
         `<div class="c-card o-container">
-            <h2 class="c-subtitle">Score</h2>
-            <h5 class="c-card__value">${game.score}</h5>
+        <h2 class="c-subtitle">Score</h2>
+        <h5 class="c-card__value">${game.score}</h5>
         </div>`;
+    }
 
     htmlEndCards.innerHTML = cardsContent;
 
