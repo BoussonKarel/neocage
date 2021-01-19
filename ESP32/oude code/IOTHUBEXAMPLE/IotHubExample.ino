@@ -8,8 +8,8 @@
 #define INTERVAL 10000
 #define MESSAGE_MAX_LEN 256
 // Please input the SSID and password of WiFi
-const char* ssid = "KAMER5";
-const char* password = "AABBCCDDAA";
+const char* ssid = "nietnicoswifi";
+const char* password = "ikbenesp123";
 
 /*String containing Hostname, Device Id & Device Key in the format:                         */
 /*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>"                */
