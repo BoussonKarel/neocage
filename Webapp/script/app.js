@@ -303,6 +303,21 @@ const showEndOfGame = function(game) {
 
     htmlEndCards.innerHTML = cardsContent;
 
+        //input validation
+        htmlInputName.addEventListener("blur",function(){
+            if(!htmlInputName.value){
+                htmlInputName.classList.add('u-validation-error');
+                htmlValidation.classList.add('u-not-valid');
+                htmlInputName.addEventListener("input",function(){
+                htmlInputName.classList.remove('u-validation-error');
+                htmlValidation.classList.remove('u-not-valid');
+                })
+            } else {
+                htmlInputName.classList.remove('u-validation-error');
+                htmlValidation.classList.remove('u-not-valid');
+            }
+        });
+
         //Save Button
     htmlSaveButton.addEventListener("click",function(){
         if(htmlInputName.innerText){
