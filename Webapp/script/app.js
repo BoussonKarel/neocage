@@ -20,7 +20,7 @@ function convertSeconds(seconds) {
 };
 //#region ***  DOM references ***
 let htmlGamemodeList, htmlGameDesc, htmlGameStart, htmlScoreboard, htmlStartpage, htmlGamepage, htmlGameTitle;
-let htmlPopupGame, htmlPopupLoading, htmlPopups = [], htmlSaveButton, htmlInputName;
+let htmlPopupGame, htmlPopupLoading, htmlPopups = [], htmlSaveButton, htmlInputName, htmlValidation;
 let htmlStatusTitle, htmlTimercircle, htmlTimerSeconds, htmlStatusCards, htmlGameStop, htmlPopupEnd, htmlEndTitle, htmlEndCards;
 //#endregion
 
@@ -581,6 +581,7 @@ document.addEventListener('DOMContentLoaded', function() {
     htmlEndCards = document.querySelector('.js-end-cards');
     htmlSaveButton = document.querySelector('.js-input-submit');
     htmlInputName = document.querySelector('.js-input-name');
+    htmlValidation = document.querySelector('.js-validation');
     
 
     if (htmlStartpage) {
