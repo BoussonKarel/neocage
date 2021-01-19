@@ -14,7 +14,7 @@ namespace NCFunctions.Models
         [JsonProperty("gamemode")]
         public string Gamemode { get; set; }
         [JsonProperty("duration")]
-        public int? Duration { get; set; }
+        public int Duration { get; set; }
         [JsonProperty("timestarted")]
         public DateTime TimeStarted { get; set; }
         [JsonProperty("score")]
