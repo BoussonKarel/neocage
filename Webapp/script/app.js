@@ -139,7 +139,7 @@ const showHighscores = (data) => {
                     score = convertSeconds(highscore.score);
                     break;
                 case 'therondo':
-                    score = `00:${highscore.score}`
+                    score = convertSeconds(highscore.score);
                     break;
                 default:
                     break;
@@ -319,13 +319,14 @@ const showEndOfGame = function(game) {
 
         //Save Button
     htmlSaveButton.addEventListener("click",function(){
-        if(htmlInputName.innerText){
-            let username = htmlInputName.innerText
+        if(htmlInputName.value){
+            let username = htmlInputName.value
             console.log(username);
     
             //username toevoegen aan de game
             game.username = username;
             //game stringifyen tot RequestBody
+            console.log(game)
             let body = JSON.stringify(game)
             console.log("> Game wordt geupdate met gebruikersnaam.");
     
@@ -333,6 +334,15 @@ const showEndOfGame = function(game) {
             showLoadingPopup();
             } else {
                 console.log("Vul een username in aub.")
+                
+                htmlInputName.classList.add('u-validation-error');
+                htmlValidation.classList.add('u-not-valid');
+                htmlInputName.addEventListener("input",function(){
+                htmlInputName.classList.remove('u-validation-error');
+                htmlValidation.classList.remove('u-not-valid');
+                })
+
+
             }
     
         });
