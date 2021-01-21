@@ -12,12 +12,12 @@ namespace NCFunctions.Entities
 
         }
 
-        public GameEntity(Guid id, string gamemodeId)
+        public GameEntity(Guid id, string gamemodeid)
         {
             Id = id;
-            GamemodeId = gamemodeId;
+            GamemodeId = gamemodeid;
             RowKey = id.ToString();
-            PartitionKey = gamemodeId;
+            PartitionKey = gamemodeid;
         }
 
         public Guid Id { get; set; }
