@@ -556,7 +556,7 @@ const getCurrentGame = async () => {
 const getHighscores = (gamemodeId) => {
     console.log("> Highscores voor gamemode ophalen...")
     showLoadingPopup();
-    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
+    handleData(`${URL}/games/${gamemodeId}?amount=10`,showHighscores, errorHighscores);
 };
 //#endregion
     
