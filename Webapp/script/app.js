@@ -222,6 +222,7 @@ const showTimer = function(startTime, duration) {
 const showGameStatus = function(game) {
     console.log("- Game status wordt geupdate.");
     hideLoadingPopup();
+    console.log(game)
 
     htmlStatusTitle.innerHTML = game.gamemode;
 
@@ -229,7 +230,7 @@ const showGameStatus = function(game) {
     let cardsContent = "";
 
     // SCORE
-    if(game.gamemode == "doubletrouble"){
+    if(game.gamemode_id == "doubletrouble"){
         let score = game.score;
         let player_1 = Math.floor(score / 10);
         let player_2 = score % 10;
@@ -275,7 +276,7 @@ const showEndOfGame = function(game) {
     
     let cardsContent = "";
     // SCORE
-    if(game.gamemode == "doubletrouble"){
+    if(game.gamemode_id == "doubletrouble"){
         let score = game.score;
         let player_1 = Math.floor(score / 10);
         let player_2 = score % 10;
