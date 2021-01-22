@@ -118,6 +118,12 @@ namespace NCFunctions.Repositories
 
                 games.Sort();
 
+                if (gamemodeid == "therondo" || gamemodeid == "doubletrouble")
+                {
+                    // Om ter laagst
+                    games.Reverse();
+                }
+
                 // return a max of (amount) results
                 if (amount != null)
                 {
