@@ -273,30 +273,21 @@ const showEndOfGame = function(game) {
 
     // Fill popup
     htmlEndTitle.innerHTML = game.gamemode;
+    let score = game.score;
     
     let cardsContent = "";
     // SCORE
-    if(game.gamemode_id == "doubletrouble"){
-        let score = game.score;
-        let player_1 = Math.floor(score / 10);
-        let player_2 = score % 10;
-
+    if(game.gamemode_id == "quickytricky"){
         cardsContent +=
-            `<div class="c-minicards">
-                            <div class="c-minicard">
-                                <h2 class="c-subtitle u-alpha-textcolor">Speler 1</h2>
-                                <h5 class="c-card__value u-alpha-textcolor">${player_1}</h5>
-                            </div>
-                            <div class="c-minicard">
-                                <h2 class="c-subtitle u-beta-textcolor">Speler 2</h2>
-                                <h5 class="c-card__value u-beta-textcolor">${player_2}</h5>
-                            </div>
-                        </div>`;
+        `<div class="c-card o-container">
+        <h2 class="c-subtitle">Score</h2>
+        <h5 class="c-card__value">${score}</h5>
+        </div>`;
     } else {
         cardsContent +=
         `<div class="c-card o-container">
         <h2 class="c-subtitle">Score</h2>
-        <h5 class="c-card__value">${game.score}</h5>
+        <h5 class="c-card__value">${convertSeconds(score)}</h5>
         </div>`;
     }
 
