@@ -352,11 +352,12 @@ void setID() {
     while (1);
   }
 
+/*
   lox1.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
   lox2.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
   lox3.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
   lox4.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
-
+*/
   sensors[0] = lox1;
   sensors[1] = lox2;
   sensors[2] = lox3;
@@ -442,7 +443,7 @@ void checkSensors() {
 
 void theRondo() {
   delay(5000);
-  sensitivity = 160;
+  sensitivity = 100;
   leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
   leds.show();
   unsigned long startMillis = millis();
@@ -502,7 +503,7 @@ void quickyTricky(int duration) {
 
 void doubleTrouble() {
   delay(5000);
-  sensitivity = 175;
+  sensitivity = 100;
   //tientallen -> speler 1  andere -> speler 2
   //Eerste speler die aan 5 komt wint 
   //speler 1 is bv rood, speler 2 bv blauw
