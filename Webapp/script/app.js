@@ -139,7 +139,7 @@ const showHighscores = (data) => {
                     score = convertSeconds(highscore.score);
                     break;
                 case 'therondo':
-                    score = `00:${highscore.score}`
+                    score = convertSeconds(highscore.score);
                     break;
                 default:
                     break;
@@ -163,25 +163,29 @@ const showPopup = function(htmlPopup) {
 }
 
 const showTimer = function(startTime, duration) {
-    // Als er een duration is
-    if (duration != null) {
-        let endTime = startTime + (duration * 1000);
+    let endTime = startTime + (duration * 1000);
 
-        const timer = setInterval(function() {
-            let now = Date.now();
+    const timer = setInterval(function() {  
+        let now = Date.now();
 
-            let stroke_dasharray, timerText;
-            // Check is starttime has passed
-            if (startTime > now) {
-                // How many ms left till start?
-                let msTillStart = startTime - now;
-                // How many s left till start?
-                let sTillStart = Math.ceil(msTillStart / 1000);
+        let stroke_dasharray, timerText;
 
-                stroke_dasharray = 0;
-                timerText = sTillStart;
-            }
-            else {
+        // Aftellen naar de start
+        if (startTime > now) {
+            // How many ms left till start?
+            let msTillStart = startTime - now;
+                    // How many s left till start?
+            let sTillStart = Math.ceil(msTillStart / 1000);
+
+            stroke_dasharray = 0;
+            timerText = sTillStart;
+        }
+        // Reeds gestart
+        else {
+            // Spel is bezig
+            // Optellen of aftellen?
+            if (duration > 0) {
+                // OPTELLEN
                 // How many ms left?
                 let msTillEnd = endTime - now;
                 // How many s left?
@@ -198,33 +202,27 @@ const showTimer = function(startTime, duration) {
 
                 timerText = sTillEnd;
             }
+            else {
+                let circle_len = 60;
 
-            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
-            htmlTimerSeconds.innerHTML = timerText;
-        }, 30);
-    }
-    else {
-        // duration = null, toon verstreken tijd
-        const timer = setInterval(function() {
-            // One circle every 60 seconds
-            duration = 60;
+                // How many (milli)seconds have passed since the start
+                let msPassed = (now - startTime);
+                let sPassed = Math.ceil(msPassed / 1000);
+                
+                stroke_dasharray = (msPassed / (circle_len*1000) * max_stroke_dasharray) % max_stroke_dasharray;
+                timerText = sPassed;
+            }
+        }
 
-            let now = Date.now();
-            // How many (milli)seconds have passed since the start
-            let msPassed = (now - startTime);
-            let sPassed = Math.ceil(msPassed / 1000);
-    
-            let stroke_dasharray = (msPassed / (duration*1000) * max_stroke_dasharray) % max_stroke_dasharray;
-    
-            htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
-            htmlTimerSeconds.innerHTML = sPassed;
-        }, 30);
-    }
+        htmlTimercircle.setAttribute("stroke-dasharray", `${stroke_dasharray} ${max_stroke_dasharray}`);
+        htmlTimerSeconds.innerHTML = timerText;
+    }, 30);
 }
 
 const showGameStatus = function(game) {
     console.log("- Game status wordt geupdate.");
     hideLoadingPopup();
+    console.log(game)
 
     htmlStatusTitle.innerHTML = game.gamemode;
 
@@ -232,7 +230,7 @@ const showGameStatus = function(game) {
     let cardsContent = "";
 
     // SCORE
-    if(game.gamemode == "doubletrouble"){
+    if(game.gamemode_id == "doubletrouble"){
         let score = game.score;
         let player_1 = Math.floor(score / 10);
         let player_2 = score % 10;
@@ -275,30 +273,21 @@ const showEndOfGame = function(game) {
 
     // Fill popup
     htmlEndTitle.innerHTML = game.gamemode;
+    let score = game.score;
     
     let cardsContent = "";
     // SCORE
-    if(game.gamemode == "doubletrouble"){
-        let score = game.score;
-        let player_1 = Math.floor(score / 10);
-        let player_2 = score % 10;
-
+    if(game.gamemode_id == "quickytricky"){
         cardsContent +=
-            `<div class="c-minicards">
-                            <div class="c-minicard">
-                                <h2 class="c-subtitle u-alpha-textcolor">Speler 1</h2>
-                                <h5 class="c-card__value u-alpha-textcolor">${player_1}</h5>
-                            </div>
-                            <div class="c-minicard">
-                                <h2 class="c-subtitle u-beta-textcolor">Speler 2</h2>
-                                <h5 class="c-card__value u-beta-textcolor">${player_2}</h5>
-                            </div>
-                        </div>`;
+        `<div class="c-card o-container">
+        <h2 class="c-subtitle">Score</h2>
+        <h5 class="c-card__value">${score}</h5>
+        </div>`;
     } else {
         cardsContent +=
         `<div class="c-card o-container">
         <h2 class="c-subtitle">Score</h2>
-        <h5 class="c-card__value">${game.score}</h5>
+        <h5 class="c-card__value">${convertSeconds(score)}</h5>
         </div>`;
     }
 
@@ -321,13 +310,14 @@ const showEndOfGame = function(game) {
 
         //Save Button
     htmlSaveButton.addEventListener("click",function(){
-        if(htmlInputName.innerText){
-            let username = htmlInputName.innerText
+        if(htmlInputName.value){
+            let username = htmlInputName.value
             console.log(username);
     
             //username toevoegen aan de game
             game.username = username;
             //game stringifyen tot RequestBody
+            console.log(game)
             let body = JSON.stringify(game)
             console.log("> Game wordt geupdate met gebruikersnaam.");
     
@@ -335,6 +325,15 @@ const showEndOfGame = function(game) {
             showLoadingPopup();
             } else {
                 console.log("Vul een username in aub.")
+                
+                htmlInputName.classList.add('u-validation-error');
+                htmlValidation.classList.add('u-not-valid');
+                htmlInputName.addEventListener("input",function(){
+                htmlInputName.classList.remove('u-validation-error');
+                htmlValidation.classList.remove('u-not-valid');
+                })
+
+
             }
     
         });
@@ -558,7 +557,7 @@ const getCurrentGame = async () => {
 const getHighscores = (gamemodeId) => {
     console.log("> Highscores voor gamemode ophalen...")
     showLoadingPopup();
-    handleData(`${URL}/games/${gamemodeId}`,showHighscores, errorHighscores);
+    handleData(`${URL}/games/${gamemodeId}?amount=10`,showHighscores, errorHighscores);
 };
 //#endregion
     

@@ -11,6 +11,7 @@ using NCFunctions.Helpers;
 using NCFunctions.Models;
 using NCFunctions.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NCFunctions
 {
@@ -95,9 +96,20 @@ namespace NCFunctions
         {
             try
             {
-                // User wants to get the played games with a username filled in (score saved)
-                // No matter what gamemode
-                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true);
+                // How many results does the user want?
+                IDictionary<string, string> dictParameters = req.GetQueryParameterDictionary();
+
+                int? amount = null;
+                if (dictParameters.ContainsKey("amount"))
+                {
+                    amount = int.Parse(dictParameters["amount"]);
+                    Console.WriteLine(amount);
+                }
+
+                // (true) User wants to get the played games with a username filled in (score saved)
+                // (null) No matter what gamemode
+                // (amount) the amount of games (or null for unlimited)
+                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true, null, amount);
 
                 return new OkObjectResult(gamesWithScore);
             }
@@ -114,9 +126,20 @@ namespace NCFunctions
         {
             try
             {
-                // User wants to get ALL the played games
-                // No matter what gamemode
-                List<Game> games = await GameRepository.GetGamesAsync(false);
+                // How many results does the user want?
+                IDictionary<string, string> dictParameters = req.GetQueryParameterDictionary();
+
+                int? amount = null;
+                if (dictParameters.ContainsKey("amount"))
+                {
+                    amount = int.Parse(dictParameters["amount"]);
+                    Console.WriteLine(amount);
+                }
+
+                // (false) User wants to get ALL the played games
+                // (null) No matter what gamemode
+                // (amount) the amount of games (or null for unlimited)
+                List<Game> games = await GameRepository.GetGamesAsync(false, null, amount);
 
                 return new OkObjectResult(games);
             }
@@ -134,9 +157,21 @@ namespace NCFunctions
         {
             try
             {
-                // User wants to get the played games with a username filled in (score saved)
-                // Only the ones of gamemode id
-                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true, gamemodeid);
+                // How many results does the user want?
+                IDictionary<string, string> dictParameters = req.GetQueryParameterDictionary();
+
+                int? amount = null;
+                if(dictParameters.ContainsKey("amount"))
+                {
+                    amount = int.Parse(dictParameters["amount"]);
+                    Console.WriteLine(amount);
+                }
+
+
+                // (true) User wants to get the played games with a username filled in (score saved)
+                // (gamemodeid) Only the ones of gamemode id
+                // (amount) the amount of games (or null for unlimited)
+                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(true, gamemodeid, amount);
 
                 return new OkObjectResult(gamesWithScore);
             }
@@ -154,9 +189,20 @@ namespace NCFunctions
         {
             try
             {
-                // User wants to get ALL the played games
-                // Only the ones of gamemode id
-                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(false, gamemodeid);
+                // How many results does the user want?
+                IDictionary<string, string> dictParameters = req.GetQueryParameterDictionary();
+
+                int? amount = null;
+                if (dictParameters.ContainsKey("amount"))
+                {
+                    amount = int.Parse(dictParameters["amount"]);
+                    Console.WriteLine(amount);
+                }
+
+                // (false) User wants to get ALL the played games
+                // (gamemodeid) Only the ones of gamemode id
+                // (amount) the amount of games (or null for unlimited)
+                List<Game> gamesWithScore = await GameRepository.GetGamesAsync(false, gamemodeid, amount);
 
                 return new OkObjectResult(gamesWithScore);
             }

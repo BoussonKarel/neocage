@@ -12,7 +12,7 @@ namespace NCFunctions.Entities
 
         }
 
-        public GamemodeEntity(string id, string name, string desc, int? dur, bool rel)
+        public GamemodeEntity(string id, string name, string desc, int dur, bool rel)
         {
             Id = id;
             Name = name;
@@ -26,7 +26,7 @@ namespace NCFunctions.Entities
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? Duration { get; set; }
+        public int Duration { get; set; }
         public bool Released { get; set; }
     }
 }

@@ -64,7 +64,7 @@ namespace NCFunctions.Repositories
             }
         }
 
-        public static async Task<List<Game>> GetGamesAsync(bool withUsername, string gamemodeid = null)
+        public static async Task<List<Game>> GetGamesAsync(bool withUsername, string gamemodeid = null, int? amount = null)
         {
             try
             {
@@ -117,6 +117,20 @@ namespace NCFunctions.Repositories
                 }
 
                 games.Sort();
+
+                if (gamemodeid == "therondo" || gamemodeid == "doubletrouble")
+                {
+                    // Om ter laagst
+                    games.Reverse();
+                }
+
+                // return a max of (amount) results
+                if (amount != null)
+                {
+                    if (amount > games.Count)
+                        amount = games.Count;
+                    games = games.GetRange(0, amount.GetValueOrDefault());
+                }
 
                 return games;
             }
