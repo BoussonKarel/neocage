@@ -1,0 +1,1157 @@
+/*------------------------------------*\
+#FONTS
+\*------------------------------------*/
+
+/*------------------------------------*\
+#Variables
+\*------------------------------------*/
+
+:root {
+  /* colors */
+  --global-color-white-transparent: #ffffff32;
+
+  --global-color-neutral-xx-light: #ededed;
+  --global-color-neutral-x-light: #d4d4d4;
+  --global-color-neutral-light: #bababa;
+  --global-color-neutral: #a1a1a1;
+  --global-color-neutral-dark: #6e6e6e;
+  --global-color-neutral-x-dark: #3a3a3a;
+
+  --global-color-alpha-xx-light: #d8eff6;
+  --global-color-alpha-x-light: #a7e2f6;
+  --global-color-alpha-light: #76d6f6;
+  --global-color-alpha: #44c9f6;
+  --global-color-alpha-dark: #00b8f6;
+  --global-color-alpha-x-dark: #0086b3;
+  --global-color-alpha-xx-dark: #005f80;
+  --global-color-alpha-xxx-dark: #00394d;
+  --global-color-alpha-xxxx-dark: #00131a;
+
+  --global-color-alpha-transparent: #44c9f632;
+
+  --global-color-beta-xx-light: #ecbdd9;
+  --global-color-beta-x-light: #ec8ec6;
+  --global-color-beta-light: #ec5eb2;
+  --global-color-beta: #ec008c;
+  --global-color-beta-dark: #b3006a;
+  --global-color-beta-x-dark: #80004c;
+
+  --global-color-beta-transparent: #ec008c32;
+
+  --global-color-gamma-xx-light: #fffbcc;
+  --global-color-gamma-x-light: #fff899;
+  --global-color-gamma-light: #fff466;
+  --global-color-gamma: #ffed00;
+  --global-color-gamma-dark: #e6d500;
+  --global-color-gamma-x-dark: #ccbe00;
+
+  --global-font-size: 16;
+
+  --global-baseline: calc(1rem / 2);
+  --global-whitespace-xxs: var(--global-baseline); /* 8 */
+  --global-whitespace-xs: calc(var(--global-baseline) * 2); /* 16 */
+  --global-whitespace-sm: calc(var(--global-baseline) * 3); /* 24 */
+  --global-whitespace-md: calc(var(--global-baseline) * 4); /* 32 */
+  --global-whitespace-lg: calc(var(--global-baseline) * 5); /* 40 */
+
+  --pi: 3.14159265359;
+}
+
+/*------------------------------------*\
+#GENERIC
+\*------------------------------------*/
+
+/*
+    Generic: Page
+    ---
+    Global page styles + universal box-sizing:
+*/
+
+html {
+  font-size: calc(var(--global-font-size) / 16 * 100%);
+  line-height: 1.5;
+  font-family: "Open Sans", Helvetica, arial, sans-serif;
+  color: var(--color-neutral-dark);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: white;
+}
+
+body {
+  height: calc(100vh - var(--global-whitespace-xs));
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/*
+* Remove text-shadow in selection highlight:
+* https://twitter.com/miketaylr/status/12228805301
+*
+* Customize the background color to match your design.
+*/
+
+::-moz-selection {
+  background: var(--global-color-alpha);
+  color: white;
+  text-shadow: none;
+  text-decoration-color: white;
+}
+
+::selection {
+  background: var(--global-color-alpha);
+  color: white;
+  text-shadow: none;
+  text-decoration-color: white;
+}
+
+/*------------------------------------*\
+#Elements
+\*------------------------------------*/
+
+/*
+Elements: Images
+---
+Default markup for images to make them responsive
+*/
+
+img {
+  max-width: 100%;
+  vertical-align: top;
+}
+
+/*
+    Elements: typography
+    ---
+    Default markup for typographic elements
+*/
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: calc(36rem / var(--global-font-size));
+  line-height: calc(48rem / var(--global-font-size));
+  margin: 0 0 24px;
+}
+
+h2 {
+  font-size: calc(32rem / var(--global-font-size));
+  line-height: calc(40rem / var(--global-font-size));
+  margin: 0 0 24px;
+}
+
+h3 {
+  font-size: calc(26rem / var(--global-font-size));
+  line-height: calc(32rem / var(--global-font-size));
+  margin: 0 0 24px;
+}
+
+h4,
+h5,
+h6 {
+  font-size: calc(16rem / var(--global-font-size));
+  font-weight: 600;
+  line-height: calc(24rem / var(--global-font-size));
+  margin: 0 0 24px;
+}
+
+p,
+ol,
+ul,
+dl,
+table,
+address,
+figure {
+  margin: 0 0 24px;
+}
+
+ul,
+ol {
+  padding-left: 24px;
+}
+
+li ul,
+li ol {
+  margin-bottom: 0;
+}
+
+blockquote {
+  font-style: normal;
+  font-size: calc(23rem / var(--global-font-size));
+  line-height: calc(32rem / var(--global-font-size));
+  margin: 0 0 24px;
+}
+
+blockquote * {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+figcaption {
+  font-weight: 400;
+  font-size: calc(12rem / var(--global-font-size));
+  line-height: calc(16rem / var(--global-font-size));
+  margin-top: 8px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: LightGrey;
+  margin: 0 0 24px;
+}
+
+a {
+  transition: all var(--transition-alpha);
+  color: var(--color-alpha);
+  outline-color: var(--color-alpha);
+  outline-width: medium;
+  outline-offset: 2px;
+}
+
+a:visited,
+a:active {
+  color: var(--color-alpha);
+}
+
+a:hover,
+a:focus {
+  color: var(--color-alpha-light);
+}
+
+label,
+input {
+  display: block;
+}
+
+select {
+  width: 100%;
+}
+
+input::placeholder {
+  color: var(--color-neutral-light);
+}
+
+/*------------------------------------*\
+#OBJECTS
+\*------------------------------------*/
+
+/*
+    Objects: Row
+    ---
+    Creates a horizontal row that stretches the viewport and adds padding around children
+*/
+
+.o-row {
+  position: relative;
+  padding: 24px 24px 0;
+}
+
+/*
+    Objects: Container
+    ---
+    Creates a horizontal container that sets de global max-width
+*/
+
+.o-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(41 * var(--global-baseline));
+  width: 100%;
+}
+
+/*
+    Objects: List
+    ---
+    Small reusable object to remove default list styling from lists
+*/
+
+.o-list {
+  list-style: none;
+  padding: 0;
+}
+
+/*
+    Object: Button reset
+    ---
+    Small button reset object
+*/
+
+.o-button-reset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+/*
+    Object: Hide accessible
+    ---
+    Accessibly hide any element
+*/
+
+.o-hide-accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.o-link {
+  margin: 0;
+}
+
+.o-link::selection {
+  text-decoration-color: white;
+}
+
+/*------------------------------------*\
+#COMPONENTS
+\*------------------------------------*/
+
+.blue {
+  background: var(--global-color-alpha);
+}
+
+/*
+    Component: App
+    ---
+    Main app container
+*/
+
+.c-app {
+  display: flex;
+
+  flex-direction: column;
+
+  min-height: 100vh;
+}
+
+/*
+    Component: Start page
+    ---
+    Main app container
+*/
+
+.c-startpage {
+  flex-grow: 1;
+
+  color: white;
+  text-align: center;
+}
+
+/*
+    Component: logo svg
+    ---
+    Exerlights logo on top of screen
+*/
+
+.c-logo__svg {
+  max-width: 100%;
+  max-height: 133px;
+  fill: #ffffff;
+}
+
+/*
+    Component: Start page menu
+    ---
+    Main menu to select gamemodes
+*/
+
+.c-menu__title {
+  font-size: calc(29rem / var(--global-font-size));
+  line-height: calc(43.5rem / var(--global-font-size));
+  font-weight: 600;
+  margin-bottom: var(--global-whitespace-xxs);
+}
+
+.c-menu__list {
+  margin-bottom: 0;
+}
+
+/*
+    Component: Gamemode
+    ---
+    Main menu to select gamemodes
+*/
+
+.c-gamemode {
+  cursor: pointer;
+
+  font-size: calc(18rem / var(--global-font-size));
+  line-height: calc(27rem / var(--global-font-size));
+
+  color: var(--global-color-neutral-x-dark);
+  background: #ffffff;
+
+  margin-bottom: var(--global-whitespace-xxs);
+
+  border-radius: var(--global-baseline);
+
+  padding: calc(var(--global-baseline) / 8 * 10.5);
+}
+
+.c-gamemode:hover,
+.c-gamemode:focus {
+  box-shadow: 0 0 0 3px var(--global-color-white-transparent);
+}
+
+.c-gamemode:active {
+  background-color: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: Footer
+    ---
+    Footer on bottom of page
+*/
+
+.c-footer {
+  position: sticky;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff;
+
+  padding: 0 var(--global-whitespace-sm);
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.c-footer__text {
+  margin: 0;
+  font-size: calc(14rem / var(--global-font-size));
+  color: var(--global-color-neutral-x-dark);
+}
+
+.c-footer__logos {
+  display: flex;
+  align-items: center;
+}
+
+.c-footer__logo {
+  padding: calc(var(--global-baseline) / 2);
+  height: 48px;
+  width: 48px;
+  fill: #44c9f6;
+}
+
+/*
+    Component: Error
+    ---
+    Message popup when an error occured
+*/
+
+.c-error__title {
+  font-weight: 600;
+  font-size: calc(20rem / var(--global-font-size));
+  line-height: calc(30rem / var(--global-font-size));
+  text-align: center;
+  margin: 0;
+  padding: 0 0 var(--global-whitespace-xs) 0;
+  /* padding: 0 var(--global-whitespace-xs); */
+}
+
+.c-error__info-icon {
+  width: 13%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c-error__info-text {
+  width: 85%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/*
+    Component: Validation
+    ---
+    
+*/
+
+.c-validation {
+  font-weight: 400;
+  font-size: calc(12rem / var(--global-font-size));
+  line-height: calc(18rem / var(--global-font-size));
+  height: calc(18rem / var(--global-font-size));
+  color: var(--global-color-beta);
+  display: none;
+}
+
+/*
+    Component: Popup
+    ---
+    Popup to show above everything
+*/
+
+.c-popup {
+  overflow-y: auto;
+  position: fixed;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  width: 100%; /* Full width */
+  min-height: 100%; /* Full height */
+
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  display: none;
+}
+
+.c-popup__content {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: var(--global-baseline);
+  padding: var(--global-whitespace-xs);
+
+  max-width: calc(41 * var(--global-baseline) - var(--global-whitespace-xs));
+  margin: var(--global-whitespace-xs) auto 0;
+}
+
+.c-popup--shown {
+  display: block;
+}
+
+.c-popup__close {
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  top: var(--global-whitespace-xxs);
+  right: var(--global-whitespace-xxs);
+  fill: var(--global-color-neutral-dark);
+}
+
+.c-popup__close:hover,
+.c-popup__close:focus,
+.c-popup__close:active {
+  fill: var(--global-color-neutral-x-dark);
+}
+
+/*
+    Component: Label
+.c-label{
+    ---
+    Label for name input to save score
+*/
+
+.c-label {
+  font-weight: 400;
+  font-size: calc(18rem / var(--global-font-size));
+  line-height: calc(27rem / var(--global-font-size));
+  text-align: center;
+  padding: 0 var(--global-whitespace-xs);
+}
+
+/*
+    Component: Input
+    Input field for name to save score
+    ---
+*/
+
+.c-input {
+  margin: 0 auto;
+  width: 100%;
+  font-size: calc(18rem / var(--global-font-size));
+  line-height: calc(27rem / var(--global-font-size));
+  height: var(--global-whitespace-md);
+  outline: none;
+  border-radius: calc(var(--global-baseline) / 2);
+}
+
+.c-input:focus {
+  outline: none;
+  border-color: var(--global-color-alpha);
+}
+
+/*
+    Component: Info
+    ---
+    Info popup
+*/
+
+.c-info__title {
+  margin-bottom: var(--global-whitespace-xs);
+}
+
+.c-infoblock {
+  margin-bottom: 16px;
+}
+
+.c-infoblock__title {
+  font-size: calc(20rem / var(--global-font-size));
+  line-height: calc(30rem / var(--global-font-size));
+}
+
+/*
+    Component: Table
+    ---
+    Table with highscores
+*/
+.c-infoblock__table {
+  overflow-y: auto;
+  max-height: calc(25 * var(--global-baseline));
+  border: 1px solid var(--global-color-neutral-dark);
+}
+.c-table {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.c-table__item {
+  word-break: break-all;
+  width: 70%;
+  padding: calc(var(--global-baseline) / 8 * 2) var(--global-whitespace-xxs);
+}
+
+.c-table__row:nth-child(odd) {
+  background: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: countdown
+    ---
+*/
+Grey cards with information in them .c-countdown__time {
+  margin-top: var(--global-whitespace-xxs);
+  font-size: calc(58rem / var(--global-font-size));
+  line-height: calc(57rem / var(--global-font-size));
+  font-weight: 600;
+  text-align: center;
+}
+
+/*
+    Component: Button
+    ---
+    Button for play, stop, save...
+*/
+
+.c-button {
+  cursor: pointer;
+  width: 100%;
+  height: 48px;
+  background: var(--button-backgroundColor, var(--global-color-alpha));
+  border-radius: calc(var(--global-baseline) / 2);
+}
+
+.c-button--save {
+  color: white;
+  font-size: calc(20rem / var(--global-font-size));
+  line-height: calc(30rem / var(--global-font-size));
+  font-weight: 700; /* bold */
+  margin-top: var(--global-whitespace-xs);
+  margin-bottom: var(--global-whitespace-xxs);
+}
+
+.c-button__svg {
+  fill: white;
+  height: 48px;
+  width: 48px;
+}
+
+.c-button:hover,
+.c-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    var(--button-shadowcolor, var(--global-color-alpha-transparent));
+}
+
+.c-button:active {
+  background: var(--button-activeBackground, var(--global-color-alpha-light));
+}
+
+.c-button--stop {
+  --button-backgroundColor: var(--global-color-beta);
+  --button-shadowcolor: var(--global-color-beta-transparent);
+  --button-activeBackground: var(--global-color-beta-light);
+}
+
+/*
+    Component: title
+    ---
+    Titles on pages
+*/
+
+.c-title {
+  font-size: calc(32rem / var(--global-font-size));
+  line-height: calc(48rem / var(--global-font-size));
+  font-weight: 700; /* bold */
+  text-align: center;
+  margin: 0;
+}
+
+.c-subtitle {
+  font-size: calc(29rem / var(--global-font-size));
+  line-height: calc(43.5rem / var(--global-font-size));
+  font-weight: 600; /* semibold */
+  text-align: center;
+}
+
+/*
+    Component: Status
+    ---
+    Game status div
+*/
+
+.c-status {
+  flex-grow: 1;
+}
+
+.c-status__info {
+  margin-bottom: var(--global-whitespace-sm);
+}
+
+.c-overview {
+  text-align: center;
+}
+
+.c-overview__title {
+  padding-bottom: var(--global-whitespace-xs);
+}
+
+/*
+    Component: stop button
+    ---
+    Stick stop button to bottom
+*/
+
+.c-stopbutton {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}
+
+/*
+    Component: card
+    ---
+    Grey cards with information in them
+*/
+
+.c-card {
+  background-color: var(--global-color-neutral-xx-light);
+  padding: var(--global-whitespace-sm);
+  border-radius: var(--global-baseline);
+  text-align: center;
+  margin-bottom: var(--global-whitespace-sm);
+  box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.16);
+}
+
+.c-card__value {
+  font-size: calc(56rem / var(--global-font-size));
+}
+
+/*
+    Component: minicards
+    ---
+    Mini grey cards for Double trouble with information in them
+*/
+
+.c-minicards {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.c-minicard {
+  flex-basis: calc(50% - 12px);
+  background-color: var(--global-color-neutral-xx-light);
+  border-radius: var(--global-baseline);
+  padding: var(--global-whitespace-sm) var(--global-whitespace-xs)
+    var(--global-whitespace-sm) var(--global-whitespace-xs);
+  box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 315px) {
+  .c-minicards {
+    display: inline;
+    text-align: center;
+  }
+
+  .c-minicard {
+    width: 100%;
+    margin-top: var(--global-whitespace-sm);
+  }
+}
+
+/*
+    Component: progress bar card
+    ---
+    Progress bar card 
+*/
+
+/* Sets the containers height and width */
+.c-timer {
+  --timer-stroke-width: 4px;
+
+  position: relative;
+  border-radius: 100%;
+}
+
+.c-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+.c-timer__path--elapsed {
+  stroke-width: var(--timer-stroke-width);
+  stroke: var(--global-color-neutral-xx-light);
+}
+
+.c-timer__path--remaining {
+  stroke-width: var(--timer-stroke-width);
+  stroke: var(--global-color-alpha);
+
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.c-timer__text {
+  position: absolute;
+  top: 0;
+
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: calc(56rem / var(--global-font-size));
+  font-weight: 600;
+}
+
+/*
+    Component: loading cursor svg
+    ---
+    Nice loading svg
+*/
+@keyframes stroke {
+  100%,
+  0% {
+    stroke: var(--global-color-alpha);
+  }
+  33% {
+    stroke: var(--global-color-beta);
+  }
+  66% {
+    stroke: var(--global-color-gamma);
+  }
+}
+
+@keyframes loading {
+  0%,
+  20% {
+    stroke-dashoffset: 250;
+    transform: rotate(0deg);
+  }
+  50%,
+  70% {
+    stroke-dashoffset: 75;
+    transform: rotate(75deg);
+  }
+  100% {
+    stroke-dashoffset: 250;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.c-loading {
+  --loading-stroke-width: var(--global-baseline);
+  --loading-dimensions: calc(var(--global-baseline) * 10);
+
+  display: flex;
+  justify-content: center;
+}
+
+.c-loading__svg {
+  width: var(--loading-dimensions);
+  height: var(--loading-dimensions);
+
+  animation: rotate 2s linear infinite;
+}
+
+.c-loading__circle {
+  fill: none;
+  stroke-width: var(--loading-stroke-width);
+  stroke: var(--global-color-gamma);
+  stroke-dasharray: 283;
+  stroke-dashoffset: 75;
+
+  animation: loading 2s linear infinite, stroke 5s linear infinite;
+
+  transform-origin: center center;
+}
+
+/*------------------------------------*\
+#UTILITIES
+\*------------------------------------*/
+
+/*
+    Utilities: textcolor
+    ---
+    Utility classes to put specific colors onto text
+*/
+
+.u-alpha-textcolor {
+  color: var(--global-color-alpha);
+}
+
+.u-beta-textcolor {
+  color: var(--global-color-beta);
+  fill: var(--global-color-beta);
+}
+
+/*
+    Utilities: validatin error
+    ---
+    Make input red when validation error
+*/
+
+.u-validation-error {
+  border-color: var(--global-color-beta);
+}
+
+.u-not-valid {
+  display: block;
+}
+
+/*
+    Utilities: color
+    ---
+    Utility classes to put specific colors onto elements
+*/
+
+.u-color-neutral {
+  color: var(--color-neutral);
+}
+
+.u-color-neutral-dark {
+  color: var(--color-neutral-dark);
+}
+
+/*
+    Utilities: spacing
+    ---
+    Utility classes to put specific margins and paddings onto elements
+*/
+
+.u-pt-clear {
+  padding-top: 0 !important;
+}
+
+.u-mb-clear {
+  margin-bottom: 0 !important;
+}
+
+.u-mb-xs {
+  margin-bottom: 4px !important;
+}
+
+.u-mb-sm {
+  margin-bottom: 8px !important;
+}
+
+.u-mb-md {
+  margin-bottom: 16px !important;
+}
+
+.u-mb-lg {
+  margin-bottom: 32px !important;
+}
+
+.u-mb-xl {
+  margin-bottom: 48px !important;
+}
+
+/*
+    Utilities: max-width
+    ---
+    Utility classes to put specific max widths onto elements
+*/
+
+.u-max-width-xs {
+  max-width: 27em !important;
+}
+
+.u-max-width-sm {
+  max-width: 39em !important;
+}
+
+.u-max-width-md {
+  max-width: 50em !important;
+}
+
+.u-max-width-lg {
+  max-width: 63.5em !important;
+}
+
+.u-max-width-none {
+  max-width: none !important;
+}
+
+/*
+    Utilities: align
+    ---
+    Utility classes align text or components
+*/
+
+.u-align-text-center {
+  text-align: center;
+}
+
+.u-align-center {
+  margin: 0 auto;
+}
+
+/*
+    Utilities: text
+    Utility classes to create smaller or bigger test
+*/
+
+.u-text-sm {
+  font-size: calc(14rem / var(--global-font-size));
+}
+
+/*------------------------------------*\
+#MEDIA
+\*------------------------------------*/
+
+/*
+    Media Queries
+    ---
+    EXAMPLE Media Queries for Responsive Design.
+    These examples override the primary ('mobile first') styles.
+    USE THEM INLINE!
+*/
+
+/* Extra small devices (portrait phones, less than 576px)
+No media query since this is the default in mobile first design
+*/
+
+/* Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {}
+*/
+
+/* Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {}
+*/
+
+/* Large devices (landscape tablets, desktops, 992px and up)
+@media (min-width: 992px) {}
+*/
+
+/* Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {}
+*/
+
+/*
+    Print styles.
+    ---
+    Inlined to avoid the additional HTTP request:
+    http://www.phpied.com/delay-loading-your-print-css/
+*/
+
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    /* Black prints faster:
+        http://www.sanbeiji.com/archives/953 */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  /*
+    * Don't show links that are fragment identifiers,
+    * or use the `javascript:` pseudo protocol
+    */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+  pre {
+    white-space: pre-wrap !important;
+  }
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  /*
+    * Printing Tables:
+    * http://css-discuss.incutio.com/wiki/Printing_Tables
+    */
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
