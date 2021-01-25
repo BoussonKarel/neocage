@@ -1,10 +1,10 @@
 #include "Adafruit_VL53L0X.h"
 
 // address we will assign if dual sensor is present
-#define LOX1_ADDRESS 0x30
-#define LOX2_ADDRESS 0x31
-#define LOX3_ADDRESS 0x32
-#define LOX4_ADDRESS 0x33
+#define LOX1_ADDRESS 0x31
+#define LOX2_ADDRESS 0x32
+#define LOX3_ADDRESS 0x33
+#define LOX4_ADDRESS 0x34
 
 // set the pins to shutdown
 #define SHT_LOX1 0
@@ -58,7 +58,6 @@ void setID() {
   // initing LOX1
   if (!lox1.begin(LOX1_ADDRESS)) {
     Serial.println(F("Failed to boot first VL53L0X"));
-    while (1);
   }
   delay(100);
 
@@ -69,7 +68,6 @@ void setID() {
   //initing LOX2
   if (!lox2.begin(LOX2_ADDRESS)) {
     Serial.println(F("Failed to boot second VL53L0X"));
-    while (1);
   }
 
   // activating LOX3
@@ -79,7 +77,6 @@ void setID() {
   //initing LOX3
   if (!lox3.begin(LOX3_ADDRESS)) {
     Serial.println(F("Failed to boot 3 VL53L0X"));
-    while (1);
   }
   
   // activating LOX4
@@ -89,7 +86,6 @@ void setID() {
   //initing LOX4
   if (!lox4.begin(LOX4_ADDRESS)) {
     Serial.println(F("Failed to boot 4 VL53L0X"));
-    while (1);
   }
 
   /*lox1.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);

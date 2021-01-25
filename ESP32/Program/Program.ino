@@ -43,6 +43,8 @@ int currentDuration;
 int gameScore = 0;
 String currentGameTitle = "";
 String currentTimeStarted = "";
+int DoubleTroubleScore1 = 0;
+int DoubleTroubleScore2 = 0;
 
 //IoTHub
 //const char* ssid = "Howest-IoT";
@@ -153,6 +155,9 @@ void Task0Code(void * parameter) {
       else if(currentGame=="therondo") {
         theRondo();
       }
+      else if(currentGame=="doubletrouble") {
+        doubleTrouble();
+      }
     }
 
   }
@@ -204,7 +209,7 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
     Serial.println(gamemode);
     Serial.println(currentDuration);
     //voor game starten -> succes code sturen naar backend
-    if(gamemode != "therondo" && gamemode != "quickytricky") {
+    if(gamemode != "therondo" && gamemode != "quickytricky" && gamemode != "doubletrouble") {
       Serial.println("game unknown");
       responseMessage = "{\"error\": game unknown}";
       result = 404;
@@ -241,7 +246,7 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
     for(int i = 0; i < JEWEL_COUNT; i++) {
       activeSensors[i] = false;
       lastValue[i] = 0;
-      doneRondo[i] = false;
+      doneRondo[i] = true;
     }
     gameScore = 0;  
     lastGoal = 0;
@@ -393,15 +398,35 @@ void checkSensors() {
       if(valueWithSensitivity < lastValue[i]) {
         Serial.println("GOAAAAAAAAAAAAAAAAAAAAAAAAL");
         //er is gescoord
-        toggleSensor(i);
         //return true als er gescoord is
         lastGoal = i;
-        gameScore++;
-        gameUpdate();
         if(currentGame == "therondo") {
           setJewel(i, 0,255,0);
           doneRondo[i] = true;
+          toggleSensor(i);
+          gameScore++;          
         }
+        else if(currentGame =="doubletrouble") {
+          if(i < JEWEL_COUNT/2) {
+            //speler 1 scoort
+            DoubleTroubleScore1++;
+            gameScore = gameScore +10;
+          }
+          else {
+            //speler 2 scoort
+            DoubleTroubleScore2++;
+            gameScore = gameScore +1;
+            //Serial.println("Score 2" + DoubleTroubleScore1);
+          }
+        }
+        else {
+          //QUicky tricky
+          gameScore++;
+          toggleSensor(i);
+        }
+        Serial.println(gameScore);
+        gameUpdate();
+
         //Alle vorige values worden op 0 gezet om problemen te verkomen
         for(int j = 0; j < JEWEL_COUNT; j++) {
           lastValue[j] = 0;
@@ -416,7 +441,8 @@ void checkSensors() {
 }
 
 void theRondo() {
-  sensitivity = 100;
+  delay(5000);
+  sensitivity = 160;
   leds.fill(leds.Color(255, 0, 0), 0, LED_COUNT);
   leds.show();
   unsigned long startMillis = millis();
@@ -433,11 +459,14 @@ void theRondo() {
   //Alle lichten zijn  uit -> Millis en kijken hoeveel het verschil is
   unsigned long endMillis = millis();
   gameScore = endMillis - startMillis;
+  gameScore = gameScore/1000;
+  
   gameOff();
 
 }
 
 void quickyTricky(int duration) {
+  sensitivity = 100;
   delay(5000);
   duration = duration * 1000; //Van ms naar seconden
   leds.fill(leds.Color(0, 0, 255), 0, LED_COUNT);
@@ -469,6 +498,31 @@ void quickyTricky(int duration) {
   //alles uit
   gameOff();
 
+}
+
+void doubleTrouble() {
+  delay(5000);
+  sensitivity = 175;
+  //tientallen -> speler 1  andere -> speler 2
+  //Eerste speler die aan 5 komt wint 
+  //speler 1 is bv rood, speler 2 bv blauw
+  //Ledjes 2 rood, 2 blauw
+  for(int i = 0; i < JEWEL_COUNT; i++) {
+    if(i < JEWEL_COUNT/2) {
+      setJewel(i,255,0,0);
+    }
+    else {
+      setJewel(i,0,0,255);
+    }
+    toggleSensor(i);
+  }
+
+  //Zolang geen enekele score groter is dan 4 -> sensors uitlezen
+  while(DoubleTroubleScore1 < 2 && DoubleTroubleScore2 < 2) {
+     checkSensors();
+  }
+  
+  gameOff();
 }
 
 void D2C(String typeUpdate) {
@@ -503,12 +557,15 @@ void gameOff() {
   for(int i = 0; i < JEWEL_COUNT; i++) {
     activeSensors[i] = false;
     lastValue[i] = 0;
+    doneRondo[i] = true;
   }
   currentGame = "";
   gameID = "";
   currentDuration = 0;
   gameScore = 0;
   lastGoal = 0;
+  DoubleTroubleScore1 = 0;
+  DoubleTroubleScore2 = 0;
 
   leds.fill(leds.Color(255, 255, 255), 0, LED_COUNT);
   leds.show();
