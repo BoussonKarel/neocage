@@ -6,10 +6,10 @@
 #include "time.h"
 
 // address we will assign if dual sensor is present
-#define LOX1_ADDRESS 0x30
-#define LOX2_ADDRESS 0x31
-#define LOX3_ADDRESS 0x32
-#define LOX4_ADDRESS 0x33
+#define LOX1_ADDRESS 0x31
+#define LOX2_ADDRESS 0x32
+#define LOX3_ADDRESS 0x33
+#define LOX4_ADDRESS 0x34
 
 // set the pins to shutdown
 #define SHT_LOX1 0
@@ -158,6 +158,10 @@ void Task0Code(void * parameter) {
       else if(currentGame=="doubletrouble") {
         doubleTrouble();
       }
+      else if(currentGame=="trainingmodus") {
+        currentDuration = 3600 *10; 
+        quickyTricky(currentDuration);
+      }
     }
 
   }
@@ -209,7 +213,7 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
     Serial.println(gamemode);
     Serial.println(currentDuration);
     //voor game starten -> succes code sturen naar backend
-    if(gamemode != "therondo" && gamemode != "quickytricky" && gamemode != "doubletrouble") {
+    if(gamemode != "therondo" && gamemode != "quickytricky" && gamemode != "doubletrouble" && gamemode != "trainingmodus") {
       Serial.println("game unknown");
       responseMessage = "{\"error\": game unknown}";
       result = 404;
@@ -242,14 +246,19 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
   }
   else if (strcmp(methodName, "stopgame") == 0)
   {
-    currentGame = "";
     for(int i = 0; i < JEWEL_COUNT; i++) {
       activeSensors[i] = false;
       lastValue[i] = 0;
       doneRondo[i] = true;
     }
-    gameScore = 0;  
+    currentGame = "";
+    gameID = "";
+    currentDuration = 0;
+    gameScore = 0;
     lastGoal = 0;
+    DoubleTroubleScore1 = 0;
+    DoubleTroubleScore2 = 0;
+
     LogInfo("Stop spel");
     DynamicJsonDocument doc(1024);
     doc["stopped"] = "true";
@@ -404,7 +413,6 @@ void checkSensors() {
         if(currentGame == "therondo") {
           setJewel(i, 0,255,0);
           doneRondo[i] = true;
-          toggleSensor(i);
           gameScore++;          
         }
         else if(currentGame =="doubletrouble") {
@@ -419,12 +427,13 @@ void checkSensors() {
             gameScore = gameScore +1;
             //Serial.println("Score 2" + DoubleTroubleScore1);
           }
+          setJewel(i, 0,0,0);
         }
         else {
           //QUicky tricky
           gameScore++;
-          toggleSensor(i);
         }
+        toggleSensor(i);
         Serial.println(gameScore);
         gameUpdate();
 
@@ -503,6 +512,8 @@ void quickyTricky(int duration) {
 
 void doubleTrouble() {
   delay(5000);
+  unsigned long startMillis = millis();
+  
   sensitivity = 100;
   //tientallen -> speler 1  andere -> speler 2
   //Eerste speler die aan 5 komt wint 
@@ -519,10 +530,13 @@ void doubleTrouble() {
   }
 
   //Zolang geen enekele score groter is dan 4 -> sensors uitlezen
-  while(DoubleTroubleScore1 < 2 && DoubleTroubleScore2 < 2) {
+  while(DoubleTroubleScore1 < 2 && DoubleTroubleScore2 < 2 && currentGame != "") {
      checkSensors();
   }
   
+  unsigned long endMillis = millis();
+  gameScore = endMillis - startMillis;
+  gameScore = gameScore/1000;
   gameOff();
 }
 

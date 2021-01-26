@@ -266,6 +266,11 @@ const showGameStatus = function(game) {
 
     let startTime = new Date(game.timestarted).getTime();
 
+    // Remove duration added by ESP
+    if (game.gamemode.id = "trainingmodus") {
+        game.duration = 0;
+    }
+
     showTimer(startTime, game.duration);
 
     htmlStatusCards.innerHTML = cardsContent;
