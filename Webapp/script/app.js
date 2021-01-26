@@ -108,6 +108,14 @@ const showGamemodeInfo = (gamemode) => {
     htmlGameTitle.innerHTML = gamemode.name;
     htmlGameDesc.innerHTML = gamemode.description;
 
+    //recreate button to remove old eventListeners
+    let button = htmlGameStart;
+    let buttonClone = button.cloneNode(true);
+    button.parentNode.replaceChild(buttonClone, button)
+    htmlGameStart = buttonClone;
+
+    //add new eventListener
+
     htmlGameStart.addEventListener("click",function(){
         startGame(gamemode);
     });
@@ -257,6 +265,11 @@ const showGameStatus = function(game) {
     
 
     let startTime = new Date(game.timestarted).getTime();
+
+    // Remove duration added by ESP
+    if (game.gamemode.id = "trainingmodus") {
+        game.duration = 0;
+    }
 
     showTimer(startTime, game.duration);
 
@@ -490,7 +503,8 @@ const listenToGamemodes = function() {
     for(let btn of buttons) {
         btn.addEventListener("click",function(){
             const gamemode = gamemodes[btn.dataset.index]
-            getHighscores(gamemode.id); 
+            getHighscores(gamemode.id);
+
             showGamemodeInfo(gamemode)
 
             showPopup(htmlPopupGame)
